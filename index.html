@@ -332,7 +332,7 @@ body{padding-bottom:0}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 15.10. 20:00 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 15.10. 20:30 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -359,19 +359,28 @@ const V=[
 {n:'Monster-Bagger',tn:'13.000 t',p:4000,c:50000000,m:5,col:0x7a4fc2,z:6.5,lic:1}];
 const J=[
 ['Gartenteich ausheben',30,100,0],['Zaunpfosten-Löcher',20,65,0],['Zisterne im Garten',55,190,0],['Pool im Vorgarten',45,150,0],
+['Schwimmteich für Familie Becker',38,125,0],['Zaunpfosten für Pferdekoppel',26,85,0],['Regenwasser-Zisterne Schrebergarten',50,170,0],['Pool für das Gartenfest',42,140,0],
 ['Kabelgraben ziehen',80,330,1],['Fundament Einfamilienhaus',120,480,1],['Hofeinfahrt abtragen',100,400,1],['Tiefgaragen-Rampe',160,700,1],
+['Kabelgraben Neubaugebiet',90,360,1],['Fundament Einfamilienhaus am Hang',130,520,1],['Hofeinfahrt Einfamilienhaus neu pflastern',95,390,1],['Tiefgarage Wohnanlage',170,740,1],
 ['Baugrube Supermarkt',600,2800,2],['Regenrückhaltebecken',800,3800,2],['Sportplatz einebnen',500,2300,2],
+['Baugrube Supermarkt-Filiale',640,3000,2],['Regenrückhaltebecken Neubaugebiet',850,4000,2],['Sportplatz Planum Schulzentrum',520,2400,2],['Kabelgraben Gewerbepark',560,2600,2],
 ['Kanalbau Innenstadt',1500,8000,3],['Tunnelportal freilegen',2200,12500,3],['Hafenbecken vertiefen',3000,17000,3],
+['Kanalbau Altstadt-Sanierung',1600,8600,3],['Tunnelportal Nordhang',2300,13000,3],['Hafenbecken Erweiterung Südkai',3100,17500,3],['Tiefgarage Innenstadt-Kaufhaus',1800,9500,3],
 ['Baugrube Gewerbepark',2500,16000,4],['Lärmschutzwall einebnen',3000,19000,4],['Brückenpfeiler-Baugrube',3500,24000,4],
+['Baugrube Gewerbepark Süd',2600,16800,4],['Lärmschutzwall Autobahn A7',3100,20000,4],['Brückenpfeiler-Baugrube Rhein',3600,25000,4],
 ['Autobahn-Einschnitt',6000,45000,5],['Staudamm-Fundament',9000,70000,5],['Kiesgrube erweitern',7000,52000,5],
+['Autobahn-Einschnitt Bergstrecke',6400,48000,5],['Tunnel-Vortrieb Alpenpass',8200,62000,5],['Kiesgrube Südfeld',7200,54000,5],['Staudamm-Fundament Talsperre',9400,74000,5],
 ['Fabrikhalle abbrechen',14000,120000,6],['Brückenabriss Autobahn',22000,200000,6],['Hochhaus-Abriss',30000,290000,6],
+['Fabrikhalle Abbruch Industriepark',15000,128000,6],['Brückenabriss Stadtautobahn',23000,210000,6],['Hochhaus-Abbruch Bürokomplex',31000,300000,6],
 ['Steinbruch erweitern',40000,380000,7],['Erzmine freilegen',60000,620000,7],['Kohle-Vorschnitt',50000,500000,7],
-['Tagebau-Abraum',150000,1600000,8],['Kanal-Neubau',200000,2300000,8],['Hafen-Neubau',250000,3000000,8]];
+['Steinbruch Nordhang erweitern',42000,395000,7],['Erzmine Stollen freilegen',62000,640000,7],['Kohle-Vorschnitt Flöz 3',52000,520000,7],
+['Tagebau-Abraum',150000,1600000,8],['Kanal-Neubau',200000,2300000,8],['Hafen-Neubau',250000,3000000,8],
+['Tagebau-Abraum Süd',160000,1700000,8],['Kanal-Neubau Binnenschifffahrt',210000,2400000,8],['Hafen-Neubau Containerterminal',260000,3100000,8]];
 /* Exklusive Auftraege: Name, Aufwand, Lohn, Bagger-Stufe, Rang */
 const X=[
 ['Villa-Pool für Prominente',200,2200,1,1],['Staatsauftrag: Kanalbau Altstadt',2500,42000,3,2],['Flughafen-Baugrube',6500,150000,4,3],
 ['Brückenabriss Rheintal',28000,700000,6,4],['Hochhaus-Abriss Frankfurt',34000,950000,6,4],['Erzmine Nordschacht',70000,1500000,7,4],
-['Mega-Tagebau Nord',180000,5500000,8,5],['Hafen-Neubau Rotterdam',280000,8500000,8,5]];
+['Mega-Tagebau Nord',180000,5500000,8,5],['Villa-Garten mit Naturpool',260,3000,1,1],['Staatsauftrag: Tunnelportal Nordhang',2800,52000,3,2],['Staudamm-Fundament Notfallsanierung',10000,260000,5,3],['Kohle-Vorschnitt Großabbau',58000,1100000,7,4],['Hafen-Neubau Rotterdam',280000,8500000,8,5]];
 /* Balance: laengeres Spiel */
 const WK=1.1,PY=.3125,CK=3;V.forEach(v=>{v.c*=CK});
 const ST0=()=>({jobs:0,ex:0,work:0,best:0,passive:0,repairs:0,repCost:0,breaks:0,spins:0,cstake:0,cwin:0,big:0,time:0,sold:0});
@@ -391,21 +400,22 @@ const RANKS=[{n:'Praktikant',at:0,u:'Standardaufträge'},{n:'Azubi',at:10000,u:'
 const rankIx=()=>{let r=0;RANKS.forEach((k,i)=>{if(S.life>=k.at)r=i});return r};
 S.rk=rankIx();let pfT=0;
 function gen(){
- const rk=rankIx();
+ const rk=rankIx(),lk=S.offers.filter(o=>o.t>S.tier).length,mxT=lk<2?V.length-1:S.tier;
  if(rk>=1&&S.offers.filter(o=>o.ex).length<2&&Math.random()<.22){
-  const el=X.filter(x=>x[4]<=rk&&x[3]<=S.tier+1&&!S.offers.some(o=>o.n===x[0]));
+  const el=X.filter(x=>x[4]<=rk&&x[3]<=Math.min(S.tier+1,mxT)&&!S.offers.some(o=>o.n===x[0]));
   if(el.length){const x=el[Math.floor(Math.random()*el.length)],f=.9+Math.random()*.2;
    const o={id:S.nid++,n:x[0],w:Math.round(x[1]*f),e:Math.round(x[2]*f),t:x[3],prog:0,ex:1};newIds.add(o.id);return o}}
  for(let k=0;k<12;k++){
   const hi=Math.random()<.25?S.tier+1:S.tier-Math.floor(Math.random()*3);
-  const pool=J.filter(j=>j[3]===Math.max(0,Math.min(V.length-1,hi)));
+  const pool=J.filter(j=>j[3]===Math.max(0,Math.min(V.length-1,mxT,hi)));
   if(!pool.length)continue;
   const j=pool[Math.floor(Math.random()*pool.length)];
   if(S.offers.some(o=>o.n===j[0])&&k<11)continue;
   const f=.8+Math.random()*.4;
   const o={id:S.nid++,n:j[0],w:Math.round(j[1]*f),e:Math.round(j[2]*f),t:j[3],prog:0};if(Math.random()<.12){o.rush=Date.now()+90000;o.e*=3}
   newIds.add(o.id);return o}}
-function refill(){while(S.offers.length<6)S.offers.push(gen());S.offers.sort((a,b)=>(b.ex||0)-(a.ex||0)||a.t-b.t||a.e-b.e)}
+function refill(){{let n=0;S.offers=S.offers.filter(o=>{if(o.t>S.tier&&o.id!==S.job&&++n>2)return false;return true})}
+ while(S.offers.length<6)S.offers.push(gen());S.offers.sort((a,b)=>(b.ex||0)-(a.ex||0)||a.t-b.t||a.e-b.e)}
 refill();newIds.clear();
 let tt;function toast(t){try{sfxFor(t)}catch(e){}const e=$('#toast');e.textContent=t;e.classList.add('s');clearTimeout(tt);tt=setTimeout(()=>e.classList.remove('s'),1800)}
 const cur=()=>S.offers.find(o=>o.id===S.job);
@@ -587,7 +597,8 @@ function init3d(){
  try{initFx()}catch(e){fxOff=true;console.warn('fx',e)}
  $('#camb').addEventListener('click',()=>{shot=(shot+1)%4;shotT=0;updCamBtn()});
  setExc();rs();gInit();addEventListener('resize',rs);requestAnimationFrame(loop)}
-function rs(){const w=view.clientWidth,h=view.clientHeight;R.setSize(w,h);cam.aspect=w/h;cam.updateProjectionMatrix()}
+const qpr=()=>{const w=view.clientWidth||390,d=devicePixelRatio||1;return[Math.max(d,Math.min(5,1920/w)),Math.min(d,1.5),1][GL]||1};
+function rs(){const w=view.clientWidth,h=view.clientHeight;R.setPixelRatio(qpr());R.setSize(w,h);cam.aspect=w/h;cam.updateProjectionMatrix()}
 function setExc(){if(exc)scene.remove(exc.g);exc=makeExc(S.tier);scene.add(exc.g);envK=null}
 
 /* ---------- Umgebungen passend zum Auftrag ---------- */
@@ -1236,7 +1247,7 @@ function makeRoller(sc){
 let GM='auto',GL=0,gAcc=0,gN=0,gT=0,ctxLost=false;try{GM=localStorage.getItem('baggerQ')||'auto'}catch(e){}
 const GNAME={auto:'Auto',high:'Hoch',mid:'Mittel',low:'Niedrig'};
 function applyQ(l){GL=l;document.body.classList.toggle('lowfx',l>=1);if(!R)return;
- try{R.setPixelRatio([Math.min(Math.max(devicePixelRatio||1,2),3),Math.min(devicePixelRatio||1,1.5),1][l]);
+ try{R.setPixelRatio(qpr());
   const ms=[4096,2048,1024][l];if(sun&&sun.shadow.mapSize.x!==ms){sun.shadow.mapSize.set(ms,ms);if(sun.shadow.map){sun.shadow.map.dispose();sun.shadow.map=null}}
   const sh=l<2;if(R.shadowMap.enabled!==sh){R.shadowMap.enabled=sh;scene.traverse(o=>{if(o.material)[].concat(o.material).forEach(m=>{m.needsUpdate=true})})}
   rs()}catch(e){}}
@@ -1288,7 +1299,7 @@ function thumbs(){
 function renderOffers(){
  $('#offers').innerHTML=S.offers.map(o=>{const lock=o.t>S.tier;
   return `<div class="job ${o.id===S.job?'act1':''} ${lock?'locked':''} ${o.ex?'ex':''} ${newIds.has(o.id)?'new':''}"><div class="jt">${o.t+1}</div><div class="jmain"><b>${o.n}</b>${o.ex?'<span class="exb">Exklusiv</span>':''}${o.rush?`<span class="rush" data-r="${o.rush}">EILIG ×3</span>`:''}<span class="meta">Aufwand ${o.w.toLocaleString('de-DE')} · ${lock?'braucht '+V[o.t].n:'ca. '+Math.max(1,Math.ceil((o.w-o.prog)/pw()))+' s'}</span></div><div class="jside"><span class="pay">${F(pay(o))}</span><button class="act sm" type="button" data-job="${o.id}" ${lock?'disabled':''}>${o.id===S.job?'Läuft':'Annehmen'}</button></div></div>`}).join('');newIds.clear()}
-function switchTo(i){if(i===S.tier||i>S.top)return;S.cds[S.tier]={c:S.cond,b:!!S.broken,f:S.fix||0};S.tier=i;const d=S.cds[i]||{c:100,b:false,f:0};S.cond=d.c;S.broken=d.b;S.fix=d.f;const o=cur();if(o&&o.t>i)S.job=null;if(T3)setExc();renderShop();renderOffers();renderTop();renderProg();renderBrk();save()}
+function switchTo(i){if(i===S.tier||i>S.top)return;S.cds[S.tier]={c:S.cond,b:!!S.broken,f:S.fix||0};S.tier=i;const d=S.cds[i]||{c:100,b:false,f:0};S.cond=d.c;S.broken=d.b;S.fix=d.f;const o=cur();if(o&&o.t>i)S.job=null;if(T3)setExc();refill();renderShop();renderOffers();renderTop();renderProg();renderBrk();save()}
 function renderCond(){const e=$('#cbar');if(!e)return;const c=Math.round(S.cond);e.style.width=c+'%';e.style.background=condCol();$('#cpct').textContent=c+' %';$('#cst').textContent=S.broken?'Defekt – steht still':c>60?'Guter Zustand':c>30?'Verschlissen – Ausfallrisiko steigt':'Schlecht – hohes Ausfallrisiko';
  const f=FULLC(),w=MAINTC(),ok=S.cond<100;$('#frep').disabled=!ok||S.m<f;$('#fmnt').disabled=!ok||S.m<w;$('#frep').textContent=ok?'Komplett reparieren · '+F(f):'Alles in Ordnung';$('#fmnt').textContent=ok?'Warten (+30 %) · '+F(w):'Keine Wartung nötig'}
 function renderShop(){
@@ -1827,7 +1838,7 @@ function clOpen(){if($('#clov'))return;const o=document.createElement('div');o.i
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#clbtn'))clOpen()});
 setTimeout(clLoad,3500);setInterval(clLoad,60000);
 /* Auto-Update: neue Version erkennen und neu laden */
-const BUILD='20261015-2000';
+const BUILD='20261015-2030';
 setTimeout(async()=>{try{if(!/^https?:/.test(location.protocol))return;
  const t=await (await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'})).text(),m=t.match(/const BUILD='([^']+)'/);
  if(m&&m[1]!==BUILD){const k='baggerUpd';if(sessionStorage.getItem(k)===m[1])return;sessionStorage.setItem(k,m[1]);location.replace(location.pathname+'?v='+m[1])}}catch(e){}},3500);
