@@ -135,11 +135,14 @@ button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
 .offh{font:700 22px var(--f1)}.offbig{font:700 40px var(--f1);color:var(--acc);text-shadow:0 1px 0 rgba(0,0,0,.25);font-variant-numeric:tabular-nums}
 .offg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.offg div{background:var(--surf2);border-radius:12px;padding:8px 4px;display:grid;gap:2px}.offg b{font:700 15px var(--f1)}.offg span{font:600 10px var(--f2);letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
 .offl{text-align:left;border-top:1px solid var(--line)}.offl div{display:flex;justify-content:space-between;gap:8px;padding:6px 2px;border-bottom:1px solid var(--line);font-size:13px}
-.cll{display:grid;gap:8px;text-align:left;max-height:46vh;overflow-y:auto}
-.cle{border-left:3px solid #e53935;padding:4px 0 4px 10px}
-.clh{display:flex;justify-content:space-between;gap:8px;font:700 13px var(--f2);color:#e53935}.clh span{font-weight:500;font-size:11px;color:var(--mut)}.clh a{color:#e53935;text-decoration:underline;cursor:pointer;margin-left:6px}
-.clb{color:#e53935;white-space:pre-wrap;word-break:break-word;margin-top:3px}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .cle{border-color:#ff6b63}:root:not([data-theme="light"]) .clh,:root:not([data-theme="light"]) .clb,:root:not([data-theme="light"]) .clh a{color:#ff6b63}}
+.cll{display:grid;gap:10px;text-align:left;max-height:56vh;overflow-y:auto}
+.clglow{border:2px solid #ff2a2a!important;box-shadow:0 0 10px #ff2a2a,0 0 28px rgba(255,42,42,.55),inset 0 0 14px rgba(255,42,42,.18)!important;animation:rglow2 2.4s ease-in-out infinite}
+@keyframes rglow2{50%{box-shadow:0 0 5px #ff2a2a,0 0 14px rgba(255,42,42,.4),inset 0 0 8px rgba(255,42,42,.12)}}
+@media (prefers-reduced-motion:reduce){.clglow{animation:none}}
+.cle{border-top:1px solid var(--line);padding-top:8px}.cle:first-child{border-top:0;padding-top:0}
+.clh{display:flex;gap:4px;align-items:baseline;font:600 13px var(--f2);color:var(--ink)}.clh .cla{color:#e53935}.clh span{margin-left:auto;font-weight:500;font-size:11px;color:var(--mut)}
+.clb{white-space:pre-wrap;word-break:break-word;margin-top:3px;color:var(--ink)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .clh .cla{color:#ff6b63}}
 .cab{--ink:#eceae4;--mut:#9aa0a8;--line:#323840;--surf2:#262a31;--ok:#5fd07a;--bad:#ff7b63;color:var(--ink);background:linear-gradient(#22262d,#14171b);border-radius:24px;padding:16px;box-shadow:var(--sh);border-top:5px solid var(--acc)}
 .cab h2{font:700 15px var(--f1);letter-spacing:.2em;text-transform:uppercase;color:var(--acc);margin:0 0 12px;text-align:center}
 .reels{display:flex;gap:8px;background:#07080a;padding:10px;border-radius:16px;box-shadow:inset 0 3px 10px rgba(0,0,0,.7)}
@@ -295,7 +298,7 @@ body{padding-bottom:0}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 15.10. 15:00 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 15.10. 15:15 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -1373,7 +1376,7 @@ let admOpen=false;
 const ADM_PIN='1925';
 function renderAdm(){const e=$('#adm');if(!e)return;
  if(!admOpen){e.innerHTML='<b>Admin-Panel</b><div class="meta">Zugang nur mit Code.</div><div style="display:flex;gap:8px"><input id="admpin" type="password" inputmode="numeric" maxlength="8" autocomplete="off" placeholder="Code" style="flex:1;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><button class="act" id="admgo" type="button">Öffnen</button></div><div class="meta" id="admmsg"></div>';return}
- e.innerHTML='<b>Admin-Panel</b><div class="meta">Aktuelles Geld: '+F(S.m)+'</div><div style="display:flex;gap:8px"><input id="admsum" type="text" inputmode="numeric" autocomplete="off" placeholder="Betrag in €" style="flex:1;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><button class="act" id="admset" type="button">Geld setzen</button></div><div class="meta" id="admmsg"></div><div class="meta" style="margin-top:6px">Casino: <b>'+(isBan()?'Hausverbot':'zugelassen')+'</b></div><button class="act ghost sm" id="admban" type="button">'+(isBan()?'Casino freischalten':'Hausverbot erteilen')+'</button><div class="meta" style="margin-top:10px"><b>Alle Spieler verwalten</b> (Cloud-Konto des Admins nötig)</div><button class="act sm" id="admpl-load" type="button">Spielerliste laden</button><div id="admpl"></div><div class="meta" style="margin-top:6px">Supabase (Cloud-Speicher)</div><input id="sburl" type="text" autocomplete="off" placeholder="Projekt-URL https://xxxx.supabase.co" value="'+(sbCfg().url||'')+'" style="min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><input id="sbkey" type="text" autocomplete="off" placeholder="anon public key" value="'+(sbCfg().key||'')+'" style="min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><button class="act" id="sbsave" type="button">Supabase-Zugang speichern</button><button class="act ghost" id="admclose" type="button">Admin schließen</button>';admRenderPl()}
+ e.innerHTML='<b>Admin-Panel</b><div class="meta">Aktuelles Geld: '+F(S.m)+'</div><div style="display:flex;gap:8px"><input id="admsum" type="text" inputmode="numeric" autocomplete="off" placeholder="Betrag in €" style="flex:1;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><button class="act" id="admset" type="button">Geld setzen</button></div><div class="meta" id="admmsg"></div><div class="meta" style="margin-top:6px">Casino: <b>'+(isBan()?'Hausverbot':'zugelassen')+'</b></div><button class="act ghost sm" id="admban" type="button">'+(isBan()?'Casino freischalten':'Hausverbot erteilen')+'</button><div class="meta" style="margin-top:10px"><b>Changelog verfassen</b></div><textarea id="admcl" maxlength="800" rows="3" placeholder="Neue Changelog-Nachricht …" style="width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit;resize:none"></textarea><button class="act sm" id="admclpost" type="button">Changelog veröffentlichen</button><div class="meta" id="admclmsg"></div><div id="admcllist"></div><div class="meta" style="margin-top:10px"><b>Alle Spieler verwalten</b> (Cloud-Konto des Admins nötig)</div><button class="act sm" id="admpl-load" type="button">Spielerliste laden</button><div id="admpl"></div><div class="meta" style="margin-top:6px">Supabase (Cloud-Speicher)</div><input id="sburl" type="text" autocomplete="off" placeholder="Projekt-URL https://xxxx.supabase.co" value="'+(sbCfg().url||'')+'" style="min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><input id="sbkey" type="text" autocomplete="off" placeholder="anon public key" value="'+(sbCfg().key||'')+'" style="min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><button class="act" id="sbsave" type="button">Supabase-Zugang speichern</button><button class="act ghost" id="admclose" type="button">Admin schließen</button>';admRenderPl();admClList();clLoad().then(admClList)}
 function resetArm(b){if(b.dataset.arm){delete b.dataset.arm;b.textContent='Spielstand zurücksetzen';return true}b.dataset.arm='1';b.textContent='Nochmal tippen zum Löschen';setTimeout(()=>{delete b.dataset.arm;b.textContent='Spielstand zurücksetzen'},3000);return false}
 document.addEventListener('click',e=>{
  const t=e.target.closest('button');if(!t)return;
@@ -1394,6 +1397,10 @@ document.addEventListener('click',e=>{
  if(admOpen&&t.id==='admban'){const want=!isBan();
   if(sbOn()&&sbSess){try{await_flag(sbSess.uid,{banned:want}).then(()=>{setBan(want,true);renderAdm();renderCasino();$('#admmsg').textContent=want?'Hausverbot erteilt.':'Casino freigeschaltet.'}).catch(er=>{$('#admmsg').textContent='Nicht möglich: '+er.message+' (Admin-Konto angemeldet?)'})}catch(er){}return}
   setBan(want);renderAdm();renderCasino();$('#admmsg').textContent=want?'Hausverbot erteilt.':'Casino freigeschaltet.';return}
+ if(admOpen&&t.id==='admclpost'){const v=(($('#admcl')||{}).value||'').trim();if(!v){$('#admclmsg').textContent='Bitte Text eingeben.';return}
+  if(!sbOn()||!sbSess){$('#admclmsg').textContent='Bitte im Cloud-Konto als Admin anmelden.';return}
+  sbReq('/rest/v1/changelog',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({author:sbName0(),body:v.slice(0,800)})}).then(()=>clLoad()).then(()=>{$('#admcl').value='';admClList();$('#admclmsg').textContent='Veröffentlicht ✓'}).catch(er=>{$('#admclmsg').textContent='Fehler: '+er.message});return}
+ if(admOpen&&t.dataset.cld){sbReq('/rest/v1/changelog?id=eq.'+t.dataset.cld,{method:'DELETE'}).then(()=>clLoad()).then(admClList).catch(er=>{$('#admclmsg').textContent='Fehler: '+er.message});return}
  if(admOpen&&t.id==='admpl-load'){admLoadPl();return}
  if(admOpen&&t.dataset.pa){const pr=t.closest('.pr'),uid=pr.dataset.u;
   if(t.dataset.pa==='ban'){const w=t.dataset.v==='1';await_flag(uid,{banned:w}).then(()=>{if(uid===(sbSess&&sbSess.uid)){setBan(w,true);renderCasino()}admLoadPl()}).catch(er=>{admPlMsg='Fehler: '+er.message;admRenderPl()})}
@@ -1575,20 +1582,18 @@ async function clLoad(){if(!sbOn())return;
  const d=$('#cldot');if(d)d.hidden=!(clRows&&clRows.length&&+clRows[0].id>clSeen());
  if($('#clov'))clRender()}
 function clRender(){const o=$('#clov');if(!o)return;const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
- const keep=($('#clin')||{}).value||'';
  o.querySelector('.offc').innerHTML='<div class="offh">📢 Changelog</div>'
-  +(clAdmin?'<div style="display:grid;gap:6px;text-align:left"><textarea id="clin" maxlength="800" rows="3" placeholder="Neue Nachricht als Admin …" style="width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit;resize:none">'+esc(keep)+'</textarea><button class="act sm" id="clpost" type="button">Veröffentlichen</button></div>':'')
-  +'<div class="cll">'+(clErr?'<div class="meta">'+esc(clErr)+'</div>':!clRows?'<div class="meta">Lade …</div>':clRows.length?clRows.map(m=>'<div class="cle"><div class="clh">Admin • '+esc(m.author||'Admin')+'<span>'+fdate(m.created_at)+(clAdmin?' <a data-cld="'+m.id+'">Löschen</a>':'')+'</span></div><div class="clb">'+esc(m.body)+'</div></div>').join(''):'<div class="meta">Noch keine Einträge.</div>')+'</div><button class="act big" id="clx" type="button">Schließen</button>'}
+  +'<div class="cll">'+(clErr?'<div class="meta">'+esc(clErr)+'</div>':!clRows?'<div class="meta">Lade …</div>':clRows.length?clRows.map(m=>'<div class="cle"><div class="clh"><b class="cla">Admin</b> • '+esc(m.author||'Admin')+'<span>'+fdate(m.created_at)+'</span></div><div class="clb">'+esc(m.body)+'</div></div>').join(''):'<div class="meta">Noch keine Einträge.</div>')+'</div><button class="act big" id="clx" type="button">Schließen</button>'}
+function admClList(){const e=$('#admcllist');if(!e)return;const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+ e.innerHTML=(clRows&&clRows.length)?'<div class="apl">'+clRows.slice(0,8).map(m=>'<div class="pr"><div class="meta">'+fdate(m.created_at)+'</div><div style="white-space:pre-wrap;word-break:break-word">'+esc(m.body)+'</div><div class="row"><button class="act ghost sm" data-cld="'+m.id+'" type="button">Löschen</button></div></div>').join('')+'</div>':''}
 function clOpen(){if($('#clov'))return;const o=document.createElement('div');o.id='clov';o.className='';o.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:18px';
- o.innerHTML='<div class="offc" style="max-height:86vh;overflow-y:auto"></div>';document.body.appendChild(o);
- o.addEventListener('click',async e=>{const t=e.target;if(t===o||t.id==='clx'){o.remove();return}
-  if(t.id==='clpost'){const v=(($('#clin')||{}).value||'').trim();if(!v)return;try{await sbReq('/rest/v1/changelog',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({author:sbName0(),body:v.slice(0,800)})});$('#clin').value='';await clLoad()}catch(er){clErr='Fehler: '+er.message;clRender()}return}
-  if(t.dataset&&t.dataset.cld){try{await sbReq('/rest/v1/changelog?id=eq.'+t.dataset.cld,{method:'DELETE'});await clLoad()}catch(er){clErr='Fehler: '+er.message;clRender()}}});
+ o.innerHTML='<div class="offc clglow" style="max-height:86vh;overflow-y:auto"></div>';document.body.appendChild(o);
+ o.addEventListener('click',e=>{const t=e.target;if(t===o||t.id==='clx')o.remove()});
  clRender();clLoad().then(()=>{if(clRows&&clRows.length){try{localStorage.setItem('baggerCl',String(+clRows[0].id))}catch(e){}const d=$('#cldot');if(d)d.hidden=true}})}
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#clbtn'))clOpen()});
 setTimeout(clLoad,3500);setInterval(clLoad,60000);
 /* Auto-Update: neue Version erkennen und neu laden */
-const BUILD='20261015-1500';
+const BUILD='20261015-1515';
 setTimeout(async()=>{try{if(!/^https?:/.test(location.protocol))return;
  const t=await (await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'})).text(),m=t.match(/const BUILD='([^']+)'/);
  if(m&&m[1]!==BUILD){const k='baggerUpd';if(sessionStorage.getItem(k)===m[1])return;sessionStorage.setItem(k,m[1]);location.replace(location.pathname+'?v='+m[1])}}catch(e){}},3500);
