@@ -239,6 +239,7 @@ body{padding-bottom:0}
 <section id="pay" hidden></section>
 <section id="board" hidden></section>
 <section id="prof" hidden></section>
+<div id="inboxwrap" hidden></div>
 <div id="cloudwrap" hidden><div class="card2" style="padding:14px;display:grid;gap:10px;margin-top:14px"><div id="cloud"></div></div></div>
 <div id="admwrap" hidden><div class="card2" style="padding:14px;display:grid;gap:10px;margin-top:14px"><div id="adm"></div></div></div>
 <section id="slot" hidden>
@@ -276,7 +277,7 @@ body{padding-bottom:0}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 15.10. 12:55 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 15.10. 13:10 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -1277,20 +1278,49 @@ let lbRows=null,lbT=0,lbErr='',lbBusy=false;
 async function lbLoad(force){if(!sbOn()||!sbSess){lbRows=null;renderBoard();return}
  if(lbBusy||(!force&&Date.now()-lbT<20000))return;lbBusy=true;
  try{const r=await sbReq('/rest/v1/saves?select=user_id,name,rank,geld:data->>m,lz:data->>lic&limit=500');lbRows=(r||[]).map(x=>({id:x.user_id,name:x.name||'Spieler',rank:+x.rank||0,m:Math.max(0,parseFloat(x.geld)||0),l:Math.max(0,parseInt(x.lz)||0)}));lbErr=''}catch(e){lbErr=e.message}
- lbT=Date.now();lbBusy=false;renderBoard()}
-function renderBoard(){const e=$('#board');if(!e)return;if(document.activeElement&&document.activeElement.id==='lbnm')return;
+ lbT=Date.now();lbBusy=false;if(!lbView)renderBoard()}
+function renderBoard(){const e=$('#board');if(!e)return;if(document.activeElement&&(document.activeElement.id==='lbnm'||document.activeElement.id==='msgtxt'))return;
  const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
  let h='<h2 class="sec">Bestenliste</h2>';
  if(!sbOn()||!sbSess){e.innerHTML=h+'<div class="card2" style="padding:16px;display:grid;gap:10px"><div>Melde dich im Profil an, um die Bestenliste aller Spieler zu sehen.</div><button class="act" id="lbprof" type="button">Zum Profil</button></div>';return}
  if(!lbRows){e.innerHTML=h+'<div class="card2" style="padding:16px"><div class="meta">'+(lbErr?esc(lbErr):'Lade Bestenliste …')+'</div></div>';return}
+ const me0=sbSess.uid;if(lbView){e.innerHTML=h+pfHtml(esc,me0);return}
  const me=sbSess.uid,rows=lbRows.map(r=>r.id===me?{id:r.id,name:sbName0(),rank:rankIx(),m:S.m,l:S.lic||0}:r).sort((a,b)=>(b.l-a.l)||(b.m-a.m)),pos=rows.findIndex(r=>r.id===me)+1;
  const med=['#d4a017','#9aa3ab','#b0703a'];
  e.innerHTML=h+(nameSet()?'':'<div class="card2" style="padding:12px 14px;display:grid;gap:8px"><div class="meta">Lege deinen Spielernamen fest. Er erscheint hier und kann nur einmal gesetzt werden.</div><div style="display:flex;gap:8px"><input id="lbnm" type="text" maxlength="20" autocomplete="nickname" placeholder="Dein Name" style="flex:1;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><button class="act" id="lbname" type="button">Speichern</button></div></div>')+'<div class="card2" style="padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:10px"><div class="meta">'+(pos?'Deine Platzierung: <b>'+pos+'</b> von '+rows.length:rows.length+' Spieler')+'</div><button class="act ghost sm" id="lbref" type="button" '+(lbBusy?'disabled':'')+'>Aktualisieren</button></div>'
   +'<div class="card2" style="padding:6px 0">'+(rows.length?rows.slice(0,100).map((r,i)=>{const top=i<3,cr=top?'<svg viewBox="0 0 24 20" width="30" height="25" aria-label="Platz '+(i+1)+'"><path d="M2 17L.5 5l6 5L12 2l5.5 8 6-5L22 17z" fill="'+med[i]+'" stroke="rgba(0,0,0,.35)" stroke-width=".8" stroke-linejoin="round"/><rect x="2" y="17" width="20" height="2.6" rx="1" fill="'+med[i]+'" stroke="rgba(0,0,0,.35)" stroke-width=".8"/><circle cx="12" cy="2.5" r="1.6" fill="#fff" opacity=".7"/></svg>':'';
    const bg=r.id===me?'background:color-mix(in srgb,var(--acc) 22%,transparent);':(top?'background:linear-gradient(90deg,color-mix(in srgb,'+med[i]+' 22%,transparent),transparent 85%);':'');
-   return '<div style="display:flex;align-items:center;gap:10px;padding:'+(top?'12px':'10px')+' 14px;'+bg+(i?'border-top:1px solid var(--line)':'')+'"><div style="width:34px;text-align:center;display:flex;flex-direction:column;align-items:center;line-height:1">'+(top?cr+'<b style="font:700 12px var(--f1);color:'+med[i]+';margin-top:2px">'+(i+1)+'</b>':'<b style="font:700 18px var(--f1);color:var(--mut)">'+(i+1)+'</b>')+'</div><div style="flex:1;min-width:0"><div style="font-weight:'+(top?700:600)+';overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(r.name)+(r.id===me?' <span class="meta">(du)</span>':'')+'</div><div class="meta">'+esc((RANKS[r.rank]||RANKS[0]).n)+' · 🏅 '+r.l+(r.l===1?' Lizenz':' Lizenzen')+'</div></div><b style="font:700 17px var(--f1);font-variant-numeric:tabular-nums">'+F(r.m)+'</b></div>'}).join(''):'<div class="meta" style="padding:14px">Noch keine Einträge.</div>')+'</div>'
+   return '<div data-pf="'+r.id+'" style="cursor:pointer;display:flex;align-items:center;gap:10px;padding:'+(top?'12px':'10px')+' 14px;'+bg+(i?'border-top:1px solid var(--line)':'')+'"><div style="width:34px;text-align:center;display:flex;flex-direction:column;align-items:center;line-height:1">'+(top?cr+'<b style="font:700 12px var(--f1);color:'+med[i]+';margin-top:2px">'+(i+1)+'</b>':'<b style="font:700 18px var(--f1);color:var(--mut)">'+(i+1)+'</b>')+'</div><div style="flex:1;min-width:0"><div style="font-weight:'+(top?700:600)+';overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(r.name)+(r.id===me?' <span class="meta">(du)</span>':'')+'</div><div class="meta">'+esc((RANKS[r.rank]||RANKS[0]).n)+' · 🏅 '+r.l+(r.l===1?' Lizenz':' Lizenzen')+'</div></div><b style="font:700 17px var(--f1);font-variant-numeric:tabular-nums">'+F(r.m)+'</b><span class="meta">›</span></div>'}).join(''):'<div class="meta" style="padding:14px">Noch keine Einträge.</div>')+'</div>'
   +'<div class="meta" style="padding:0 4px">Sortiert nach Lizenzen, bei gleich vielen nach Geld. Aktualisierung alle 30 Sekunden.</div>'}
 setInterval(()=>{if(!$('#board').hidden&&sbSess)lbLoad(true)},30000);
+/* ---------- Spielerprofile und Nachrichten ---------- */
+let lbView=null,pfData=null,pfMsg='',inbox=[],inboxErr='',msgLast=0;
+const fdate=t=>{try{return new Date(t).toLocaleString('de-DE',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}catch(e){return''}};
+async function openProfile(uid){lbView=uid;pfData=null;pfMsg='';renderBoard();
+ try{const r=await sbReq('/rest/v1/saves?user_id=eq.'+uid+'&select=name,rank,life,data');pfData=(r&&r[0])||{}}catch(e){pfMsg=e.message;pfData={}}
+ renderBoard()}
+function pfHtml(esc,me){
+ const row=(lbRows||[]).find(x=>x.id===lbView),own=lbView===me,d=own?S:((pfData&&pfData.data)||{}),st=d.st||{};
+ const nm=own?sbName0():((pfData&&pfData.name)||(row&&row.name)||'Spieler'),rk=own?rankIx():(+((pfData&&pfData.rank)||(row&&row.rank))||0);
+ const rw=(k,v)=>'<div style="display:flex;justify-content:space-between;padding:8px 0;border-top:1px solid var(--line)"><span class="meta">'+k+'</span><b>'+v+'</b></div>';
+ const info=!pfData?'<div class="meta" style="padding:10px 0">Lade …</div>':rw('Rang',esc((RANKS[rk]||RANKS[0]).n))+rw('Lizenzen',(+d.lic||0))+rw('Geld',F(+d.m||0))+rw('Gesamtverdienst',F(+d.life||(pfData&&+pfData.life)||0))+rw('Erledigte Aufträge',(+st.jobs||0))+rw('Bester Bagger',esc((V[+d.top]||V[0]).n));
+ return '<button class="act ghost sm" id="lbback" type="button">‹ Zurück zur Bestenliste</button><div class="card2" style="padding:14px;margin-top:10px"><div style="font:700 22px var(--f1)">'+esc(nm)+(own?' <span class="meta">(du)</span>':'')+'</div>'+info+'</div>'
+ +(own?'':'<div class="card2" style="padding:14px;display:grid;gap:8px;margin-top:10px"><b>Nachricht senden</b><textarea id="msgtxt" maxlength="200" rows="3" placeholder="Deine Nachricht an '+esc(nm)+' (max. 200 Zeichen)" style="width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit;resize:none"></textarea><button class="act" id="msgsend" type="button">Senden</button>'+(pfMsg?'<div class="meta">'+esc(pfMsg)+'</div>':'')+'</div>')}
+async function msgSend(){const t=$('#msgtxt'),v=((t&&t.value)||'').trim();if(!v||!lbView||!sbSess)return;
+ if(Date.now()-msgLast<4000){pfMsg='Bitte kurz warten.';renderBoard();return}msgLast=Date.now();
+ try{await sbReq('/rest/v1/messages',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({from_id:sbSess.uid,from_name:sbName0(),to_id:lbView,body:v.slice(0,200)})});pfMsg='Nachricht gesendet ✓'}
+ catch(e){pfMsg='Senden nicht möglich: '+e.message}
+ renderBoard()}
+const seenGet=()=>{try{return +localStorage.getItem('baggerMsgSeen')||0}catch(e){return 0}};
+function inboxSeen(){if(inbox.length){try{localStorage.setItem('baggerMsgSeen',String(Math.max(...inbox.map(m=>+m.id))))}catch(e){}}renderInbox()}
+async function inboxLoad(){if(!sbOn()||!sbSess||!sbSess.uid)return;
+ try{const r=await sbReq('/rest/v1/messages?to_id=eq.'+sbSess.uid+'&select=id,from_id,from_name,body,created_at&order=id.desc&limit=30');inbox=r||[];inboxErr='';
+  const nw=inbox.filter(m=>+m.id>seenGet());if(nw.length){if($('#prof').hidden)toast('Neue Nachricht von '+nw[0].from_name);else inboxSeen()}}catch(e){inboxErr=e.message}
+ renderInbox()}
+function renderInbox(){const e=$('#inboxwrap');if(!e)return;const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+ e.hidden=$('#prof').hidden||!inbox.length;if(!inbox.length)return;
+ e.innerHTML='<h2 class="sec">Nachrichten</h2><div class="card2" style="padding:6px 0">'+inbox.map((m,i)=>'<div style="padding:10px 14px;'+(i?'border-top:1px solid var(--line);':'')+'"><div style="display:flex;justify-content:space-between;gap:8px"><b>'+esc(m.from_name||'Spieler')+'</b><span class="meta">'+fdate(m.created_at)+'</span></div><div style="margin:4px 0 8px;white-space:pre-wrap;word-break:break-word">'+esc(m.body)+'</div><div style="display:flex;gap:6px"><button class="act ghost sm" data-reply="'+m.from_id+'" type="button">Antworten</button><button class="act ghost sm" data-mdel="'+m.id+'" type="button">Löschen</button></div></div>').join('')+'</div>'}
+setInterval(inboxLoad,15000);setTimeout(inboxLoad,5000);
 let admOpen=false;
 const ADM_PIN='1925';
 function renderAdm(){const e=$('#adm');if(!e)return;
@@ -1299,7 +1329,7 @@ function renderAdm(){const e=$('#adm');if(!e)return;
 function resetArm(b){if(b.dataset.arm){delete b.dataset.arm;b.textContent='Spielstand zurücksetzen';return true}b.dataset.arm='1';b.textContent='Nochmal tippen zum Löschen';setTimeout(()=>{delete b.dataset.arm;b.textContent='Spielstand zurücksetzen'},3000);return false}
 document.addEventListener('click',e=>{
  const t=e.target.closest('button');if(!t)return;
- if(t.dataset.t){document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b===t));['jobs','shop','firm','pay','slot','prof','board'].forEach(id=>$('#'+id).hidden=id!==t.dataset.t);if(t.dataset.t==='board')lbLoad(true);if(t.dataset.t==='slot')renderCasino();if(t.dataset.t!=='prof')admOpen=false;$('#admwrap').hidden=t.dataset.t!=='prof';$('#cloudwrap').hidden=t.dataset.t!=='prof';renderAdm();if(t.dataset.t==='prof'){renderCloud()}if(t.dataset.t==='jobs'&&T3)rs();if(t.dataset.t==='firm')renderFirm();if(t.dataset.t==='pay')renderPay();if(t.dataset.t==='prof')renderProf();$('#rk').classList.toggle('on',t.id==='rk');$('#scr').scrollTo(0,0);return}
+ if(t.dataset.t){document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b===t));['jobs','shop','firm','pay','slot','prof','board'].forEach(id=>$('#'+id).hidden=id!==t.dataset.t);if(t.dataset.t==='board'){lbView=null;lbLoad(true)}if(t.dataset.t==='slot')renderCasino();if(t.dataset.t!=='prof')admOpen=false;$('#admwrap').hidden=t.dataset.t!=='prof';$('#cloudwrap').hidden=t.dataset.t!=='prof';$('#inboxwrap').hidden=t.dataset.t!=='prof'||!inbox.length;if(t.dataset.t==='prof')inboxSeen();renderAdm();if(t.dataset.t==='prof'){renderCloud()}if(t.dataset.t==='jobs'&&T3)rs();if(t.dataset.t==='firm')renderFirm();if(t.dataset.t==='pay')renderPay();if(t.dataset.t==='prof')renderProf();$('#rk').classList.toggle('on',t.id==='rk');$('#scr').scrollTo(0,0);return}
  if(t.dataset.job){S.job=+t.dataset.job;renderOffers();renderProg();return}
  if(t.dataset.sel){switchTo(+t.dataset.sel);return}
  if(t.dataset.buy){const i=+t.dataset.buy,v=V[i];if(S.m>=v.c&&i===S.top+1&&(!v.lic||S.lic>=v.lic)){S.m-=v.c;S.cds[S.tier]={c:S.cond,b:!!S.broken,f:S.fix||0};S.top=i;S.tier=i;S.cond=100;S.broken=false;S.job=null;S.offers=[];refill();toast(v.n+' gekauft!');if(T3)setExc();renderShop();renderOffers();renderTop();renderProg();save()}return}
@@ -1471,7 +1501,13 @@ function bjStand(){const g=S.bj;if(!g||g.done)return;bjEnd()}
 function bjDouble(){const g=S.bj;if(!g||g.done||g.p.length!==2||g.bet>S.m)return;
  S.m-=g.bet;S.st.cstake+=g.bet;g.bet*=2;g.p.push(bjDraw());renderTop();bjEnd()}
 document.addEventListener('click',e=>{
- const t=e.target.closest&&e.target.closest('#selfban,[data-g],[data-bjb],#bjdeal,#bjhit,#bjstand,#bjdbl');if(!t)return;
+ const pf=e.target.closest&&e.target.closest('[data-pf]');
+ if(pf&&!e.target.closest('button')){openProfile(pf.dataset.pf);return}
+ const t=e.target.closest&&e.target.closest('#lbback,#msgsend,[data-reply],[data-mdel],#selfban,[data-g],[data-bjb],#bjdeal,#bjhit,#bjstand,#bjdbl');if(!t)return;
+ if(t.id==='lbback'){lbView=null;renderBoard();return}
+ if(t.id==='msgsend'){msgSend();return}
+ if(t.dataset.reply){const u=t.dataset.reply;document.querySelector('nav button[data-t=board]').click();openProfile(u);return}
+ if(t.dataset.mdel){sbReq('/rest/v1/messages?id=eq.'+t.dataset.mdel,{method:'DELETE'}).then(inboxLoad).catch(()=>{});return}
  if(t.id==='selfban'){if(!t.dataset.arm){t.dataset.arm='1';t.textContent='Wirklich sperren? Nur ein Admin kann das aufheben. Nochmal tippen.';setTimeout(()=>{delete t.dataset.arm;t.textContent='Selbstsperre: Casino für mich sperren'},4000);return}delete t.dataset.arm;setBan(true);renderCasino();toast('Selbstsperre aktiv');return}
  if(t.dataset.g){document.querySelectorAll('.cas-tabs button').forEach(b=>b.classList.toggle('on',b===t));$('#slots').hidden=t.dataset.g!=='slots';$('#bjw').hidden=t.dataset.g!=='bj';if(t.dataset.g==='bj'){if(S.bj&&S.bj.done&&!$('#dh').innerHTML)bjMsg('Wähle deinen Einsatz.');bjRender()}return}
  if(t.dataset.bjb){bjBet=+t.dataset.bjb;bjRender();return}
