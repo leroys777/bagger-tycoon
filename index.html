@@ -308,6 +308,8 @@ const X=[
 ['Villa-Pool für Prominente',200,2200,1,1],['Staatsauftrag: Kanalbau Altstadt',2500,42000,3,2],['Flughafen-Baugrube',6500,150000,4,3],
 ['Brückenabriss Rheintal',28000,700000,6,4],['Hochhaus-Abriss Frankfurt',34000,950000,6,4],['Erzmine Nordschacht',70000,1500000,7,4],
 ['Mega-Tagebau Nord',180000,5500000,8,5],['Hafen-Neubau Rotterdam',280000,8500000,8,5]];
+/* Balance: laengeres Spiel */
+const WK=1.6,PY=.5,CK=3;V.forEach(v=>{v.c*=CK});
 const ST0=()=>({jobs:0,ex:0,work:0,best:0,passive:0,repairs:0,repCost:0,breaks:0,spins:0,cstake:0,cwin:0,big:0,time:0,sold:0});
 let S={m:0,tier:0,job:null,offers:[],nid:1,up:{mot:0,hyd:0,tec:0,auto:0},lic:0,tot:0,life:0,emp:'self',st:ST0(),v:2,rk:0};
 const newState=()=>({m:0,tier:0,job:null,offers:[],nid:1,up:{mot:0,hyd:0,tec:0,auto:0},lic:0,tot:0,life:0,emp:'self',unl:0,st:ST0(),v:2,rk:0,cond:100,top:0,cds:{}});
@@ -315,9 +317,9 @@ try{const d=JSON.parse(localStorage.getItem(KEY));if(d&&d.offers)S=d}catch(e){}
 const save=()=>{if(window.__ns)return;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 if(S.pend){S.m+=S.pend;S.pend=0}
 S.up=Object.assign({mot:0,hyd:0,tec:0,auto:0},S.up||{});S.lic=S.lic||0;S.tot=S.tot||0;S.life=Math.max(S.life||0,S.tot);if(!S.emp)S.emp='self';S.st=Object.assign(ST0(),S.st||{});if(typeof S.cond!=='number')S.cond=100;if(typeof S.top!=='number')S.top=S.tier;if(!S.cds)S.cds={};if(!S.v){S.tier=[0,1,2,3,5,8][S.tier]||0;S.v=2;S.offers=[];S.job=null;S.prog=0}if(S.tier>=V.length)S.tier=0;if(S.emp==='wtd'&&S.next>Date.now()+300000)S.next=Date.now()+300000;
-const pw=()=>V[S.tier].p*(1+.2*S.up.mot);
+const pw=()=>V[S.tier].p*(1+.2*S.up.mot)/WK;
 const payM=()=>(1+.12*S.up.hyd)*(1+.35*S.lic)*(1+.05*rankIx())*((S.boostUntil||0)>Date.now()?2:1);
-const pay=o=>Math.round(o.e*payM());
+const pay=o=>Math.round(o.e*PY*payM());
 const newIds=new Set();
 const RANKS=[{n:'Praktikant',at:0,u:'Standardaufträge'},{n:'Azubi',at:10000,u:'erste exklusive Aufträge'},{n:'Geselle',at:150000,u:'Staatsaufträge im Tiefbau'},{n:'Alt-Geselle',at:2000000,u:'Flughäfen und Großbaustellen'},{n:'Meister',at:25000000,u:'Abrisse und Bergwerke'},{n:'Bauingenieur',at:250000000,u:'Mega-Projekte im Tagebau und Hafenbau'}];
 const rankIx=()=>{let r=0;RANKS.forEach((k,i)=>{if(S.life>=k.at)r=i});return r};
@@ -1132,12 +1134,12 @@ const dmg=()=>1-Math.max(0,Math.min(100,S.cond))/100;
 const FULLC=()=>Math.max(1,Math.round(RC()*(.25+.9*dmg())));
 const MAINTC=()=>Math.max(1,Math.round(RC()*.12*(.5+dmg())));
 const condCol=()=>S.cond>60?'#2e9e5b':S.cond>30?'#e0a100':'#d63a24';
-const RC=()=>Math.round([60,150,900,5000,16000,50000,160000,500000,2000000][S.tier]*Math.max(.4,1-.06*S.up.tec));
+const RC=()=>Math.round(2*[60,150,900,5000,16000,50000,160000,500000,2000000][S.tier]*Math.max(.4,1-.06*S.up.tec));
 function renderBrk(){const b=$('#brk');b.hidden=!S.broken;if(!S.broken)return;const c=FULLC(),w=MAINTC();$('#brkt').textContent='Steht still · Zustand '+Math.round(S.cond)+' %';$('#rep').disabled=S.m<c;$('#rep').textContent='Voll '+F(c);$('#mnt').disabled=S.m<w;$('#mnt').textContent='Warten '+F(w);$('#fix').textContent='Flicken '+(S.fix||0)+'/25'}
 function renderEmp(){const c=$('#empcard');
  if(S.emp==='wtd'){const r=Math.max(0,S.next-Date.now()),m=Math.floor(r/60000),sc=String(Math.floor(r/1000)%60).padStart(2,'0');c.innerHTML=`<div class="emp-row"><div><b>WTD 91</b><span class="meta">Passives Einkommen</span></div><div style="text-align:right"><span class="pay">+2.100 €</span><br><span class="meta">in ${m}:${sc}</span></div></div><div class="bar"><i style="width:${100-r/3000}%"></i></div>`}
  else{const rest=Math.max(0,EMPMIN-S.life);c.innerHTML=`<div class="emp-row"><div><b>Selbstständig</b><span class="meta">${rest>0?'Arbeitgeber ab '+F(EMPMIN)+' Gesamtverdienst (noch '+F(rest)+')':'Arbeitgeber im Tab Firma wählbar'}</span></div></div>`}}
-function payTick(){if(S.emp!=='wtd')return;const n=Date.now();let c=0;while(S.next<=n&&c<144){S.m+=2100;S.tot+=2100;S.life+=2100;S.st.passive+=2100;S.next+=300000;c++}if(S.next<=n)S.next=n+300000;if(c){toast('WTD 91: +'+F(2100*c));save()}}
+function payTick(){if(S.emp!=='wtd')return;const n=Date.now();let c=0;while(S.next<=n&&c<144){S.m+=700;S.tot+=700;S.life+=700;S.st.passive+=700;S.next+=300000;c++}if(S.next<=n)S.next=n+300000;if(c){toast('WTD 91: +'+F(700*c));save()}}
 let last=performance.now(),sv=0,ro=0,ccd=0;
 setInterval(()=>{const n=performance.now(),dt=Math.min(3600,(n-last)/1000);last=n;const o=cur(),now=Date.now();if(dt<2)S.st.time+=dt;if(!$('#shop').hidden&&(ccd+=dt)>1){ccd=0;renderCond()}
  if(o&&!S.broken){S.cond=Math.max(0,S.cond-dt*100/1800);if(Math.random()<dt*(1+2*dmg())/(300*(1+.5*S.up.tec))){S.broken=true;S.fix=0;S.cond=Math.min(S.cond,10);S.st.breaks++;toast('Bagger kaputt!');renderShop()}o.prog+=pw()*dt;
@@ -1152,10 +1154,10 @@ setInterval(()=>{const n=performance.now(),dt=Math.min(3600,(n-last)/1000);last=
  if((sv+=dt)>3){sv=0;save()}},100);
 
 const UP=[
- {k:'mot',n:'Motor-Tuning',d:l=>'Leistung +'+l*20+' %',max:12,c:l=>Math.round(800*Math.pow(2.3,l))},
- {k:'hyd',n:'Hydraulik und Löffel',d:l=>'Auftragslohn +'+l*12+' %',max:12,c:l=>Math.round(1200*Math.pow(2.25,l))},
- {k:'tec',n:'Wartungsplan',d:l=>'Reparatur −'+l*6+' %, Defekte seltener',max:8,c:l=>Math.round(600*Math.pow(2.1,l))},
- {k:'auto',n:'Vorarbeiter',d:l=>l?'Nimmt automatisch Aufträge an':'Nimmt automatisch den besten Auftrag an',max:1,c:()=>60000}];
+ {k:'mot',n:'Motor-Tuning',d:l=>'Leistung +'+l*20+' %',max:12,c:l=>Math.round(2000*Math.pow(2.6,l))},
+ {k:'hyd',n:'Hydraulik und Löffel',d:l=>'Auftragslohn +'+l*12+' %',max:12,c:l=>Math.round(3000*Math.pow(2.5,l))},
+ {k:'tec',n:'Wartungsplan',d:l=>'Reparatur −'+l*6+' %, Defekte seltener',max:8,c:l=>Math.round(1500*Math.pow(2.3,l))},
+ {k:'auto',n:'Vorarbeiter',d:l=>l?'Nimmt automatisch Aufträge an':'Nimmt automatisch den besten Auftrag an',max:1,c:()=>250000}];
 const gain=()=>Math.floor(Math.cbrt((S.tot||0)/1000000));
 function renderFirm(){
  $('#firm').innerHTML=`<h2 class="sec" style="margin-top:4px">Arbeitgeber</h2><div class="card2" id="empbox"></div><h2 class="sec">Konzern</h2><div class="card2"><div class="emp-row"><div><b class="vn">Baulizenzen</b><span class="meta">Jede Lizenz erhöht deinen Lohn dauerhaft um 35 %</span></div><span class="pay" id="fl"></span></div><div class="emp-row"><span class="meta">Verdient in diesem Durchgang</span><b id="ft"></b></div><button class="act big" id="prest" type="button" style="margin-top:2px"></button><div class="meta" id="pn"></div></div><h2 class="sec">Werkstatt</h2>`+UP.map(u=>`<div class="job"><div class="jt" id="ul-${u.k}"></div><div class="jmain"><b>${u.n}</b><span class="meta" id="ud-${u.k}"></span></div><div class="jside"><span class="pay" id="up-${u.k}"></span><button class="act sm" data-up="${u.k}" type="button">Verbessern</button></div></div>`).join('');
@@ -1163,8 +1165,8 @@ function renderFirm(){
 function empBox(){const b=$('#empbox');if(!b)return;const k=S.life>=EMPMIN?'u'+S.emp:'l';
  if(b.dataset.k!==k){b.dataset.k=k;
   if(k==='l')b.innerHTML=`<div class="emp-row"><div><b class="vn">Noch gesperrt</b><span class="meta">Ab ${F(EMPMIN)} Gesamtverdienst kannst du dir einen Arbeitgeber suchen. Es zählt alles, was du mit Aufträgen und Gehalt verdienst, auch über Firmenverkäufe hinweg. Casino und Shop zählen nicht.</span></div></div><div class="bar"><i id="ebar"></i></div><div class="emp-row"><span class="meta">Bisher verdient</span><b id="etxt"></b></div>`;
-  else if(S.emp==='wtd')b.innerHTML=`<div class="emp-row"><div><b class="vn">WTD 91</b><span class="meta">Du bist angestellt</span></div><span class="pay">+2.100 € / 5 Min.</span></div>`;
-  else b.innerHTML=`<div class="meta">Du bist selbstständig. Jetzt kannst du dir einen Arbeitgeber suchen:</div><div class="opt hot"><b>WTD 91</b><span class="pay">2.100 € <span class="meta">alle 5 Minuten</span></span><span class="meta">Läuft auch, wenn du nichts tust.</span><button class="act" data-emp="wtd" type="button">Bei WTD 91 anfangen</button></div>`}
+  else if(S.emp==='wtd')b.innerHTML=`<div class="emp-row"><div><b class="vn">WTD 91</b><span class="meta">Du bist angestellt</span></div><span class="pay">+700 € / 5 Min.</span></div>`;
+  else b.innerHTML=`<div class="meta">Du bist selbstständig. Jetzt kannst du dir einen Arbeitgeber suchen:</div><div class="opt hot"><b>WTD 91</b><span class="pay">700 € <span class="meta">alle 5 Minuten</span></span><span class="meta">Läuft auch, wenn du nichts tust.</span><button class="act" data-emp="wtd" type="button">Bei WTD 91 anfangen</button></div>`}
  if(k==='l'){$('#ebar').style.width=Math.min(100,S.life/EMPMIN*100)+'%';$('#etxt').textContent=F(S.life)+' / '+F(EMPMIN)}}
 function updateFirm(){if($('#firm').hidden||!$('#fl'))return;empBox();
  const g=gain();$('#fl').textContent=S.lic;$('#ft').textContent=F(S.tot);
@@ -1178,7 +1180,7 @@ function doPrest(b){const g=gain();if(g<1)return;
  S=Object.assign(newState(),{emp:keep.emp,next:keep.next,nid:keep.nid,boostUntil:keep.boostUntil,lic:keep.lic,life:keep.life,unl:keep.unl,st:keep.st});S.up.auto=keep.auto;S.st.sold++;S.rk=rankIx();
  refill();newIds.clear();if(T3)setExc();renderOffers();renderShop();renderTop();renderProg();renderFirm();toast('Neue Firma gegründet: '+S.lic+' Lizenzen');save()}
 const PK=[{id:'p1',n:'Starterpaket',eur:'0,99',h:.25},{id:'p2',n:'Bauleiter',eur:'4,99',h:1},{id:'p3',n:'Unternehmer',eur:'9,99',h:3},{id:'p4',n:'Magnat',eur:'19,99',h:8},{id:'p5',n:'Tycoon',eur:'49,99',h:24}];
-const rate=()=>{const c=S.offers.filter(o=>o.t<=S.tier);return(c.length?Math.max(...c.map(o=>o.e/o.w)):3)*pw()*payM()};
+const rate=()=>{const c=S.offers.filter(o=>o.t<=S.tier);return(c.length?Math.max(...c.map(o=>o.e/o.w)):3)*pw()*payM()*PY};
 const packAmt=p=>Math.max(1000,Math.round(rate()*3600*p.h/100)*100);
 const hl=h=>h<1?Math.round(h*60)+' Min.':h+' Std.';
 const SHOP_OPEN=false;
