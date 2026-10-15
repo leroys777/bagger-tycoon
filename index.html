@@ -270,7 +270,7 @@ body{padding-bottom:0}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button></div>
+<div class="foot"><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 15.10. 12:45 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -1159,7 +1159,7 @@ const UP=[
  {k:'mot',n:'Motor-Tuning',d:l=>'Leistung +'+l*20+' %',max:12,c:l=>Math.round(2000*Math.pow(2.6,l))},
  {k:'hyd',n:'Hydraulik und Löffel',d:l=>'Auftragslohn +'+l*12+' %',max:12,c:l=>Math.round(3000*Math.pow(2.5,l))},
  {k:'tec',n:'Wartungsplan',d:l=>'Reparatur −'+l*6+' %, Defekte seltener',max:8,c:l=>Math.round(1500*Math.pow(2.3,l))},
- {k:'auto',n:'Vorarbeiter',d:l=>l?'Nimmt automatisch Aufträge an':'Nimmt automatisch den besten Auftrag an',max:1,c:()=>250000}];
+ {k:'auto',n:'Vorarbeiter',d:l=>l?'Nimmt automatisch Aufträge an':'Nimmt automatisch den besten Auftrag an',max:1,c:()=>50000}];
 const gain=()=>Math.floor(Math.cbrt((S.tot||0)/1000000));
 function renderFirm(){
  $('#firm').innerHTML=`<h2 class="sec" style="margin-top:4px">Arbeitgeber</h2><div class="card2" id="empbox"></div><h2 class="sec">Konzern</h2><div class="card2"><div class="emp-row"><div><b class="vn">Baulizenzen</b><span class="meta">Jede Lizenz erhöht deinen Lohn dauerhaft um 35 %</span></div><span class="pay" id="fl"></span></div><div class="emp-row"><span class="meta">Verdient in diesem Durchgang</span><b id="ft"></b></div><button class="act big" id="prest" type="button" style="margin-top:2px"></button><div class="meta" id="pn"></div></div><h2 class="sec">Werkstatt</h2>`+UP.map(u=>`<div class="job"><div class="jt" id="ul-${u.k}"></div><div class="jmain"><b>${u.n}</b><span class="meta" id="ud-${u.k}"></span></div><div class="jside"><span class="pay" id="up-${u.k}"></span><button class="act sm" data-up="${u.k}" type="button">Verbessern</button></div></div>`).join('');
@@ -1506,4 +1506,3 @@ ldStart(boot);
 </script>
 
 </body></html>
-<!-- build 1792060739 -->
