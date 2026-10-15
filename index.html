@@ -307,7 +307,7 @@ body{padding-bottom:0}
   <div id="msg">Setze ein und dreh.</div>
   <div id="lad" hidden><div class="duel"><div class="dz win" id="dw"></div><div class="dz lose" id="dl"></div></div><div class="emp-row" style="align-items:flex-start;gap:14px"><div class="lad" id="steps" style="flex:1"></div><div class="lside"><button class="act" id="risk" type="button">Risiko</button><button class="act ghost" id="coll" type="button">Sammeln</button><div class="meta">Drück Risiko, dann Stopp. Leuchtet Gewinn, verdoppelt sich der Betrag, sonst ist er weg.</div></div></div></div>
   <div class="lbl">Einsatz</div><div class="bets" id="bets"></div>
-  <button class="act big" id="spin" type="button">Drehen</button>
+  <div class="meta splinfo" hidden style="margin-top:10px;text-align:center"></div><button class="act big" id="spin" type="button">Drehen</button>
   <table>
    <tr><td>💎💎💎</td><td align="right">×300</td><td>7️⃣7️⃣7️⃣</td><td align="right">×100</td></tr>
    <tr><td>⭐⭐⭐</td><td align="right">×30</td><td>🔔🔔🔔</td><td align="right">×15</td></tr>
@@ -326,13 +326,13 @@ body{padding-bottom:0}
    <div class="hand" id="ph"></div><div class="hl">Du <b id="psc">–</b></div>
    <div id="bjmsg">Wähle deinen Einsatz.</div>
   </div>
-  <div id="bjbet"><div class="lbl">Einsatz</div><div class="bets bj" id="bjbets"></div><button class="act big" id="bjdeal" type="button">Austeilen</button></div>
+  <div id="bjbet"><div class="lbl">Einsatz</div><div class="bets bj" id="bjbets"></div><div class="meta splinfo" hidden style="margin:8px 0 0;text-align:center"></div><button class="act big" id="bjdeal" type="button">Austeilen</button></div>
   <div id="bjplay" hidden><div class="bjact"><button class="act" id="bjhit" type="button">Karte</button><button class="act ghost" id="bjstand" type="button">Halten</button><button class="act" id="bjdbl" type="button">Doppeln</button></div></div>
   <div class="meta" style="margin-top:10px">Nur virtuelles Geld. Echtes Glücksspiel kann süchtig machen: Hilfe unter bzga.de.</div>
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 15.10. 16:45 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 15.10. 17:00 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -1455,7 +1455,7 @@ let admOpen=false;
 const ADM_PIN='1925';
 function renderAdm(){const e=$('#adm');if(!e)return;
  if(!admOpen){e.innerHTML='<b>Admin-Panel</b><div class="meta">Zugang nur mit Code.</div><div style="display:flex;gap:8px"><input id="admpin" type="password" inputmode="numeric" maxlength="8" autocomplete="off" placeholder="Code" style="flex:1;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><button class="act" id="admgo" type="button">Öffnen</button></div><div class="meta" id="admmsg"></div>';return}
- e.innerHTML='<b>Admin-Panel</b><div class="meta">Aktuelles Geld: '+F(S.m)+'</div><div style="display:flex;gap:8px"><input id="admsum" type="text" inputmode="numeric" autocomplete="off" placeholder="Betrag in €" style="flex:1;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><button class="act" id="admset" type="button">Geld setzen</button></div><div class="meta" id="admmsg"></div><div class="meta" style="margin-top:6px">Casino: <b>'+(isBan()?'Hausverbot':'zugelassen')+'</b></div><button class="act ghost sm" id="admban" type="button">'+(isBan()?'Casino freischalten':'Hausverbot erteilen')+'</button><div class="meta" style="margin-top:10px"><b>Changelog verfassen</b></div><textarea id="admcl" maxlength="800" rows="3" placeholder="Neue Changelog-Nachricht …" style="width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit;resize:none"></textarea><button class="act sm" id="admclpost" type="button">Changelog veröffentlichen</button><div class="meta" id="admclmsg"></div><div id="admcllist"></div><div class="meta" style="margin-top:10px"><b>Alle Spieler verwalten</b> (Cloud-Konto des Admins nötig)</div><button class="act sm" id="admpl-load" type="button">Spielerliste laden</button><div id="admpl"></div><div class="meta" style="margin-top:6px">Supabase (Cloud-Speicher)</div><input id="sburl" type="text" autocomplete="off" placeholder="Projekt-URL https://xxxx.supabase.co" value="'+(sbCfg().url||'')+'" style="min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><input id="sbkey" type="text" autocomplete="off" placeholder="anon public key" value="'+(sbCfg().key||'')+'" style="min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><button class="act" id="sbsave" type="button">Supabase-Zugang speichern</button><button class="act ghost" id="admclose" type="button">Admin schließen</button>';admRenderPl();admClList();clLoad().then(admClList)}
+ e.innerHTML='<b>Admin-Panel</b><div class="meta">Aktuelles Geld: '+F(S.m)+'</div><div style="display:flex;gap:8px"><input id="admsum" type="text" inputmode="numeric" autocomplete="off" placeholder="Betrag in €" style="flex:1;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><button class="act" id="admset" type="button">Geld setzen</button></div><div class="meta" id="admmsg"></div><div class="meta" style="margin-top:6px">Casino: <b>'+(isBan()?'Hausverbot':'zugelassen')+'</b></div><button class="act ghost sm" id="admban" type="button">'+(isBan()?'Casino freischalten':'Hausverbot erteilen')+'</button><div class="meta" style="margin-top:10px"><b>Spin-Limit (für alle Spieler)</b></div><div class="meta" id="admsplst"></div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><input id="admspn" type="text" inputmode="numeric" placeholder="Spins" value="'+(SPL.spins||'')+'" style="width:84px;padding:10px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><span class="meta">in</span><input id="admspm" type="text" inputmode="numeric" placeholder="Minuten" value="'+(SPL.minutes||'')+'" style="width:90px;padding:10px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><span class="meta">Min.</span></div><label class="meta" style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="admspb" '+(SPL.bj?'checked':'')+'> Blackjack-Runden zählen auch</label><div style="display:flex;gap:8px"><button class="act sm" id="admspon" type="button">Limit aktivieren</button><button class="act ghost sm" id="admspoff" type="button">Ausschalten</button></div><div class="meta" id="admspmsg"></div><div class="meta" style="margin-top:10px"><b>Changelog verfassen</b></div><textarea id="admcl" maxlength="800" rows="3" placeholder="Neue Changelog-Nachricht …" style="width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit;resize:none"></textarea><button class="act sm" id="admclpost" type="button">Changelog veröffentlichen</button><div class="meta" id="admclmsg"></div><div id="admcllist"></div><div class="meta" style="margin-top:10px"><b>Alle Spieler verwalten</b> (Cloud-Konto des Admins nötig)</div><button class="act sm" id="admpl-load" type="button">Spielerliste laden</button><div id="admpl"></div><div class="meta" style="margin-top:6px">Supabase (Cloud-Speicher)</div><input id="sburl" type="text" autocomplete="off" placeholder="Projekt-URL https://xxxx.supabase.co" value="'+(sbCfg().url||'')+'" style="min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><input id="sbkey" type="text" autocomplete="off" placeholder="anon public key" value="'+(sbCfg().key||'')+'" style="min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><button class="act" id="sbsave" type="button">Supabase-Zugang speichern</button><button class="act ghost" id="admclose" type="button">Admin schließen</button>';admRenderPl();admClList();admSplSt();clLoad().then(admClList)}
 function resetArm(b){if(b.dataset.arm){delete b.dataset.arm;b.textContent='Spielstand zurücksetzen';return true}b.dataset.arm='1';b.textContent='Nochmal tippen zum Löschen';setTimeout(()=>{delete b.dataset.arm;b.textContent='Spielstand zurücksetzen'},3000);return false}
 document.addEventListener('click',e=>{
  const t=e.target.closest('button');if(!t)return;
@@ -1476,6 +1476,11 @@ document.addEventListener('click',e=>{
  if(admOpen&&t.id==='admban'){const want=!isBan();
   if(sbOn()&&sbSess){try{await_flag(sbSess.uid,{banned:want}).then(()=>{setBan(want,true);renderAdm();renderCasino();$('#admmsg').textContent=want?'Hausverbot erteilt.':'Casino freigeschaltet.'}).catch(er=>{$('#admmsg').textContent='Nicht möglich: '+er.message+' (Admin-Konto angemeldet?)'})}catch(er){}return}
   setBan(want);renderAdm();renderCasino();$('#admmsg').textContent=want?'Hausverbot erteilt.':'Casino freigeschaltet.';return}
+ if(admOpen&&(t.id==='admspon'||t.id==='admspoff')){const on=t.id==='admspon',n=parseInt(($('#admspn').value||'').replace(/\D/g,''),10),m=parseInt(($('#admspm').value||'').replace(/\D/g,''),10),bj=$('#admspb').checked;
+  if(on&&(!(n>=0)||!(m>=1))){$('#admspmsg').textContent='Bitte Spins (0 oder mehr) und Minuten (mindestens 1) eingeben.';return}
+  if(!sbOn()||!sbSess){$('#admspmsg').textContent='Bitte im Cloud-Konto als Admin anmelden.';return}
+  const v={on,spins:isFinite(n)?n:SPL.spins,minutes:isFinite(m)&&m>=1?m:SPL.minutes,bj};
+  sbReq('/rest/v1/settings?on_conflict=key',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({key:'spinlimit',value:v,updated_at:new Date().toISOString()})}).then(()=>{Object.assign(SPL,v);try{localStorage.setItem('baggerSplCfg',JSON.stringify(SPL))}catch(e){}splUi();admSplSt();$('#admspmsg').textContent=on?'Limit aktiv ✓ (wirkt bei Spielern innerhalb von ca. 30 Sek.)':'Limit ausgeschaltet ✓'}).catch(er=>{$('#admspmsg').textContent='Fehler: '+er.message});return}
  if(admOpen&&t.id==='admclpost'){const v=(($('#admcl')||{}).value||'').trim();if(!v){$('#admclmsg').textContent='Bitte Text eingeben.';return}
   if(!sbOn()||!sbSess){$('#admclmsg').textContent='Bitte im Cloud-Konto als Admin anmelden.';return}
   sbReq('/rest/v1/changelog',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({author:sbName0(),body:v.slice(0,800)})}).then(()=>clLoad()).then(()=>{$('#admcl').value='';admClList();$('#admclmsg').textContent='Veröffentlicht ✓'}).catch(er=>{$('#admclmsg').textContent='Fehler: '+er.message});return}
@@ -1507,7 +1512,21 @@ const pick=()=>{let r=Math.random()*100;for(const[s,w]of SY){if((r-=w)<0)return 
 let bet=10,spinning=false;
 const stake=()=>bet==='all'?Math.floor(S.m):bet;
 function renderBets(){$('#bets').innerHTML=[10,50,250,1000,'all'].map(b=>`<button data-bet="${b}" class="${b===bet?'on':''}">${b==='all'?'Alles!':F(b)}</button>`).join('');renderBetState()}
-function renderBetState(){const s=$('#spin');if(!s)return;s.disabled=spinning||gam||stake()<1||stake()>S.m;s.textContent=spinning?'Läuft…':'Drehen für '+F(stake())}
+/* ---------- Spin-Limit (vom Admin steuerbar) ---------- */
+let SPL={on:false,spins:5,minutes:10,bj:false};try{Object.assign(SPL,JSON.parse(localStorage.getItem('baggerSplCfg')||'{}'))}catch(e){}
+const splT=()=>{try{return JSON.parse(localStorage.getItem('baggerSplT')||'[]')}catch(e){return[]}};
+function splCheck(kind){if(!SPL.on||(kind==='bj'&&!SPL.bj))return{ok:true,used:0};
+ const w=Math.max(1,+SPL.minutes||1)*60000,n=Date.now(),a=splT().filter(t=>n-t<w);const lim=Math.max(0,+SPL.spins||0);
+ return a.length>=lim?{ok:false,used:a.length,lim,wait:a.length?Math.max(0,a[a.length-lim]+w-n):w}:{ok:true,used:a.length,lim}}
+function splRec(kind){if(!SPL.on||(kind==='bj'&&!SPL.bj))return;const w=Math.max(1,+SPL.minutes||1)*60000,n=Date.now();const a=splT().filter(t=>n-t<w);a.push(n);try{localStorage.setItem('baggerSplT',JSON.stringify(a))}catch(e){}}
+const mmss=ms=>{const t=Math.ceil(ms/1000);return Math.floor(t/60)+':'+String(t%60).padStart(2,'0')};
+function splUi(){document.querySelectorAll('.splinfo').forEach(e=>{const isBj=!!e.closest('#bjw');if(!SPL.on||(isBj&&!SPL.bj)){e.hidden=true;return}
+  const c=splCheck(isBj?'bj':'slot');e.hidden=false;
+  e.innerHTML=c.ok?'⏱ Limit: <b>'+c.used+' / '+c.lim+'</b> '+(isBj?'Runden':'Spins')+' in '+SPL.minutes+' Min.':'⛔ Limit erreicht ('+c.lim+' in '+SPL.minutes+' Min.). Weiter in <b>'+mmss(c.wait)+'</b>'});
+ renderBetState();if(typeof bjRender==='function'&&!$('#bjw').hidden)bjRender()}
+async function splLoad(){if(!sbOn())return;try{const r=await sbReq('/rest/v1/settings?key=eq.spinlimit&select=value');if(r&&r[0]&&r[0].value){Object.assign(SPL,{on:false,spins:5,minutes:10,bj:false},r[0].value);try{localStorage.setItem('baggerSplCfg',JSON.stringify(SPL))}catch(e){}}else if(r&&!r.length){SPL.on=false}}catch(e){}splUi()}
+setInterval(()=>{if(SPL.on)splUi()},1000);setInterval(splLoad,30000);setTimeout(splLoad,2500);
+function renderBetState(){const s=$('#spin');if(!s)return;const lc=splCheck('slot');s.disabled=spinning||gam||stake()<1||stake()>S.m||!lc.ok;s.textContent=spinning?'Läuft…':!lc.ok?'Limit: weiter in '+mmss(lc.wait):'Drehen für '+F(stake())}
 const RN=36;let RL=[],rAF=0;
 const setPos=(r,p)=>{r.pos=((p%RN)+RN)%RN;r.strip.style.transform='translateY(-'+(r.pos/(RN+1)*100)+'%)'};
 function buildReels(){RL=[...document.querySelectorAll('.reel')].map(el=>{
@@ -1530,9 +1549,9 @@ function runReels(res,cb){
   if(left>0)rAF=requestAnimationFrame(frame);else setTimeout(cb,180)};
  rAF=requestAnimationFrame(frame)}
 function spin(){
- if(isBan())return;if(gam)return;if(S.pend)collect();
+ if(isBan())return;if(!splCheck('slot').ok){splUi();return}if(gam)return;if(S.pend)collect();
  const st=stake();if(spinning||st<1||st>S.m)return;
- S.m-=st;S.st.cstake+=st;S.st.spins++;spinning=true;$('#msg').className='';$('#msg').textContent='…';renderBetState();renderTop();
+ S.m-=st;splRec('slot');S.st.cstake+=st;S.st.spins++;spinning=true;$('#msg').className='';$('#msg').textContent='…';renderBetState();renderTop();
  const res=[pick(),pick(),pick()];runReels(res,()=>done(res,st))}
 let gam=false,rk=null;
 function collect(){if(!S.pend||gam)return;S.m+=S.pend;S.st.cwin+=S.pend;if(S.pend>S.st.big)S.st.big=S.pend;toast('+'+F(S.pend)+' kassiert');S.pend=0;renderLad();renderTop();save()}
@@ -1602,7 +1621,7 @@ function bjRender(){
  const g=S.bj,live=!!g&&!g.done;
  $('#bjbet').hidden=live;$('#bjplay').hidden=!live;
  $('#bjbets').innerHTML=BJB.map(b=>`<button type="button" data-bjb="${b}" class="${b===bjBet?'on':''}" ${b>S.m?'disabled':''}>${b>=1000?(b/1000)+'k':b}</button>`).join('');
- $('#bjdeal').disabled=bjBusy||bjBet>S.m;$('#bjdeal').textContent='Austeilen für '+F(bjBet);
+ {const lc=splCheck('bj');$('#bjdeal').disabled=bjBusy||bjBet>S.m||!lc.ok;$('#bjdeal').textContent=!lc.ok?'Limit: weiter in '+mmss(lc.wait):'Austeilen für '+F(bjBet)}
  if(!g){$('#dh').innerHTML='';$('#ph').innerHTML='';$('#dsc').textContent='–';$('#psc').textContent='–';return}
  $('#dh').innerHTML=g.d.map((c,i)=>bjCard(c,live&&i===1)).join('');$('#ph').innerHTML=g.p.map(c=>bjCard(c)).join('');
  const pv=bjVal(g.p),dv=bjVal(g.d);
@@ -1611,8 +1630,8 @@ function bjRender(){
  if(live){$('#bjdbl').disabled=g.p.length!==2||g.bet>S.m}
 }
 function bjStart(){
- if(isBan())return;if(bjBusy||bjBet>S.m)return;if(S.bj&&!S.bj.done)return;
- const b=bjBet;S.m-=b;S.st.cstake+=b;S.st.spins++;
+ if(isBan())return;if(!splCheck('bj').ok){splUi();return}if(bjBusy||bjBet>S.m)return;if(S.bj&&!S.bj.done)return;
+ const b=bjBet;S.m-=b;splRec('bj');S.st.cstake+=b;S.st.spins++;
  S.bj={bet:b,p:[bjDraw(),bjDraw()],d:[bjDraw(),bjDraw()],done:false};
  sfx('card');setTimeout(()=>sfx('card'),160);bjMsg('Karte, Halten oder Doppeln?');renderTop();save();bjRender();
  if(bjVal(S.bj.p)===21)bjEnd()}
@@ -1708,6 +1727,7 @@ async function clLoad(){if(!sbOn())return;
 function clRender(){const o=$('#clov');if(!o)return;const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
  o.querySelector('.offc').innerHTML='<div class="offh">📢 Changelog</div>'
   +'<div class="cll">'+(clErr?'<div class="meta">'+esc(clErr)+'</div>':!clRows?'<div class="meta">Lade …</div>':clRows.length?clRows.map(m=>'<div class="cle"><div class="clh"><b class="cla">Admin</b> • '+esc(m.author||'Admin')+'<span>'+fdate(m.created_at)+'</span></div><div class="clb">'+esc(m.body)+'</div></div>').join(''):'<div class="meta">Noch keine Einträge.</div>')+'</div><button class="act big" id="clx" type="button">Schließen</button>'}
+function admSplSt(){const e=$('#admsplst');if(e)e.textContent='Aktuell: '+(SPL.on?SPL.spins+' Spins in '+SPL.minutes+' Min.'+(SPL.bj?' (inkl. Blackjack)':''):'kein Limit')}
 function admClList(){const e=$('#admcllist');if(!e)return;const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
  e.innerHTML=(clRows&&clRows.length)?'<div class="apl">'+clRows.slice(0,8).map(m=>'<div class="pr"><div class="meta">'+fdate(m.created_at)+'</div><div style="white-space:pre-wrap;word-break:break-word">'+esc(m.body)+'</div><div class="row"><button class="act ghost sm" data-cld="'+m.id+'" type="button">Löschen</button></div></div>').join('')+'</div>':''}
 function clOpen(){if($('#clov'))return;const o=document.createElement('div');o.id='clov';o.className='';o.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:18px';
@@ -1717,7 +1737,7 @@ function clOpen(){if($('#clov'))return;const o=document.createElement('div');o.i
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#clbtn'))clOpen()});
 setTimeout(clLoad,3500);setInterval(clLoad,60000);
 /* Auto-Update: neue Version erkennen und neu laden */
-const BUILD='20261015-1645';
+const BUILD='20261015-1700';
 setTimeout(async()=>{try{if(!/^https?:/.test(location.protocol))return;
  const t=await (await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'})).text(),m=t.match(/const BUILD='([^']+)'/);
  if(m&&m[1]!==BUILD){const k='baggerUpd';if(sessionStorage.getItem(k)===m[1])return;sessionStorage.setItem(k,m[1]);location.replace(location.pathname+'?v='+m[1])}}catch(e){}},3500);
