@@ -144,6 +144,22 @@ button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
 .clb{white-space:pre-wrap;word-break:break-word;margin-top:3px;color:var(--ink)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .clh .cla{color:#ff6b63}}
 .pdot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px;vertical-align:middle;background:#e53935;box-shadow:0 0 6px rgba(229,57,53,.8)}.pdot.on{background:#2ecc71;box-shadow:0 0 6px rgba(46,204,113,.9)}
+.pfc{margin-top:10px;background:var(--surf);border-radius:22px;overflow:hidden;box-shadow:var(--sh);text-align:center;padding-bottom:14px}
+.pfcov{height:96px;position:relative;background-size:cover}
+.pfcov:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.07) 0 10px,transparent 10px 22px)}
+.pfpos{position:absolute;right:12px;top:10px;z-index:1;font:700 13px var(--f2);background:rgba(0,0,0,.45);padding:4px 10px;border-radius:999px;color:#fff}
+.pfav{position:relative;width:84px;height:84px;border-radius:50%;margin:-42px auto 0;background:var(--surf2);border:4px solid;display:flex;align-items:center;justify-content:center;font:700 38px var(--f1);color:var(--ink);box-shadow:0 4px 14px rgba(0,0,0,.35)}
+.pdot.big{position:absolute;right:2px;bottom:2px;width:18px;height:18px;margin:0;border:3px solid var(--surf)}
+.pfname{font:700 26px var(--f1);margin-top:8px;padding:0 12px;word-break:break-word}.pfname small{font:500 13px var(--f2);color:var(--mut)}
+.pfsub{display:flex;gap:10px;justify-content:center;align-items:center;margin-top:6px;font-size:13px;flex-wrap:wrap}
+.pfrank{color:#fff;font:700 12px var(--f2);letter-spacing:.06em;text-transform:uppercase;padding:3px 11px;border-radius:999px}
+.pfbad{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:12px 14px 0}.pfbad span{background:var(--surf2);border:1px solid var(--line);border-radius:999px;padding:4px 10px;font:600 12px var(--f2)}
+.pfgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px 14px 0}
+.pft{background:var(--surf2);border-radius:14px;padding:10px 6px;display:grid;gap:2px}.pft span{font-size:18px}.pft b{font:700 17px var(--f1);font-variant-numeric:tabular-nums;word-break:break-word}.pft small{font:600 10px var(--f2);letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
+.pfbag{display:flex;align-items:center;gap:12px;margin:10px 14px 0;background:var(--surf2);border-radius:14px;padding:8px 12px;text-align:left}
+.pfbag div{display:grid;gap:1px}.pfbag small{font:600 10px var(--f2);letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}.pfbag b{font:700 17px var(--f1)}
+.pfimg{width:84px;height:56px;object-fit:cover;border-radius:10px;flex:none;background:var(--surf)}.pfno{display:flex;align-items:center;justify-content:center;font-size:28px}
+.pfmeta{display:flex;justify-content:space-between;gap:8px;margin:12px 16px 0;padding-top:10px;border-top:1px solid var(--line);font-size:12px;color:var(--mut)}.pfmeta b{color:var(--ink);font-weight:600;text-align:right}
 .cab{--ink:#eceae4;--mut:#9aa0a8;--line:#323840;--surf2:#262a31;--ok:#5fd07a;--bad:#ff7b63;color:var(--ink);background:linear-gradient(#22262d,#14171b);border-radius:24px;padding:16px;box-shadow:var(--sh);border-top:5px solid var(--acc)}
 .cab h2{font:700 15px var(--f1);letter-spacing:.2em;text-transform:uppercase;color:var(--acc);margin:0 0 12px;text-align:center}
 .reels{display:flex;gap:8px;background:#07080a;padding:10px;border-radius:16px;box-shadow:inset 0 3px 10px rgba(0,0,0,.7)}
@@ -299,7 +315,7 @@ body{padding-bottom:0}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 15.10. 15:30 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 15.10. 15:45 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -1363,13 +1379,27 @@ async function openProfile(uid){lbView=uid;pfData=null;pfMsg='';renderBoard();
  try{const r=await sbReq('/rest/v1/saves?user_id=eq.'+uid+'&select=name,rank,life,data');pfData=(r&&r[0])||{}}catch(e){pfMsg=e.message;pfData={}}
  renderBoard()}
 function pfHtml(esc,me){
- const row=(lbRows||[]).find(x=>x.id===lbView),own=lbView===me,d=own?S:((pfData&&pfData.data)||{}),st=d.st||{};
+ const own=lbView===me,row=(lbRows||[]).find(x=>x.id===lbView),d=own?S:((pfData&&pfData.data)||{}),st=d.st||{};
  const nm=own?sbName0():((pfData&&pfData.name)||(row&&row.name)||'Spieler'),rk=own?rankIx():(+((pfData&&pfData.rank)||(row&&row.rank))||0);
- const rw=(k,v)=>'<div style="display:flex;justify-content:space-between;padding:8px 0;border-top:1px solid var(--line)"><span class="meta">'+k+'</span><b>'+v+'</b></div>';
- const info=!pfData?'<div class="meta" style="padding:10px 0">Lade …</div>':rw('Rang',esc((RANKS[rk]||RANKS[0]).n))+rw('Lizenzen',(+d.lic||0))+rw('Geld',F(+d.m||0))+rw('Gesamtverdienst',F(+d.life||(pfData&&+pfData.life)||0))+rw('Erledigte Aufträge',(+st.jobs||0))+rw('Bester Bagger',esc((V[+d.top]||V[0]).n));
- const pp=pres[lbView]||{},on=isOn(lbView),pinfo=rw('Status',on?'<span style="color:#2ecc71">● Online</span>':'<span style="color:#e53935">● Offline</span>')+(on?'':rw('Zuletzt online',agoT(pp.last_seen)))+rw('Letzter Login',pp.last_login?fdate(pp.last_login)+' ('+agoT(pp.last_login)+')':'unbekannt');
- return '<button class="act ghost sm" id="lbback" type="button">‹ Zurück zur Bestenliste</button><div class="card2" style="padding:14px;margin-top:10px"><div style="font:700 22px var(--f1)">'+dotH(lbView)+esc(nm)+(own?' <span class="meta">(du)</span>':'')+'</div>'+pinfo+info+'</div>'
- +(own?'':'<div class="card2" style="padding:14px;display:grid;gap:8px;margin-top:10px"><b>Nachricht senden</b><textarea id="msgtxt" maxlength="200" rows="3" placeholder="Deine Nachricht an '+esc(nm)+' (max. 200 Zeichen)" style="width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit;resize:none"></textarea><button class="act" id="msgsend" type="button">Senden</button>'+(pfMsg?'<div class="meta">'+esc(pfMsg)+'</div>':'')+'</div>')}
+ const RC=['#8a8f98','#3fb6a8','#4a90d9','#a368d9','#e08a1e','#d4a017'],col=RC[rk]||RC[0],med=['#d4a017','#9aa3ab','#b0703a'];
+ const srt=(lbRows||[]).map(r=>r.id===me?{id:r.id,l:S.lic||0,m:S.m}:r).sort((a,b)=>(b.l-a.l)||(b.m-a.m)),pos=srt.findIndex(r=>r.id===lbView)+1;
+ const pp=pres[lbView]||{},on=isOn(lbView),lic=+d.lic||0,jobs=+st.jobs||0,top=Math.min(+d.top||0,V.length-1),veh=V[top];
+ const bad=[];if(pos&&pos<=3)bad.push(['👑','Platz '+pos]);if(lic)bad.push(['🏅',lic+(lic===1?' Lizenz':' Lizenzen')]);if(rk>=3)bad.push(['⭐',(RANKS[rk]||RANKS[0]).n]);
+ if(jobs>=500)bad.push(['🛠','500+ Aufträge']);else if(jobs>=100)bad.push(['🛠','100+ Aufträge']);if(d.up&&d.up.auto>=3)bad.push(['👷','Vorarbeiter Stufe 3']);if((+st.spins||0)>=50)bad.push(['🎰','Stammgast']);if(top>=V.length-1)bad.push(['🚜','Monster-Bagger']);
+ const tile=(i,k,v)=>'<div class="pft"><span>'+i+'</span><b>'+v+'</b><small>'+k+'</small></div>';
+ const ready=!!pfData;
+ const img=(typeof TH!=='undefined'&&TH&&TH[top])?'<img src="'+TH[top]+'" alt="" class="pfimg">':'<div class="pfimg pfno">🚜</div>';
+ const stat=on?'<span style="color:#2ecc71;font-weight:700">● Online</span>':'<span class="meta">Zuletzt online '+agoT(pp.last_seen)+'</span>';
+ return '<button class="act ghost sm" id="lbback" type="button">‹ Zurück zur Bestenliste</button>'
+ +'<div class="pfc"><div class="pfcov" style="background:linear-gradient(135deg,'+col+',color-mix(in srgb,'+col+' 35%,#11141a))">'+(pos&&pos<=3?'<div class="pfpos" style="color:'+med[pos-1]+'">👑 Platz '+pos+'</div>':(pos?'<div class="pfpos">Platz '+pos+'</div>':''))+'</div>'
+ +'<div class="pfav" style="border-color:'+col+'">'+esc((nm[0]||'?').toUpperCase())+'<i class="pdot big '+(on?'on':'off')+'"></i></div>'
+ +'<div class="pfname">'+esc(nm)+(own?' <small>(du)</small>':'')+'</div>'
+ +'<div class="pfsub"><span class="pfrank" style="background:'+col+'">'+esc((RANKS[rk]||RANKS[0]).n)+'</span>'+stat+'</div>'
+ +(bad.length?'<div class="pfbad">'+bad.map(x=>'<span>'+x[0]+' '+esc(x[1])+'</span>').join('')+'</div>':'')
+ +(ready?'<div class="pfgrid">'+tile('💶','Geld',F(+d.m||0))+tile('🏅','Lizenzen',lic)+tile('📋','Aufträge',jobs)+tile('📈','Gesamtverdienst',F(+d.life||(pfData&&+pfData.life)||0))+'</div>'
+  +'<div class="pfbag">'+img+'<div><small>Bester Bagger</small><b>'+esc(veh.n)+'</b><span class="meta">'+esc(veh.tn)+'</span></div></div>':'<div class="meta" style="padding:16px">Lade Profil …</div>')
+ +'<div class="pfmeta"><span>Letzter Login</span><b>'+(pp.last_login?fdate(pp.last_login)+' · '+agoT(pp.last_login):'unbekannt')+'</b></div></div>'
+ +(own?'':'<div class="card2" style="padding:14px;display:grid;gap:8px;margin-top:10px"><b>Nachricht an '+esc(nm)+'</b><textarea id="msgtxt" maxlength="200" rows="2" placeholder="Schreib etwas …" style="width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit;resize:none"></textarea><button class="act" id="msgsend" type="button">Senden</button>'+(pfMsg?'<div class="meta">'+esc(pfMsg)+'</div>':'')+'</div>')}
 async function msgSend(){const t=$('#msgtxt'),v=((t&&t.value)||'').trim();if(!v||!lbView||!sbSess)return;
  if(Date.now()-msgLast<4000){pfMsg='Bitte kurz warten.';renderBoard();return}msgLast=Date.now();
  try{await sbReq('/rest/v1/messages',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({from_id:sbSess.uid,from_name:sbName0(),to_id:lbView,body:v.slice(0,200)})});pfMsg='Nachricht gesendet ✓'}
@@ -1606,7 +1636,7 @@ function clOpen(){if($('#clov'))return;const o=document.createElement('div');o.i
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#clbtn'))clOpen()});
 setTimeout(clLoad,3500);setInterval(clLoad,60000);
 /* Auto-Update: neue Version erkennen und neu laden */
-const BUILD='20261015-1530';
+const BUILD='20261015-1545';
 setTimeout(async()=>{try{if(!/^https?:/.test(location.protocol))return;
  const t=await (await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'})).text(),m=t.match(/const BUILD='([^']+)'/);
  if(m&&m[1]!==BUILD){const k='baggerUpd';if(sessionStorage.getItem(k)===m[1])return;sessionStorage.setItem(k,m[1]);location.replace(location.pathname+'?v='+m[1])}}catch(e){}},3500);
