@@ -161,6 +161,19 @@ button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
 .pfbag div{display:grid;gap:1px}.pfbag small{font:600 10px var(--f2);letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}.pfbag b{font:700 17px var(--f1)}
 .pfimg{width:84px;height:56px;object-fit:cover;border-radius:10px;flex:none;background:var(--surf)}.pfno{display:flex;align-items:center;justify-content:center;font-size:28px}
 .pfmeta{display:flex;justify-content:space-between;gap:8px;margin:12px 16px 0;padding-top:10px;border-top:1px solid var(--line);font-size:12px;color:var(--mut)}.pfmeta b{color:var(--ink);font-weight:600;text-align:right}
+#bwin{position:fixed;inset:0;z-index:10000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:radial-gradient(circle,rgba(0,0,0,.55),rgba(0,0,0,.8));animation:bwin .35s ease-out;overflow:hidden;cursor:pointer}
+#bwin.out{opacity:0;transition:opacity .35s}
+@keyframes bwin{from{opacity:0}}
+.bwr{position:absolute;width:160vmax;height:160vmax;left:50%;top:50%;margin:-80vmax 0 0 -80vmax;background:repeating-conic-gradient(from 0deg,rgba(255,214,0,.22) 0 7deg,transparent 7deg 15deg);animation:bwspin 12s linear infinite;-webkit-mask-image:radial-gradient(circle,#000 0,transparent 55%);mask-image:radial-gradient(circle,#000 0,transparent 55%)}
+@keyframes bwspin{to{transform:rotate(360deg)}}
+.bwt{position:relative;font:800 clamp(40px,12.5vw,84px) var(--f1);letter-spacing:.04em;text-shadow:0 4px 0 rgba(0,0,0,.5),0 0 30px currentColor;animation:bwpop .7s cubic-bezier(.2,1.6,.4,1) both}
+@keyframes bwpop{from{transform:scale(.2) rotate(-8deg);opacity:0}}
+.bwa{position:relative;font:800 clamp(34px,11vw,62px) var(--f1);color:#fff;text-shadow:0 3px 0 rgba(0,0,0,.5);font-variant-numeric:tabular-nums;animation:bwbeat .6s ease-in-out infinite alternate}
+@keyframes bwbeat{to{transform:scale(1.06)}}
+.bws{position:relative;color:#ffe9a8;font:600 15px var(--f2);margin-top:6px}
+.shk{animation:shk .6s}
+@keyframes shk{10%,50%,90%{transform:translate(-6px,3px)}30%,70%{transform:translate(6px,-3px)}}
+@media (prefers-reduced-motion:reduce){.bwr,.bwa,.bwt{animation:none}}
 .cab{--ink:#eceae4;--mut:#9aa0a8;--line:#323840;--surf2:#262a31;--ok:#5fd07a;--bad:#ff7b63;color:var(--ink);background:linear-gradient(#22262d,#14171b);border-radius:24px;padding:16px;box-shadow:var(--sh);border-top:5px solid var(--acc)}
 .cab h2{font:700 15px var(--f1);letter-spacing:.2em;text-transform:uppercase;color:var(--acc);margin:0 0 12px;text-align:center}
 .reels{display:flex;gap:8px;background:#07080a;padding:10px;border-radius:16px;box-shadow:inset 0 3px 10px rgba(0,0,0,.7)}
@@ -258,7 +271,7 @@ body{padding-bottom:0}
 </head><body>
 <div id="ld"><div class="ldbg"></div><canvas id="ldc"></canvas><div class="ldvig"></div><div class="ldcut" id="ldcut"></div><div class="ldbar t"></div><div class="ldbar b"></div><div class="ldt">Bagger <span>Tycoon</span></div><div class="ldp"><i id="ldp"></i></div><div class="ldby">made by friedi</div></div>
 <script>window.LD0=performance.now()</script>
-<div id="scr"><header class="top"><div class="in"><div class="lh"><div class="brand"><i></i>Bagger Tycoon</div><div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><button class="rkchip" id="rk" data-t="prof" type="button">Praktikant</button><button class="rkchip" id="clbtn" type="button" aria-label="Changelog">📢 Changelog<i id="cldot" hidden style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#e53935;margin-left:6px;vertical-align:middle"></i></button></div></div><div class="bal"><small>Kontostand</small><div id="money">0 €</div></div></div></header>
+<div id="scr"><header class="top"><div class="in"><div class="lh"><div class="brand"><i></i>Bagger Tycoon</div><div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><button class="rkchip" id="rk" data-t="prof" type="button">Praktikant</button><button class="rkchip" id="sndbtn" type="button" aria-label="Ton an/aus">🔊</button><button class="rkchip" id="clbtn" type="button" aria-label="Changelog">📢 Changelog<i id="cldot" hidden style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#e53935;margin-left:6px;vertical-align:middle"></i></button></div></div><div class="bal"><small>Kontostand</small><div id="money">0 €</div></div></div></header>
 <main class="in">
 <section id="jobs">
  <div class="stage">
@@ -316,7 +329,7 @@ body{padding-bottom:0}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 15.10. 16:00 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 15.10. 16:20 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -391,7 +404,7 @@ function gen(){
   newIds.add(o.id);return o}}
 function refill(){while(S.offers.length<6)S.offers.push(gen());S.offers.sort((a,b)=>(b.ex||0)-(a.ex||0)||a.t-b.t||a.e-b.e)}
 refill();newIds.clear();
-let tt;function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('s');clearTimeout(tt);tt=setTimeout(()=>e.classList.remove('s'),1800)}
+let tt;function toast(t){try{sfxFor(t)}catch(e){}const e=$('#toast');e.textContent=t;e.classList.add('s');clearTimeout(tt);tt=setTimeout(()=>e.classList.remove('s'),1800)}
 const cur=()=>S.offers.find(o=>o.id===S.job);
 
 /* ---------- 3D ---------- */
@@ -1484,12 +1497,12 @@ function buildReels(){RL=[...document.querySelectorAll('.reel')].map(el=>{
 const eob=u=>{const c1=.4,c3=c1+1;return 1+c3*Math.pow(u-1,3)+c1*Math.pow(u-1,2)};
 function runReels(res,cb){
  const t0=performance.now();let left=RL.length,last=t0;
- RL.forEach((r,i)=>{r.state='spin';r.v=17+i*1.2;r.stopAt=t0+900+i*650;r.res=res[i];r.el.classList.remove('won');r.strip.classList.add('fast')});
+ RL.forEach((r,i)=>{r.state='spin';r.v=17+i*1.2;r.stopAt=t0+900+i*650;r.res=res[i];r.el.classList.remove('won');r.strip.classList.add('fast')});sfx('spin');
  const frame=now=>{const dt=Math.min(.05,(now-last)/1000);last=now;
   RL.forEach(r=>{
    if(r.state==='spin'){setPos(r,r.pos+r.v*dt);
     if(now>=r.stopAt){const p0=r.pos;let k=9+Math.floor(Math.random()*3),T=(Math.floor(p0)+k)%RN;if(T===0){k++;T=(Math.floor(p0)+k)%RN}
-     r.seq[T]=r.res;r.cells[T].textContent=r.res;r.p0=p0;r.p1=Math.floor(p0)+k;r.tS=now;r.D=800;r.state='stop'}}
+     r.seq[T]=r.res;r.cells[T].textContent=r.res;r.p0=p0;r.p1=Math.floor(p0)+k;r.tS=now;r.D=800;r.state='stop';sfx('tick')}}
    else if(r.state==='stop'){const u=(now-r.tS)/r.D;
     if(u>=1){setPos(r,r.p1);r.state='done';r.strip.classList.remove('fast');left--}
     else{setPos(r,r.p0+(r.p1-r.p0)*eob(u));if(u>.3)r.strip.classList.remove('fast')}}});
@@ -1528,7 +1541,7 @@ function done(r,st){
  else if(w===st){m.textContent='Einsatz zurück.'}
  else if(w>0){m.className='lose';m.textContent='Nur '+F(w)+' zurück (−'+F(st-w)+')'}
  else{m.className='lose';m.textContent='Verloren: −'+F(st)}
- renderLad();renderTop();save()}
+ renderLad();renderTop();save();if(w>st)celebrate(w-st);else sfx('lose')}
 
 /* ---------- Selbstsperre ---------- */
 const isBan=()=>!!S.ban;
@@ -1580,7 +1593,7 @@ function bjStart(){
  if(isBan())return;if(bjBusy||bjBet>S.m)return;if(S.bj&&!S.bj.done)return;
  const b=bjBet;S.m-=b;S.st.cstake+=b;S.st.spins++;
  S.bj={bet:b,p:[bjDraw(),bjDraw()],d:[bjDraw(),bjDraw()],done:false};
- bjMsg('Karte, Halten oder Doppeln?');renderTop();save();bjRender();
+ sfx('card');setTimeout(()=>sfx('card'),160);bjMsg('Karte, Halten oder Doppeln?');renderTop();save();bjRender();
  if(bjVal(S.bj.p)===21)bjEnd()}
 function bjEnd(){
  const g=S.bj;if(!g||g.done)return;
@@ -1595,8 +1608,8 @@ function bjEnd(){
  else if(pv===dv){pay=g.bet;txt='Unentschieden – Einsatz zurück.';cls=''}
  else{txt='Dealer gewinnt. −'+F(g.bet);cls='lose'}
  g.done=true;if(pay>0){S.m+=pay;S.st.cwin+=pay;if(pay>S.st.big)S.st.big=pay}
- bjMsg(txt,cls);renderTop();save();bjRender()}
-function bjHit(){const g=S.bj;if(!g||g.done)return;g.p.push(bjDraw());const v=bjVal(g.p);save();bjRender();if(v>=21)bjEnd()}
+ bjMsg(txt,cls);renderTop();save();bjRender();if(pay>g.bet)celebrate(pay-g.bet);else if(pay===g.bet)sfx('ping');else sfx('lose')}
+function bjHit(){const g=S.bj;if(!g||g.done)return;sfx('card');g.p.push(bjDraw());const v=bjVal(g.p);save();bjRender();if(v>=21)bjEnd()}
 function bjStand(){const g=S.bj;if(!g||g.done)return;bjEnd()}
 function bjDouble(){const g=S.bj;if(!g||g.done||g.p.length!==2||g.bet>S.m)return;
  S.m-=g.bet;S.st.cstake+=g.bet;g.bet*=2;g.p.push(bjDraw());renderTop();bjEnd()}
@@ -1618,6 +1631,50 @@ document.addEventListener('click',e=>{
  if(t.id==='bjdeal')bjStart();else if(t.id==='bjhit')bjHit();else if(t.id==='bjstand')bjStand();else if(t.id==='bjdbl')bjDouble()});
 
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target&&e.target.id==='chin'){e.preventDefault();chSend()}});
+
+/* ---------- Ton und Effekte ---------- */
+let AC=null,sndOn=true;try{sndOn=localStorage.getItem('baggerSnd')!=='0'}catch(e){}
+function sndInit(){try{if(AC){if(AC.state==='suspended')AC.resume();return}const C=window.AudioContext||window.webkitAudioContext;if(C){AC=new C();if(AC.state==='suspended')AC.resume()}}catch(e){}}
+function tone(f,t,d,type,v,f2){if(!AC||!sndOn)return;const n=AC.currentTime+t,o=AC.createOscillator(),g=AC.createGain();o.type=type||'sine';o.frequency.setValueAtTime(f,n);if(f2)o.frequency.exponentialRampToValueAtTime(f2,n+d);g.gain.setValueAtTime(.0001,n);g.gain.exponentialRampToValueAtTime(v||.12,n+.012);g.gain.exponentialRampToValueAtTime(.0001,n+d);o.connect(g);g.connect(AC.destination);o.start(n);o.stop(n+d+.03)}
+function noise(t,d,v,fq){if(!AC||!sndOn)return;const n=AC.currentTime+t,len=Math.max(1,Math.floor(AC.sampleRate*d)),b=AC.createBuffer(1,len,AC.sampleRate),a=b.getChannelData(0);for(let i=0;i<len;i++)a[i]=(Math.random()*2-1)*(1-i/len);const s=AC.createBufferSource();s.buffer=b;const f=AC.createBiquadFilter();f.type='bandpass';f.frequency.value=fq||1500;const g=AC.createGain();g.gain.value=v||.1;s.connect(f);f.connect(g);g.connect(AC.destination);s.start(n)}
+const SF={
+ click(){tone(540,0,.035,'triangle',.045)},
+ coin(){tone(988,0,.07,'square',.06);tone(1319,.07,.2,'square',.06)},
+ cha(){tone(784,0,.06,'square',.06);tone(1047,.06,.06,'square',.06);tone(1568,.12,.3,'square',.06)},
+ tick(){tone(240,0,.06,'square',.05,120);noise(0,.04,.05,3000)},
+ spin(){noise(0,.9,.05,700);tone(180,0,.9,'sawtooth',.025,420)},
+ card(){noise(0,.07,.1,2600)},
+ win(){[523,659,784,1047].forEach((f,i)=>tone(f,i*.09,.22,'triangle',.11))},
+ big(){[523,659,784,1047,784,1047,1319,1568].forEach((f,i)=>{tone(f,i*.11,.3,'square',.07);tone(f/2,i*.11,.3,'triangle',.08)});for(let i=0;i<14;i++)tone(1800+Math.random()*2200,.9+i*.09,.12,'sine',.05);tone(1568,1.0,.9,'triangle',.1)},
+ lose(){tone(330,0,.18,'sawtooth',.06,220);tone(220,.18,.32,'sawtooth',.06,120)},
+ brk(){tone(120,0,.4,'sawtooth',.09,55);noise(0,.25,.08,500)},
+ ping(){tone(880,0,.1,'sine',.09);tone(1175,.1,.22,'sine',.09)},
+ up(){[392,523,659].forEach((f,i)=>tone(f,i*.08,.18,'triangle',.09))}};
+function sfx(n){if(!sndOn)return;sndInit();try{SF[n]&&SF[n]()}catch(e){}}
+function sfxFor(t){if(/Auftrag erledigt|kassiert|WTD 91: \+|Vorarbeiter war/.test(t))sfx('coin');else if(/kaputt/.test(t))sfx('brk');else if(/Beförderung/.test(t))sfx('win');else if(/Nachricht/.test(t))sfx('ping');else if(/repariert|gewartet|Gewartet|geflickt|verbessert|Lizenz|freigeschaltet/.test(t))sfx('up')}
+document.addEventListener('pointerdown',sndInit,{passive:true});
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('button');if(!b)return;if(b.id==='sndbtn'){sndOn=!sndOn;try{localStorage.setItem('baggerSnd',sndOn?'1':'0')}catch(er){}b.textContent=sndOn?'🔊':'🔇';if(sndOn){sndInit();SF.ping()}return}if(!b.disabled)SF.click&&sfx('click')});
+setTimeout(()=>{const b=$('#sndbtn');if(b)b.textContent=sndOn?'🔊':'🔇'},0);
+const RM=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;
+function confetti(n,big){const c=document.createElement('canvas');c.style.cssText='position:fixed;inset:0;width:100%;height:100%;z-index:10001;pointer-events:none';document.body.appendChild(c);
+ const dpr=Math.min(2,window.devicePixelRatio||1),W=c.width=innerWidth*dpr,H=c.height=innerHeight*dpr,x=c.getContext('2d'),cols=['#ffc400','#ff3b3b','#2ecc71','#3aa0ff','#ff6bd6','#ffffff','#ff9a1f'],P=[];
+ const mk=(ox,oy,ang,spd)=>({x:ox,y:oy,vx:Math.cos(ang)*spd,vy:Math.sin(ang)*spd,w:(5+Math.random()*7)*dpr,h:(8+Math.random()*10)*dpr,r:Math.random()*6,vr:(Math.random()-.5)*.4,c:cols[Math.floor(Math.random()*cols.length)],coin:Math.random()<.07});
+ for(let i=0;i<n;i++){const side=i%3;if(side===0)P.push(mk(0,H,-Math.PI/2+Math.random()*.9-.1,(14+Math.random()*16)*dpr));else if(side===1)P.push(mk(W,H,-Math.PI/2-Math.random()*.9+.1,(14+Math.random()*16)*dpr));else P.push(mk(Math.random()*W,-20*dpr,Math.PI/2+(Math.random()-.5)*.6,(2+Math.random()*4)*dpr))}
+ const t0=performance.now(),dur=big?5200:4000;
+ const f=now=>{const el=now-t0;x.clearRect(0,0,W,H);let alive=0;
+  P.forEach(p=>{p.vy+=.45*dpr;p.vx*=.992;p.vy*=.992;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;if(p.y<H+40*dpr)alive++;
+   x.save();x.translate(p.x,p.y);x.rotate(p.r);if(p.coin){x.font=(20*dpr)+'px serif';x.fillText('💰',-10*dpr,0)}else{x.fillStyle=p.c;x.globalAlpha=Math.max(0,Math.min(1,1-(el-dur+1000)/1000));x.fillRect(-p.w/2,-p.h/2,p.w,p.h)}x.restore()});
+  if(el<dur&&alive)requestAnimationFrame(f);else c.remove()};requestAnimationFrame(f)}
+function celebrate(net){
+ if(!(net>0))return;
+ if(net<5000){sfx('win');return}
+ const tier=net>=500000?['JACKPOT!','#ff3b3b']:net>=50000?['MEGA WIN!','#ff9a1f']:['BIG WIN!','#ffc400'];
+ sfx('big');confetti(RM?60:net>=50000?320:220,net>=50000);
+ if(!RM){const sc=$('#scr');if(sc){sc.classList.add('shk');setTimeout(()=>sc.classList.remove('shk'),700)}}
+ const o=document.createElement('div');o.id='bwin';o.innerHTML='<div class="bwr"></div><div class="bwt" style="color:'+tier[1]+'">'+tier[0]+'</div><div class="bwa" id="bwa">+0 €</div><div class="bws">Weiter so! Der nächste Gewinn wartet 🎰</div>';
+ document.body.appendChild(o);const t0=performance.now(),D=1700,a=$('#bwa');
+ const cnt=now=>{const k=Math.min(1,(now-t0)/D),e=1-Math.pow(1-k,3);a.textContent='+'+F(net*e);if(k<1&&o.isConnected)requestAnimationFrame(cnt)};requestAnimationFrame(cnt);
+ const kill=()=>{o.classList.add('out');setTimeout(()=>o.remove(),350)};o.onclick=kill;setTimeout(kill,4200)}
 /* ---------- Changelog ---------- */
 let clRows=null,clErr='',clAdmin=false;
 const clSeen=()=>{try{return +localStorage.getItem('baggerCl')||0}catch(e){return 0}};
@@ -1638,7 +1695,7 @@ function clOpen(){if($('#clov'))return;const o=document.createElement('div');o.i
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#clbtn'))clOpen()});
 setTimeout(clLoad,3500);setInterval(clLoad,60000);
 /* Auto-Update: neue Version erkennen und neu laden */
-const BUILD='20261015-1600';
+const BUILD='20261015-1620';
 setTimeout(async()=>{try{if(!/^https?:/.test(location.protocol))return;
  const t=await (await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'})).text(),m=t.match(/const BUILD='([^']+)'/);
  if(m&&m[1]!==BUILD){const k='baggerUpd';if(sessionStorage.getItem(k)===m[1])return;sessionStorage.setItem(k,m[1]);location.replace(location.pathname+'?v='+m[1])}}catch(e){}},3500);
