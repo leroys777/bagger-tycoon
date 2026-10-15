@@ -116,6 +116,12 @@ button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
 .bets.bj button.on{background:radial-gradient(circle,#f2b705 40%,#c58f00);color:#1a1200;border-color:#fff}
 .bets.bj button:disabled{opacity:.35}
 .bets.bj{gap:6px;flex-wrap:nowrap;justify-content:center}
+#selfban{display:block;margin:6px auto 0;padding:11px 18px;border:2px solid #ff2a2a;border-radius:14px;background:rgba(255,42,42,.07);color:#ff3b3b;font:700 13px var(--f2);letter-spacing:.04em;text-decoration:none;cursor:pointer;box-shadow:0 0 8px #ff2a2a,0 0 20px rgba(255,42,42,.55),inset 0 0 10px rgba(255,42,42,.3);animation:rglow 2s ease-in-out infinite}
+@keyframes rglow{50%{box-shadow:0 0 4px #ff2a2a,0 0 10px rgba(255,42,42,.35),inset 0 0 5px rgba(255,42,42,.2)}}
+@media (prefers-reduced-motion:reduce){#selfban{animation:none}}
+.apl{display:grid;gap:8px;margin-top:8px}.apl .pr{border:1px solid var(--line);border-radius:12px;padding:10px;display:grid;gap:6px}
+.apl .pr b{font-weight:700}.apl .pr .row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.apl input{flex:1;min-width:90px;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit}
+.apl .tag{font:700 11px var(--f2);padding:2px 8px;border-radius:999px;background:#b3261e;color:#fff}
 .cab{--ink:#eceae4;--mut:#9aa0a8;--line:#323840;--surf2:#262a31;--ok:#5fd07a;--bad:#ff7b63;color:var(--ink);background:linear-gradient(#22262d,#14171b);border-radius:24px;padding:16px;box-shadow:var(--sh);border-top:5px solid var(--acc)}
 .cab h2{font:700 15px var(--f1);letter-spacing:.2em;text-transform:uppercase;color:var(--acc);margin:0 0 12px;text-align:center}
 .reels{display:flex;gap:8px;background:#07080a;padding:10px;border-radius:16px;box-shadow:inset 0 3px 10px rgba(0,0,0,.7)}
@@ -270,7 +276,7 @@ body{padding-bottom:0}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 15.10. 12:45 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 15.10. 12:55 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -1289,7 +1295,7 @@ let admOpen=false;
 const ADM_PIN='1925';
 function renderAdm(){const e=$('#adm');if(!e)return;
  if(!admOpen){e.innerHTML='<b>Admin-Panel</b><div class="meta">Zugang nur mit Code.</div><div style="display:flex;gap:8px"><input id="admpin" type="password" inputmode="numeric" maxlength="8" autocomplete="off" placeholder="Code" style="flex:1;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><button class="act" id="admgo" type="button">Öffnen</button></div><div class="meta" id="admmsg"></div>';return}
- e.innerHTML='<b>Admin-Panel</b><div class="meta">Aktuelles Geld: '+F(S.m)+'</div><div style="display:flex;gap:8px"><input id="admsum" type="text" inputmode="numeric" autocomplete="off" placeholder="Betrag in €" style="flex:1;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><button class="act" id="admset" type="button">Geld setzen</button></div><div class="meta" id="admmsg"></div><div class="meta" style="margin-top:6px">Casino: <b>'+(isBan()?'Hausverbot':'zugelassen')+'</b></div><button class="act ghost sm" id="admban" type="button">'+(isBan()?'Casino freischalten':'Hausverbot erteilen')+'</button><div class="meta" style="margin-top:6px">Supabase (Cloud-Speicher)</div><input id="sburl" type="text" autocomplete="off" placeholder="Projekt-URL https://xxxx.supabase.co" value="'+(sbCfg().url||'')+'" style="min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><input id="sbkey" type="text" autocomplete="off" placeholder="anon public key" value="'+(sbCfg().key||'')+'" style="min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><button class="act" id="sbsave" type="button">Supabase-Zugang speichern</button><button class="act ghost" id="admclose" type="button">Admin schließen</button>'}
+ e.innerHTML='<b>Admin-Panel</b><div class="meta">Aktuelles Geld: '+F(S.m)+'</div><div style="display:flex;gap:8px"><input id="admsum" type="text" inputmode="numeric" autocomplete="off" placeholder="Betrag in €" style="flex:1;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><button class="act" id="admset" type="button">Geld setzen</button></div><div class="meta" id="admmsg"></div><div class="meta" style="margin-top:6px">Casino: <b>'+(isBan()?'Hausverbot':'zugelassen')+'</b></div><button class="act ghost sm" id="admban" type="button">'+(isBan()?'Casino freischalten':'Hausverbot erteilen')+'</button><div class="meta" style="margin-top:10px"><b>Alle Spieler verwalten</b> (Cloud-Konto des Admins nötig)</div><button class="act sm" id="admpl-load" type="button">Spielerliste laden</button><div id="admpl"></div><div class="meta" style="margin-top:6px">Supabase (Cloud-Speicher)</div><input id="sburl" type="text" autocomplete="off" placeholder="Projekt-URL https://xxxx.supabase.co" value="'+(sbCfg().url||'')+'" style="min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><input id="sbkey" type="text" autocomplete="off" placeholder="anon public key" value="'+(sbCfg().key||'')+'" style="min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><button class="act" id="sbsave" type="button">Supabase-Zugang speichern</button><button class="act ghost" id="admclose" type="button">Admin schließen</button>';admRenderPl()}
 function resetArm(b){if(b.dataset.arm){delete b.dataset.arm;b.textContent='Spielstand zurücksetzen';return true}b.dataset.arm='1';b.textContent='Nochmal tippen zum Löschen';setTimeout(()=>{delete b.dataset.arm;b.textContent='Spielstand zurücksetzen'},3000);return false}
 document.addEventListener('click',e=>{
  const t=e.target.closest('button');if(!t)return;
@@ -1307,7 +1313,15 @@ document.addEventListener('click',e=>{
  if(t.id==='spin'){spin();return}
  if(t.id==='admgo'){if(($('#admpin').value||'').trim()===ADM_PIN){admOpen=true;renderAdm()}else{$('#admmsg').textContent='Falscher Code.';$('#admpin').value=''}return}
  if(admOpen&&t.id==='admset'){const v=parseInt(($('#admsum').value||'').replace(/\D/g,''),10);if(!isFinite(v)){$('#admmsg').textContent='Bitte einen Betrag eingeben.';return}S.m=Math.min(v,1e15);renderTop();renderShop();renderOffers();save();renderAdm();$('#admmsg').textContent='Geld gesetzt auf '+F(S.m)+'.';return}
- if(admOpen&&t.id==='admban'){setBan(!isBan());renderAdm();renderCasino();$('#admmsg').textContent=isBan()?'Hausverbot erteilt.':'Casino freigeschaltet.';return}
+ if(admOpen&&t.id==='admban'){const want=!isBan();
+  if(sbOn()&&sbSess){try{await_flag(sbSess.uid,{banned:want}).then(()=>{setBan(want,true);renderAdm();renderCasino();$('#admmsg').textContent=want?'Hausverbot erteilt.':'Casino freigeschaltet.'}).catch(er=>{$('#admmsg').textContent='Nicht möglich: '+er.message+' (Admin-Konto angemeldet?)'})}catch(er){}return}
+  setBan(want);renderAdm();renderCasino();$('#admmsg').textContent=want?'Hausverbot erteilt.':'Casino freigeschaltet.';return}
+ if(admOpen&&t.id==='admpl-load'){admLoadPl();return}
+ if(admOpen&&t.dataset.pa){const pr=t.closest('.pr'),uid=pr.dataset.u;
+  if(t.dataset.pa==='ban'){const w=t.dataset.v==='1';await_flag(uid,{banned:w}).then(()=>{if(uid===(sbSess&&sbSess.uid)){setBan(w,true);renderCasino()}admLoadPl()}).catch(er=>{admPlMsg='Fehler: '+er.message;admRenderPl()})}
+  else{const v=parseInt((pr.querySelector('input').value||'').replace(/\D/g,''),10);if(!isFinite(v)){admPlMsg='Bitte Betrag eingeben.';admRenderPl();return}
+   await_flag(uid,{cmd_money:Math.min(v,1e15),cmd_id:Date.now()}).then(()=>{if(uid===(sbSess&&sbSess.uid))flagsSync();admPlMsg='Geld gesetzt, wirkt beim Spieler innerhalb von ca. 15 s.';admLoadPl()}).catch(er=>{admPlMsg='Fehler: '+er.message;admRenderPl()})}
+  return}
  if(t.id==='sbsave'){try{localStorage.setItem(SBK,JSON.stringify({url:($('#sburl').value||'').trim(),key:($('#sbkey').value||'').trim()}))}catch(e){}$('#admmsg').textContent='Supabase-Zugang gespeichert.';renderCloud();return}
  if(t.id==='sbup'){sbPush(true);return}
  if(t.id==='sblogin'||t.id==='sbreg'){sbAuth(t.id==='sbreg');return}
@@ -1388,12 +1402,31 @@ function done(r,st){
 
 /* ---------- Selbstsperre ---------- */
 const isBan=()=>!!S.ban;
-function setBan(v){S.ban=!!v;try{if(v)localStorage.setItem('baggerBan','1');else localStorage.removeItem('baggerBan')}catch(e){}save()}
+function setBan(v,srv){S.ban=!!v;if(v&&!srv&&sbOn()&&sbSess){S.banPend=true;setTimeout(flagsSync,50)}if(!v)S.banPend=false;try{if(v)localStorage.setItem('baggerBan','1');else localStorage.removeItem('baggerBan')}catch(e){}save()}
 function renderCasino(){const b=isBan();
  $('#casban').hidden=!b;$('#casself').hidden=b;
  document.querySelector('.cas-tabs').hidden=b;
  if(b){$('#slots').hidden=true;$('#bjw').hidden=true}
  else{const bj=document.querySelector('.cas-tabs button.on').dataset.g==='bj';$('#slots').hidden=bj;$('#bjw').hidden=!bj}}
+/* ---------- Spieler-Verwaltung (Admin) ---------- */
+const await_flag=(uid,o)=>sbReq('/rest/v1/flags?on_conflict=user_id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(Object.assign({user_id:uid,updated_at:new Date().toISOString()},o))});
+const cmdGet=()=>{try{return +localStorage.getItem('baggerCmd')||0}catch(e){return 0}};
+async function flagsSync(){if(!sbOn()||!sbSess||!sbSess.uid)return;
+ try{if(S.banPend){await sbReq('/rest/v1/rpc/self_ban',{method:'POST',body:'{}'});S.banPend=false;save()}
+  const r=await sbReq('/rest/v1/flags?user_id=eq.'+sbSess.uid+'&select=banned,cmd_id,cmd_money'),f=r&&r[0];if(!f)return;
+  if(!!f.banned!==isBan()){setBan(!!f.banned,true);renderCasino();if(admOpen)renderAdm()}
+  if(+f.cmd_id>cmdGet()){try{localStorage.setItem('baggerCmd',String(+f.cmd_id))}catch(e){}if(f.cmd_money!=null){S.m=Math.max(0,+f.cmd_money);toast('Admin hat dein Geld gesetzt: '+F(S.m))}save();renderTop();renderShop();renderOffers()}}catch(e){}}
+setInterval(flagsSync,15000);setTimeout(flagsSync,4000);
+let admPl=null,admPlMsg='';
+async function admLoadPl(){if(!sbOn()||!sbSess){admPlMsg='Bitte oben im Cloud-Konto als Admin anmelden (Profil, Cloud-Speicher).';admRenderPl();return}
+ admPlMsg='Lade …';admRenderPl();
+ try{const[a,f]=await Promise.all([sbReq('/rest/v1/saves?select=user_id,name,rank,geld:data->>m,lz:data->>lic&limit=500'),sbReq('/rest/v1/flags?select=user_id,banned&limit=500')]);
+  const fm={};(f||[]).forEach(x=>fm[x.user_id]=!!x.banned);
+  admPl=(a||[]).map(x=>({id:x.user_id,name:x.name||'Spieler',m:parseFloat(x.geld)||0,l:parseInt(x.lz)||0,ban:!!fm[x.user_id]})).sort((p,q)=>p.name.localeCompare(q.name));admPlMsg=''}
+ catch(e){admPlMsg='Fehler: '+e.message}
+ admRenderPl()}
+function admRenderPl(){const e=$('#admpl');if(!e)return;const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+ e.innerHTML=(admPlMsg?'<div class="meta">'+esc(admPlMsg)+'</div>':'')+(admPl?'<div class="apl">'+admPl.map(p=>'<div class="pr" data-u="'+p.id+'"><div class="row"><b>'+esc(p.name)+'</b>'+(sbSess&&p.id===sbSess.uid?'<span class="meta">(du)</span>':'')+(p.ban?'<span class="tag">Hausverbot</span>':'')+'<span class="meta" style="margin-left:auto">'+F(p.m)+' · '+p.l+' Lizenz'+(p.l===1?'':'en')+'</span></div><div class="row"><input type="text" inputmode="numeric" placeholder="Neues Geld in €"><button class="act sm" data-pa="money" type="button">Geld setzen</button></div><div class="row"><button class="act ghost sm" data-pa="ban" data-v="'+(p.ban?0:1)+'" type="button">'+(p.ban?'Casino freischalten':'Casino sperren')+'</button></div></div>').join('')+'</div>':'')}
 /* ---------- Blackjack ---------- */
 const BJB=[100,500,1000,2500,5000,10000],RK=['A','2','3','4','5','6','7','8','9','10','J','Q','K'],SU=['♠','♥','♦','♣'];
 let bjBet=100,bjBusy=false;
