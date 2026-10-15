@@ -1187,7 +1187,7 @@ async function sbPush(manual){if(!sbOn()||!sbSess||sbBusy||sbConflict)return;sbB
  try{await sbReq('/rest/v1/saves?on_conflict=user_id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(sbRow())});sbLast=Date.now();sbSig=sbSigNow();sbMsg=manual?'Gespeichert.':sbMsg}
  catch(e){sbMsg='Speichern fehlgeschlagen: '+e.message}
  sbBusy=false;if(!$('#prof').hidden){renderCloud();if(manual&&!$('#board').hidden)lbLoad(true)}}
-const sbSigNow=()=>[S.life,S.m,S.tier,S.top,S.st&&S.st.jobs,Math.round(S.cond)].join('|');
+const sbSigNow=()=>[sbName0(),S.life,S.m,S.tier,S.top,S.st&&S.st.jobs,Math.round(S.cond)].join('|');
 async function sbPull(manual){if(!sbOn()||!sbSess)return;sbBusy=true;sbMsg='Prüfe Cloud-Stand …';renderCloud();
  try{const r=await sbReq('/rest/v1/saves?user_id=eq.'+sbSess.uid+'&select=data,name,life,rank,updated_at');
   sbBusy=false;
@@ -1197,7 +1197,7 @@ async function sbPull(manual){if(!sbOn()||!sbSess)return;sbBusy=true;sbMsg='Prü
   sbMsg='';renderCloud()}
  catch(e){sbBusy=false;sbMsg=e.message;renderCloud()}}
 function sbApply(){if(!sbConflict)return;window.__ns=true;try{localStorage.setItem(KEY,JSON.stringify(sbConflict.data))}catch(e){}location.reload()}
-async function sbName(){if(nameSet())return;const v=($('#sbnm').value||'').trim().slice(0,20);if(!v)return;try{localStorage.setItem(SBN,v)}catch(e){}sbMsg='Name gespeichert.';if(sbOn()&&sbSess)await sbPush(true);else renderCloud();if(!$('#prof').hidden)renderProf()}
+async function sbName(src){if(nameSet())return;const el=$(src==='lb'?'#lbnm':'#sbnm');const v=((el&&el.value)||'').trim().slice(0,20);if(!v)return;try{localStorage.setItem(SBN,v)}catch(e){}sbMsg='Name gespeichert.';if(sbOn()&&sbSess)await sbPush(true);else renderCloud();if(!$('#prof').hidden)renderProf();if(!$('#board').hidden)lbLoad(true)}
 async function sbLoadBoard(force){if(!sbOn())return;if(sbBoard&&!force&&Date.now()-sbBoard.t<30000)return;
  try{const r=await sbReq('/rest/v1/saves?select=name,rank,life&order=life.desc&limit=10');sbBoard={t:Date.now(),rows:r||[]}}catch(e){sbBoard={t:Date.now(),rows:[],err:e.message}}
  if(!$('#prof').hidden)renderCloud()}
@@ -1220,14 +1220,14 @@ async function lbLoad(force){if(!sbOn()||!sbSess){lbRows=null;renderBoard();retu
  if(lbBusy||(!force&&Date.now()-lbT<20000))return;lbBusy=true;
  try{const r=await sbReq('/rest/v1/saves?select=user_id,name,rank,geld:data->>m&limit=500');lbRows=(r||[]).map(x=>({id:x.user_id,name:x.name||'Spieler',rank:+x.rank||0,m:Math.max(0,parseFloat(x.geld)||0)}));lbErr=''}catch(e){lbErr=e.message}
  lbT=Date.now();lbBusy=false;renderBoard()}
-function renderBoard(){const e=$('#board');if(!e)return;
+function renderBoard(){const e=$('#board');if(!e)return;if(document.activeElement&&document.activeElement.id==='lbnm')return;
  const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
  let h='<h2 class="sec">Bestenliste</h2>';
  if(!sbOn()||!sbSess){e.innerHTML=h+'<div class="card2" style="padding:16px;display:grid;gap:10px"><div>Melde dich im Profil an, um die Bestenliste aller Spieler zu sehen.</div><button class="act" id="lbprof" type="button">Zum Profil</button></div>';return}
  if(!lbRows){e.innerHTML=h+'<div class="card2" style="padding:16px"><div class="meta">'+(lbErr?esc(lbErr):'Lade Bestenliste …')+'</div></div>';return}
  const me=sbSess.uid,rows=lbRows.map(r=>r.id===me?{id:r.id,name:sbName0(),rank:rankIx(),m:S.m}:r).sort((a,b)=>b.m-a.m),pos=rows.findIndex(r=>r.id===me)+1;
  const med=['#d4a017','#9aa3ab','#b0703a'];
- e.innerHTML=h+'<div class="card2" style="padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:10px"><div class="meta">'+(pos?'Deine Platzierung: <b>'+pos+'</b> von '+rows.length:rows.length+' Spieler')+'</div><button class="act ghost sm" id="lbref" type="button" '+(lbBusy?'disabled':'')+'>Aktualisieren</button></div>'
+ e.innerHTML=h+(nameSet()?'':'<div class="card2" style="padding:12px 14px;display:grid;gap:8px"><div class="meta">Lege deinen Spielernamen fest. Er erscheint hier und kann nur einmal gesetzt werden.</div><div style="display:flex;gap:8px"><input id="lbnm" type="text" maxlength="20" autocomplete="nickname" placeholder="Dein Name" style="flex:1;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><button class="act" id="lbname" type="button">Speichern</button></div></div>')+'<div class="card2" style="padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:10px"><div class="meta">'+(pos?'Deine Platzierung: <b>'+pos+'</b> von '+rows.length:rows.length+' Spieler')+'</div><button class="act ghost sm" id="lbref" type="button" '+(lbBusy?'disabled':'')+'>Aktualisieren</button></div>'
   +'<div class="card2" style="padding:6px 0">'+(rows.length?rows.slice(0,100).map((r,i)=>'<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;'+(r.id===me?'background:color-mix(in srgb,var(--acc) 22%,transparent);':'')+(i?'border-top:1px solid var(--line)':'')+'"><b style="width:28px;text-align:center;font:700 18px var(--f1);color:'+(med[i]||'var(--mut)')+'">'+(i+1)+'</b><div style="flex:1;min-width:0"><div style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(r.name)+(r.id===me?' <span class="meta">(du)</span>':'')+'</div><div class="meta">'+esc((RANKS[r.rank]||RANKS[0]).n)+'</div></div><b style="font:700 17px var(--f1);font-variant-numeric:tabular-nums">'+F(r.m)+'</b></div>').join(''):'<div class="meta" style="padding:14px">Noch keine Einträge.</div>')+'</div>'
   +'<div class="meta" style="padding:0 4px">Das Geld wird alle 30 Sekunden aktualisiert.</div>'}
 setInterval(()=>{if(!$('#board').hidden&&sbSess)lbLoad(true)},30000);
@@ -1258,6 +1258,7 @@ document.addEventListener('click',e=>{
  if(t.id==='sblogin'||t.id==='sbreg'){sbAuth(t.id==='sbreg');return}
  if(t.id==='sbout'){sbSess=null;try{localStorage.removeItem(SBS)}catch(e){}sbMsg='Abgemeldet.';renderCloud();return}
  if(t.id==='sbname'){sbName();return}
+ if(t.id==='lbname'){sbName('lb');return}
  if(t.id==='sbdown'){sbPull(true);return}
  if(t.id==='sbkeepl'){sbConflict=null;sbPush(true);return}
  if(t.id==='sbtakec'){sbApply();return}
