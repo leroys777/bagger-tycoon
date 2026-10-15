@@ -88,6 +88,34 @@ button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
 .veh.cur .tag{color:var(--ink)}
 
 /* Spielothek */
+
+.cas-tabs{display:flex;gap:6px;margin-bottom:10px;background:var(--surf2,#e9e6df);padding:4px;border-radius:999px}
+.cas-tabs button{flex:1;border:0;background:transparent;color:inherit;font:700 14px var(--f2);padding:9px 0;border-radius:999px;cursor:pointer;letter-spacing:.04em}
+.cas-tabs button.on{background:var(--acc);color:var(--accink)}
+.felt{position:relative;margin:4px 0 12px;padding:14px 10px 12px;border-radius:120px 120px 22px 22px/46px 46px 22px 22px;background:radial-gradient(ellipse at 50% 20%,#1f8a52,#0e5a33 60%,#073a20);box-shadow:inset 0 0 0 4px #5a3a1c,inset 0 0 0 6px #b98a4a,inset 0 10px 40px rgba(0,0,0,.55),0 6px 18px rgba(0,0,0,.4);color:#f4efe0;text-align:center}
+.felt .arc{font:600 10px var(--f2);letter-spacing:.28em;color:rgba(255,230,160,.55);text-transform:uppercase;margin:2px 0 8px}
+.hand{min-height:98px;display:flex;justify-content:center;align-items:center;padding:2px 0}
+.hl{font:700 12px var(--f2);letter-spacing:.1em;text-transform:uppercase;color:#ffe9a8;margin:6px 0 2px;display:flex;justify-content:center;gap:8px;align-items:center}
+.hl b{background:rgba(0,0,0,.4);border-radius:999px;padding:2px 10px;font-variant-numeric:tabular-nums;color:#fff}
+.hl b.bust{background:#b3261e}.hl b.bj{background:#c9951a;color:#1a1200}
+.pc{width:clamp(48px,15vw,62px);aspect-ratio:5/7;border-radius:7px;background:linear-gradient(#fff,#ece8dd);color:#15171a;position:relative;box-shadow:0 3px 7px rgba(0,0,0,.5);margin-left:-20px;font-family:Georgia,serif;font-weight:700;animation:deal .32s cubic-bezier(.2,.9,.3,1.2) both}
+.pc:first-child{margin-left:0}
+.pc.red{color:#c4161c}
+.pc i{position:absolute;left:5px;top:3px;font-style:normal;font-size:clamp(14px,4.4vw,18px);line-height:1}
+.pc i small{display:block;font-size:.8em}
+.pc em{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:clamp(26px,8vw,34px)}
+.pc.back{background:repeating-linear-gradient(45deg,#7b1620 0 5px,#5c0f17 5px 10px);box-shadow:inset 0 0 0 3px #f1e8d0,0 3px 7px rgba(0,0,0,.5)}
+.pc.back i,.pc.back em{display:none}
+@keyframes deal{from{transform:translate(40px,-60px) rotate(18deg) scale(.8);opacity:0}to{transform:none;opacity:1}}
+#bjmsg{min-height:26px;margin:8px 0 2px;font:700 17px var(--f1);letter-spacing:.04em}
+#bjmsg.win{color:#9bf0b0}#bjmsg.lose{color:#ff9a86}
+.bjact{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px}
+.bjact .act{padding:0 4px;font-size:16px}
+.chip{display:inline-flex;align-items:center;justify-content:center;gap:6px;font:700 13px var(--f2)}
+.bets.bj button{border-radius:50%;width:48px;height:48px;padding:0;border:3px dashed rgba(255,255,255,.55);background:radial-gradient(circle,#2b3340 40%,#1b2029);font-size:13px}
+.bets.bj button.on{background:radial-gradient(circle,#f2b705 40%,#c58f00);color:#1a1200;border-color:#fff}
+.bets.bj button:disabled{opacity:.35}
+.bets.bj{gap:6px;flex-wrap:nowrap;justify-content:center}
 .cab{--ink:#eceae4;--mut:#9aa0a8;--line:#323840;--surf2:#262a31;--ok:#5fd07a;--bad:#ff7b63;color:var(--ink);background:linear-gradient(#22262d,#14171b);border-radius:24px;padding:16px;box-shadow:var(--sh);border-top:5px solid var(--acc)}
 .cab h2{font:700 15px var(--f1);letter-spacing:.2em;text-transform:uppercase;color:var(--acc);margin:0 0 12px;text-align:center}
 .reels{display:flex;gap:8px;background:#07080a;padding:10px;border-radius:16px;box-shadow:inset 0 3px 10px rgba(0,0,0,.7)}
@@ -208,6 +236,8 @@ body{padding-bottom:0}
 <div id="cloudwrap" hidden><div class="card2" style="padding:14px;display:grid;gap:10px;margin-top:14px"><div id="cloud"></div></div></div>
 <div id="admwrap" hidden><div class="card2" style="padding:14px;display:grid;gap:10px;margin-top:14px"><div id="adm"></div></div></div>
 <section id="slot" hidden>
+ <div class="cas-tabs"><button type="button" class="on" data-g="slots">🎰 Spielautomat</button><button type="button" data-g="bj">🃏 Blackjack</button></div>
+ <div id="slots">
  <div class="cab">
   <h2>Spielothek</h2>
   <div class="reels"><div class="reel">7️⃣</div><div class="reel">7️⃣</div><div class="reel">7️⃣</div></div>
@@ -223,6 +253,20 @@ body{padding-bottom:0}
   </table>
   <div class="meta" style="margin-top:10px">Hier geht es nur um virtuelles Geld. Echtes Glücksspiel kann süchtig machen: Hilfe unter bzga.de.</div>
  </div>
+</div>
+ <div id="bjw" hidden><div class="cab">
+  <h2>Blackjack</h2>
+  <div class="felt">
+   <div class="arc">Blackjack zahlt 3 zu 2</div>
+   <div class="hl">Dealer <b id="dsc">–</b></div><div class="hand" id="dh"></div>
+   <div class="arc" style="margin:6px 0">Dealer zieht bis 16 · steht ab 17</div>
+   <div class="hand" id="ph"></div><div class="hl">Du <b id="psc">–</b></div>
+   <div id="bjmsg">Wähle deinen Einsatz.</div>
+  </div>
+  <div id="bjbet"><div class="lbl">Einsatz</div><div class="bets bj" id="bjbets"></div><button class="act big" id="bjdeal" type="button">Austeilen</button></div>
+  <div id="bjplay" hidden><div class="bjact"><button class="act" id="bjhit" type="button">Karte</button><button class="act ghost" id="bjstand" type="button">Halten</button><button class="act" id="bjdbl" type="button">Doppeln</button></div></div>
+  <div class="meta" style="margin-top:10px">Nur virtuelles Geld. Echtes Glücksspiel kann süchtig machen: Hilfe unter bzga.de.</div>
+ </div></div>
 </section>
 <div class="foot"><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button></div>
 </main></div>
@@ -1334,6 +1378,55 @@ function done(r,st){
  else if(w>0){m.className='lose';m.textContent='Nur '+F(w)+' zurück (−'+F(st-w)+')'}
  else{m.className='lose';m.textContent='Verloren: −'+F(st)}
  renderLad();renderTop();save()}
+
+/* ---------- Blackjack ---------- */
+const BJB=[100,500,1000,2500,5000,10000],RK=['A','2','3','4','5','6','7','8','9','10','J','Q','K'],SU=['♠','♥','♦','♣'];
+let bjBet=100,bjBusy=false;
+const bjVal=h=>{let t=0,a=0;h.forEach(c=>{const r=c[0];if(r===0){a++;t+=11}else t+=Math.min(r+1,10)});while(t>21&&a>0){t-=10;a--}return t};
+const bjDraw=()=>[Math.floor(Math.random()*13),Math.floor(Math.random()*4)];
+const bjCard=(c,hide)=>hide?'<div class="pc back"></div>':`<div class="pc ${c[1]===1||c[1]===2?'red':''}"><i>${RK[c[0]]}<small>${SU[c[1]]}</small></i><em>${SU[c[1]]}</em></div>`;
+function bjMsg(t,c){const m=$('#bjmsg');m.textContent=t;m.className=c||''}
+function bjRender(){
+ const g=S.bj,live=!!g&&!g.done;
+ $('#bjbet').hidden=live;$('#bjplay').hidden=!live;
+ $('#bjbets').innerHTML=BJB.map(b=>`<button type="button" data-bjb="${b}" class="${b===bjBet?'on':''}" ${b>S.m?'disabled':''}>${b>=1000?(b/1000)+'k':b}</button>`).join('');
+ $('#bjdeal').disabled=bjBusy||bjBet>S.m;$('#bjdeal').textContent='Austeilen für '+F(bjBet);
+ if(!g){$('#dh').innerHTML='';$('#ph').innerHTML='';$('#dsc').textContent='–';$('#psc').textContent='–';return}
+ $('#dh').innerHTML=g.d.map((c,i)=>bjCard(c,live&&i===1)).join('');$('#ph').innerHTML=g.p.map(c=>bjCard(c)).join('');
+ const pv=bjVal(g.p),dv=bjVal(g.d);
+ $('#dsc').textContent=live?String(Math.min(g.d[0][0]===0?11:Math.min(g.d[0][0]+1,10),11)):dv;$('#dsc').className=!live&&dv>21?'bust':'';
+ $('#psc').textContent=pv;$('#psc').className=pv>21?'bust':(pv===21&&g.p.length===2?'bj':'');
+ if(live){$('#bjdbl').disabled=g.p.length!==2||g.bet>S.m}
+}
+function bjStart(){
+ if(bjBusy||bjBet>S.m)return;if(S.bj&&!S.bj.done)return;
+ const b=bjBet;S.m-=b;S.st.cstake+=b;S.st.spins++;
+ S.bj={bet:b,p:[bjDraw(),bjDraw()],d:[bjDraw(),bjDraw()],done:false};
+ bjMsg('Karte, Halten oder Doppeln?');renderTop();save();bjRender();
+ if(bjVal(S.bj.p)===21)bjEnd()}
+function bjEnd(){
+ const g=S.bj;if(!g||g.done)return;
+ const pv=bjVal(g.p);const nat=pv===21&&g.p.length===2;
+ if(pv<=21&&!(nat)){while(bjVal(g.d)<17)g.d.push(bjDraw())}
+ else if(nat){while(bjVal(g.d)<17)g.d.push(bjDraw())}
+ const dv=bjVal(g.d),dn=dv===21&&g.d.length===2;let pay=0,txt,cls;
+ if(pv>21){txt='Überkauft! −'+F(g.bet);cls='lose'}
+ else if(nat&&!dn){pay=Math.round(g.bet*2.5);txt='BLACKJACK! +'+F(pay-g.bet)+' 🎉';cls='win'}
+ else if(dn&&!nat){txt='Dealer hat Blackjack. −'+F(g.bet);cls='lose'}
+ else if(dv>21||pv>dv){pay=g.bet*2;txt=(dv>21?'Dealer überkauft! ':'Gewonnen! ')+'+'+F(g.bet);cls='win'}
+ else if(pv===dv){pay=g.bet;txt='Unentschieden – Einsatz zurück.';cls=''}
+ else{txt='Dealer gewinnt. −'+F(g.bet);cls='lose'}
+ g.done=true;if(pay>0){S.m+=pay;S.st.cwin+=pay;if(pay>S.st.big)S.st.big=pay}
+ bjMsg(txt,cls);renderTop();save();bjRender()}
+function bjHit(){const g=S.bj;if(!g||g.done)return;g.p.push(bjDraw());const v=bjVal(g.p);save();bjRender();if(v>=21)bjEnd()}
+function bjStand(){const g=S.bj;if(!g||g.done)return;bjEnd()}
+function bjDouble(){const g=S.bj;if(!g||g.done||g.p.length!==2||g.bet>S.m)return;
+ S.m-=g.bet;S.st.cstake+=g.bet;g.bet*=2;g.p.push(bjDraw());renderTop();bjEnd()}
+document.addEventListener('click',e=>{
+ const t=e.target.closest&&e.target.closest('[data-g],[data-bjb],#bjdeal,#bjhit,#bjstand,#bjdbl');if(!t)return;
+ if(t.dataset.g){document.querySelectorAll('.cas-tabs button').forEach(b=>b.classList.toggle('on',b===t));$('#slots').hidden=t.dataset.g!=='slots';$('#bjw').hidden=t.dataset.g!=='bj';if(t.dataset.g==='bj'){if(S.bj&&S.bj.done&&!$('#dh').innerHTML)bjMsg('Wähle deinen Einsatz.');bjRender()}return}
+ if(t.dataset.bjb){bjBet=+t.dataset.bjb;bjRender();return}
+ if(t.id==='bjdeal')bjStart();else if(t.id==='bjhit')bjHit();else if(t.id==='bjstand')bjStand();else if(t.id==='bjdbl')bjDouble()});
 
 document.addEventListener('gesturestart',e=>e.preventDefault());
 {let lt0=0,sx=0,sy=0;
