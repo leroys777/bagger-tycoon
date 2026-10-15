@@ -332,7 +332,7 @@ body{padding-bottom:0}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 15.10. 17:00 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 15.10. 18:00 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -1242,7 +1242,8 @@ const UP=[
  {k:'hyd',n:'Hydraulik und Löffel',d:l=>'Auftragslohn +'+l*12+' %',max:12,c:l=>Math.round(3000*Math.pow(2.5,l))},
  {k:'tec',n:'Wartungsplan',d:l=>'Reparatur −'+l*6+' %, Defekte seltener',max:8,c:l=>Math.round(1500*Math.pow(2.3,l))},
  {k:'auto',n:'Vorarbeiter',d:l=>['Stufe 1: nimmt automatisch den ersten Auftrag an','Stufe 2: nimmt immer den besten Auftrag an','Stufe 3: wählt den besten Auftrag und arbeitet bis zu 12 Std. auch offline','Alle Stufen freigeschaltet. Stufe 3: bester Auftrag, bis zu 12 Std. offline'][l],max:3,c:l=>[50000,100000,1000000][l]}];
-const gain=()=>Math.floor(Math.cbrt((S.tot||0)/1000000));
+const LC=[1000000,2500000,10000000,50000000,200000000];
+const gain=()=>{let g=0;while(S.lic+g<LC.length&&(S.tot||0)>=LC[S.lic+g])g++;return g};
 function renderFirm(){
  $('#firm').innerHTML=`<h2 class="sec" style="margin-top:4px">Arbeitgeber</h2><div class="card2" id="empbox"></div><h2 class="sec">Konzern</h2><div class="card2"><div class="emp-row"><div><b class="vn">Baulizenzen</b><span class="meta">Jede Lizenz erhöht deinen Lohn dauerhaft um 35 %</span></div><span class="pay" id="fl"></span></div><div class="emp-row"><span class="meta">Verdient in diesem Durchgang</span><b id="ft"></b></div><button class="act big" id="prest" type="button" style="margin-top:2px"></button><div class="meta" id="pn"></div></div><h2 class="sec">Werkstatt</h2>`+UP.map(u=>`<div class="job"><div class="jt" id="ul-${u.k}"></div><div class="jmain"><b>${u.n}</b><span class="meta" id="ud-${u.k}"></span></div><div class="jside"><span class="pay" id="up-${u.k}"></span><button class="act sm" data-up="${u.k}" type="button">Verbessern</button></div></div>`).join('');
  updateFirm()}
@@ -1254,8 +1255,8 @@ function empBox(){const b=$('#empbox');if(!b)return;const k=S.life>=EMPMIN?'u'+S
  if(k==='l'){$('#ebar').style.width=Math.min(100,S.life/EMPMIN*100)+'%';$('#etxt').textContent=F(S.life)+' / '+F(EMPMIN)}}
 function updateFirm(){if($('#firm').hidden||!$('#fl'))return;empBox();
  const g=gain();$('#fl').textContent=S.lic;$('#ft').textContent=F(S.tot);
- const pb=$('#prest');if(!pb.dataset.arm){pb.textContent=g>=1?'Firma verkaufen · +'+g+(g>1?' Lizenzen':' Lizenz'):'Noch keine Lizenz verfügbar'}pb.disabled=g<1;
- $('#pn').textContent=g>=1?'Setzt Geld, Bagger und Werkstatt zurück. Lizenzen und Vorarbeiter bleiben.':'Verdiene '+F(1000000)+' in einem Durchgang für die erste Lizenz. Mit Lizenz 1 kannst du den Monster-Bagger kaufen.';
+ const pb=$('#prest');if(!pb.dataset.arm){pb.textContent=g>=1?'Firma verkaufen · +'+g+(g>1?' Lizenzen':' Lizenz'):(S.lic>=LC.length?'Alle Lizenzen erworben':'Noch keine Lizenz verfügbar')}pb.disabled=g<1;
+ $('#pn').textContent=g>=1?'Setzt Geld, Bagger und Werkstatt zurück. Lizenzen und Vorarbeiter bleiben.':S.lic>=LC.length?'Du besitzt alle '+LC.length+' Lizenzen.':'Verdiene '+F(LC[S.lic])+' in einem Durchgang für Lizenz '+(S.lic+1)+'. Preise: '+LC.map(F).join(' · ')+'.';
  UP.forEach(u=>{const l=S.up[u.k]||0,mx=l>=u.max,c=u.c(l);$('#ul-'+u.k).textContent=l;$('#ud-'+u.k).textContent=u.d(l)+(u.k==='auto'?' · Stufe '+l+'/'+u.max:' · Stufe '+l+'/'+u.max);$('#up-'+u.k).textContent=mx?'Max':F(c);const b=document.querySelector('[data-up="'+u.k+'"]');b.disabled=mx||S.m<c;b.textContent=mx?'Max':'Verbessern'})}
 function buyUp(k){const u=UP.find(x=>x.k===k),l=S.up[k]||0;if(!u||l>=u.max)return;const c=u.c(l);if(S.m<c)return;S.m-=c;S.up[k]=l+1;toast(u.n+' verbessert');renderOffers();renderTop();updateFirm();save()}
 function doPrest(b){const g=gain();if(g<1)return;
@@ -1737,7 +1738,7 @@ function clOpen(){if($('#clov'))return;const o=document.createElement('div');o.i
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#clbtn'))clOpen()});
 setTimeout(clLoad,3500);setInterval(clLoad,60000);
 /* Auto-Update: neue Version erkennen und neu laden */
-const BUILD='20261015-1700';
+const BUILD='20261015-1800';
 setTimeout(async()=>{try{if(!/^https?:/.test(location.protocol))return;
  const t=await (await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'})).text(),m=t.match(/const BUILD='([^']+)'/);
  if(m&&m[1]!==BUILD){const k='baggerUpd';if(sessionStorage.getItem(k)===m[1])return;sessionStorage.setItem(k,m[1]);location.replace(location.pathname+'?v='+m[1])}}catch(e){}},3500);
