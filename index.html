@@ -1,3 +1,5 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Bagger Tycoon</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -176,6 +178,7 @@ button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
 .ldp i{display:block;height:100%;width:0;background:#ffc400;border-radius:9px}
 .ldby{position:absolute;bottom:2.6vh;left:0;right:0;text-align:center;font:500 11px/1 var(--f2);letter-spacing:.22em;opacity:.75;z-index:3;text-transform:lowercase}
 </style>
+</head><body>
 <div id="ld"><div class="ldbg"></div><canvas id="ldc"></canvas><div class="ldvig"></div><div class="ldcut" id="ldcut"></div><div class="ldbar t"></div><div class="ldbar b"></div><div class="ldt">Bagger <span>Tycoon</span></div><div class="ldp"><i id="ldp"></i></div><div class="ldby">made by friedi</div></div>
 <script>window.LD0=performance.now()</script>
 <header class="top"><div class="in"><div class="lh"><div class="brand"><i></i>Bagger Tycoon</div><button class="rkchip" id="rk" data-t="prof" type="button">Praktikant</button></div><div class="bal"><small>Kontostand</small><div id="money">0 €</div></div></div></header>
@@ -1361,3 +1364,5 @@ function ldStart(done){
  requestAnimationFrame(()=>{t0=performance.now();raf=requestAnimationFrame(tick);setTimeout(done,40)})}
 ldStart(boot);
 </script>
+
+</body></html>
