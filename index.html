@@ -153,6 +153,7 @@ button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
 .pfname{font:700 26px var(--f1);margin-top:8px;padding:0 12px;word-break:break-word}.pfname small{font:500 13px var(--f2);color:var(--mut)}
 .pfsub{display:flex;gap:10px;justify-content:center;align-items:center;margin-top:6px;font-size:13px;flex-wrap:wrap}
 .pfrank{color:#fff;font:700 12px var(--f2);letter-spacing:.06em;text-transform:uppercase;padding:3px 11px;border-radius:999px}
+.pfban{margin:12px 14px 0;padding:9px 12px;border-radius:12px;border:2px solid #ff2a2a;color:#ff3b3b;font:700 14px var(--f2);background:rgba(255,42,42,.08);box-shadow:0 0 10px rgba(255,42,42,.45)}
 .pfbad{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:12px 14px 0}.pfbad span{background:var(--surf2);border:1px solid var(--line);border-radius:999px;padding:4px 10px;font:600 12px var(--f2)}
 .pfgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px 14px 0}
 .pft{background:var(--surf2);border-radius:14px;padding:10px 6px;display:grid;gap:2px}.pft span{font-size:18px}.pft b{font:700 17px var(--f1);font-variant-numeric:tabular-nums;word-break:break-word}.pft small{font:600 10px var(--f2);letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
@@ -315,7 +316,7 @@ body{padding-bottom:0}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 15.10. 15:45 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 15.10. 16:00 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -1371,10 +1372,11 @@ async function chSend(){const i=$('#chin'),v=((i&&i.value)||'').trim();if(!v||!s
  catch(e){chErr='Senden nicht möglich: '+e.message;renderBoard()}}
 setInterval(()=>{if(!$('#board').hidden&&sbSess&&lbSub!=='rank'){if(lbSub==='global')gcLoad();else pvLoad()}},4000);
 /* ---------- Spielerprofile und Nachrichten ---------- */
-let lbView=null,pfData=null,pfMsg='',inbox=[],inboxErr='',msgLast=0;
+let lbView=null,pfData=null,pfMsg='',pfBan={},inbox=[],inboxErr='',msgLast=0;
 const fdate=t=>{try{return new Date(t).toLocaleString('de-DE',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}catch(e){return''}};
 async function openProfile(uid){lbView=uid;pfData=null;pfMsg='';renderBoard();
  try{const pr=await sbReq('/rest/v1/presence?user_id=eq.'+uid+'&select=user_id,last_seen,last_login');if(pr&&pr[0])pres[uid]=pr[0]}catch(e){}
+ try{const fb=await sbReq('/rest/v1/flags?user_id=eq.'+uid+'&select=banned');pfBan[uid]=!!(fb&&fb[0]&&fb[0].banned)}catch(e){}
 
  try{const r=await sbReq('/rest/v1/saves?user_id=eq.'+uid+'&select=name,rank,life,data');pfData=(r&&r[0])||{}}catch(e){pfMsg=e.message;pfData={}}
  renderBoard()}
@@ -1387,7 +1389,7 @@ function pfHtml(esc,me){
  const bad=[];if(pos&&pos<=3)bad.push(['👑','Platz '+pos]);if(lic)bad.push(['🏅',lic+(lic===1?' Lizenz':' Lizenzen')]);if(rk>=3)bad.push(['⭐',(RANKS[rk]||RANKS[0]).n]);
  if(jobs>=500)bad.push(['🛠','500+ Aufträge']);else if(jobs>=100)bad.push(['🛠','100+ Aufträge']);if(d.up&&d.up.auto>=3)bad.push(['👷','Vorarbeiter Stufe 3']);if((+st.spins||0)>=50)bad.push(['🎰','Stammgast']);if(top>=V.length-1)bad.push(['🚜','Monster-Bagger']);
  const tile=(i,k,v)=>'<div class="pft"><span>'+i+'</span><b>'+v+'</b><small>'+k+'</small></div>';
- const ready=!!pfData;
+ const ready=!!pfData,ban=own?isBan():!!pfBan[lbView];
  const img=(typeof TH!=='undefined'&&TH&&TH[top])?'<img src="'+TH[top]+'" alt="" class="pfimg">':'<div class="pfimg pfno">🚜</div>';
  const stat=on?'<span style="color:#2ecc71;font-weight:700">● Online</span>':'<span class="meta">Zuletzt online '+agoT(pp.last_seen)+'</span>';
  return '<button class="act ghost sm" id="lbback" type="button">‹ Zurück zur Bestenliste</button>'
@@ -1395,7 +1397,7 @@ function pfHtml(esc,me){
  +'<div class="pfav" style="border-color:'+col+'">'+esc((nm[0]||'?').toUpperCase())+'<i class="pdot big '+(on?'on':'off')+'"></i></div>'
  +'<div class="pfname">'+esc(nm)+(own?' <small>(du)</small>':'')+'</div>'
  +'<div class="pfsub"><span class="pfrank" style="background:'+col+'">'+esc((RANKS[rk]||RANKS[0]).n)+'</span>'+stat+'</div>'
- +(bad.length?'<div class="pfbad">'+bad.map(x=>'<span>'+x[0]+' '+esc(x[1])+'</span>').join('')+'</div>':'')
+ +(ban?'<div class="pfban">🚫 Hausverbot im Casino</div>':'')+(bad.length?'<div class="pfbad">'+bad.map(x=>'<span>'+x[0]+' '+esc(x[1])+'</span>').join('')+'</div>':'')
  +(ready?'<div class="pfgrid">'+tile('💶','Geld',F(+d.m||0))+tile('🏅','Lizenzen',lic)+tile('📋','Aufträge',jobs)+tile('📈','Gesamtverdienst',F(+d.life||(pfData&&+pfData.life)||0))+'</div>'
   +'<div class="pfbag">'+img+'<div><small>Bester Bagger</small><b>'+esc(veh.n)+'</b><span class="meta">'+esc(veh.tn)+'</span></div></div>':'<div class="meta" style="padding:16px">Lade Profil …</div>')
  +'<div class="pfmeta"><span>Letzter Login</span><b>'+(pp.last_login?fdate(pp.last_login)+' · '+agoT(pp.last_login):'unbekannt')+'</b></div></div>'
@@ -1636,7 +1638,7 @@ function clOpen(){if($('#clov'))return;const o=document.createElement('div');o.i
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#clbtn'))clOpen()});
 setTimeout(clLoad,3500);setInterval(clLoad,60000);
 /* Auto-Update: neue Version erkennen und neu laden */
-const BUILD='20261015-1545';
+const BUILD='20261015-1600';
 setTimeout(async()=>{try{if(!/^https?:/.test(location.protocol))return;
  const t=await (await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'})).text(),m=t.match(/const BUILD='([^']+)'/);
  if(m&&m[1]!==BUILD){const k='baggerUpd';if(sessionStorage.getItem(k)===m[1])return;sessionStorage.setItem(k,m[1]);location.replace(location.pathname+'?v='+m[1])}}catch(e){}},3500);
