@@ -284,7 +284,7 @@ body{padding-bottom:0}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 15.10. 13:30 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 15.10. 13:45 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -328,9 +328,11 @@ const X=[
 const WK=1.1,PY=.25,CK=3;V.forEach(v=>{v.c*=CK});
 const ST0=()=>({jobs:0,ex:0,work:0,best:0,passive:0,repairs:0,repCost:0,breaks:0,spins:0,cstake:0,cwin:0,big:0,time:0,sold:0});
 let S={m:0,tier:0,job:null,offers:[],nid:1,up:{mot:0,hyd:0,tec:0,auto:0},lic:0,tot:0,life:0,emp:'self',st:ST0(),v:2,rk:0};
-const newState=()=>({m:0,tier:0,job:null,offers:[],nid:1,up:{mot:0,hyd:0,tec:0,auto:0},lic:0,tot:0,life:0,emp:'self',unl:0,st:ST0(),v:2,rk:0,cond:100,top:0,cds:{}});
+const newState=()=>({autoMig:1,m:0,tier:0,job:null,offers:[],nid:1,up:{mot:0,hyd:0,tec:0,auto:0},lic:0,tot:0,life:0,emp:'self',unl:0,st:ST0(),v:2,rk:0,cond:100,top:0,cds:{}});
 try{const d=JSON.parse(localStorage.getItem(KEY));if(d&&d.offers)S=d}catch(e){}
-const save=()=>{if(window.__ns)return;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const LOADSEEN=S.seen||0;
+if(S.up&&S.up.auto===1&&!S.autoMig){S.up.auto=2}S.autoMig=1;
+const save=()=>{if(window.__ns)return;S.seen=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 if(S.pend){S.m+=S.pend;S.pend=0}
 S.up=Object.assign({mot:0,hyd:0,tec:0,auto:0},S.up||{});try{if(localStorage.getItem('baggerBan')==='1')S.ban=true}catch(e){}if(S.ban)try{localStorage.setItem('baggerBan','1')}catch(e){}S.lic=S.lic||0;S.tot=S.tot||0;S.life=Math.max(S.life||0,S.tot);if(!S.emp)S.emp='self';S.st=Object.assign(ST0(),S.st||{});if(typeof S.cond!=='number')S.cond=100;if(typeof S.top!=='number')S.top=S.tier;if(!S.cds)S.cds={};if(!S.v){S.tier=[0,1,2,3,5,8][S.tier]||0;S.v=2;S.offers=[];S.job=null;S.prog=0}if(S.tier>=V.length)S.tier=0;if(S.emp==='wtd'&&S.next>Date.now()+300000)S.next=Date.now()+300000;
 const pw=()=>V[S.tier].p*(1+.2*S.up.mot)/WK;
@@ -1160,7 +1162,7 @@ let last=performance.now(),sv=0,ro=0,ccd=0;
 setInterval(()=>{const n=performance.now(),dt=Math.min(3600,(n-last)/1000);last=n;const o=cur(),now=Date.now();if(dt<2)S.st.time+=dt;if(!$('#shop').hidden&&(ccd+=dt)>1){ccd=0;renderCond()}
  if(o&&!S.broken){S.cond=Math.max(0,S.cond-dt*100/1800);if(Math.random()<dt*(1+2*dmg())/(300*(1+.5*S.up.tec))){S.broken=true;S.fix=0;S.cond=Math.min(S.cond,10);S.st.breaks++;toast('Bagger kaputt!');renderShop()}o.prog+=pw()*dt;
   if(o.prog>=o.w){const p=pay(o);S.m+=p;S.tot+=p;S.life+=p;{const q=S.st;q.jobs++;if(o.ex)q.ex++;q.work+=o.w;if(p>q.best)q.best=p}toast('Auftrag erledigt: +'+F(p));S.offers=S.offers.filter(x=>x!==o);S.job=null;refill();renderOffers();save()}}
- if(!S.job&&S.up.auto&&!S.broken){const c=S.offers.filter(x=>x.t<=S.tier).sort((a,b)=>b.e/b.w-a.e/a.w)[0];if(c){S.job=c.id;renderOffers()}}
+ if(!S.job&&S.up.auto&&!S.broken){const el=S.offers.filter(x=>x.t<=S.tier),c=S.up.auto>=2?el.sort((a,b)=>b.e/b.w-a.e/a.w)[0]:el[0];if(c){S.job=c.id;renderOffers()}}
  if(S.offers.some(x=>x.rush&&x.rush<now&&x.id!==S.job)){S.offers=S.offers.filter(x=>!(x.rush&&x.rush<now&&x.id!==S.job));refill();renderOffers()}
  document.querySelectorAll('.rush').forEach(e=>{const q=Math.max(0,Math.ceil((e.dataset.r-now)/1000));e.textContent='EILIG ×3 · '+Math.floor(q/60)+':'+String(q%60).padStart(2,'0')});
  if(S.life>=EMPMIN&&!S.unl){S.unl=1;toast('Arbeitgeber freigeschaltet: siehe Tab Firma');save()}
@@ -1173,7 +1175,7 @@ const UP=[
  {k:'mot',n:'Motor-Tuning',d:l=>'Leistung +'+l*20+' %',max:12,c:l=>Math.round(2000*Math.pow(2.6,l))},
  {k:'hyd',n:'Hydraulik und Löffel',d:l=>'Auftragslohn +'+l*12+' %',max:12,c:l=>Math.round(3000*Math.pow(2.5,l))},
  {k:'tec',n:'Wartungsplan',d:l=>'Reparatur −'+l*6+' %, Defekte seltener',max:8,c:l=>Math.round(1500*Math.pow(2.3,l))},
- {k:'auto',n:'Vorarbeiter',d:l=>l?'Nimmt automatisch Aufträge an':'Nimmt automatisch den besten Auftrag an',max:1,c:()=>50000}];
+ {k:'auto',n:'Vorarbeiter',d:l=>['Stufe 1: nimmt automatisch den ersten Auftrag an','Stufe 2: nimmt immer den besten Auftrag an','Stufe 3: wählt den besten Auftrag und arbeitet bis zu 12 Std. auch offline','Alle Stufen freigeschaltet. Stufe 3: bester Auftrag, bis zu 12 Std. offline'][l],max:3,c:l=>[50000,100000,1000000][l]}];
 const gain=()=>Math.floor(Math.cbrt((S.tot||0)/1000000));
 function renderFirm(){
  $('#firm').innerHTML=`<h2 class="sec" style="margin-top:4px">Arbeitgeber</h2><div class="card2" id="empbox"></div><h2 class="sec">Konzern</h2><div class="card2"><div class="emp-row"><div><b class="vn">Baulizenzen</b><span class="meta">Jede Lizenz erhöht deinen Lohn dauerhaft um 35 %</span></div><span class="pay" id="fl"></span></div><div class="emp-row"><span class="meta">Verdient in diesem Durchgang</span><b id="ft"></b></div><button class="act big" id="prest" type="button" style="margin-top:2px"></button><div class="meta" id="pn"></div></div><h2 class="sec">Werkstatt</h2>`+UP.map(u=>`<div class="job"><div class="jt" id="ul-${u.k}"></div><div class="jmain"><b>${u.n}</b><span class="meta" id="ud-${u.k}"></span></div><div class="jside"><span class="pay" id="up-${u.k}"></span><button class="act sm" data-up="${u.k}" type="button">Verbessern</button></div></div>`).join('');
@@ -1188,7 +1190,7 @@ function updateFirm(){if($('#firm').hidden||!$('#fl'))return;empBox();
  const g=gain();$('#fl').textContent=S.lic;$('#ft').textContent=F(S.tot);
  const pb=$('#prest');if(!pb.dataset.arm){pb.textContent=g>=1?'Firma verkaufen · +'+g+(g>1?' Lizenzen':' Lizenz'):'Noch keine Lizenz verfügbar'}pb.disabled=g<1;
  $('#pn').textContent=g>=1?'Setzt Geld, Bagger und Werkstatt zurück. Lizenzen und Vorarbeiter bleiben.':'Verdiene '+F(1000000)+' in einem Durchgang für die erste Lizenz. Mit Lizenz 1 kannst du den Monster-Bagger kaufen.';
- UP.forEach(u=>{const l=S.up[u.k]||0,mx=l>=u.max,c=u.c(l);$('#ul-'+u.k).textContent=u.k==='auto'?(l?'✓':'–'):l;$('#ud-'+u.k).textContent=u.d(l)+(u.k==='auto'?'':' · Stufe '+l+'/'+u.max);$('#up-'+u.k).textContent=mx?'Max':F(c);const b=document.querySelector('[data-up="'+u.k+'"]');b.disabled=mx||S.m<c;b.textContent=mx?'Max':'Verbessern'})}
+ UP.forEach(u=>{const l=S.up[u.k]||0,mx=l>=u.max,c=u.c(l);$('#ul-'+u.k).textContent=l;$('#ud-'+u.k).textContent=u.d(l)+(u.k==='auto'?' · Stufe '+l+'/'+u.max:' · Stufe '+l+'/'+u.max);$('#up-'+u.k).textContent=mx?'Max':F(c);const b=document.querySelector('[data-up="'+u.k+'"]');b.disabled=mx||S.m<c;b.textContent=mx?'Max':'Verbessern'})}
 function buyUp(k){const u=UP.find(x=>x.k===k),l=S.up[k]||0;if(!u||l>=u.max)return;const c=u.c(l);if(S.m<c)return;S.m-=c;S.up[k]=l+1;toast(u.n+' verbessert');renderOffers();renderTop();updateFirm();save()}
 function doPrest(b){const g=gain();if(g<1)return;
  if(!b.dataset.arm){b.dataset.arm='1';b.textContent='Nochmal tippen zum Verkaufen';setTimeout(()=>{delete b.dataset.arm},3000);return}
@@ -1554,7 +1556,7 @@ document.addEventListener('click',e=>{
 
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target&&e.target.id==='chin'){e.preventDefault();chSend()}});
 /* Auto-Update: neue Version erkennen und neu laden */
-const BUILD='20261015-1330';
+const BUILD='20261015-1345';
 setTimeout(async()=>{try{if(!/^https?:/.test(location.protocol))return;
  const t=await (await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'})).text(),m=t.match(/const BUILD='([^']+)'/);
  if(m&&m[1]!==BUILD){const k='baggerUpd';if(sessionStorage.getItem(k)===m[1])return;sessionStorage.setItem(k,m[1]);location.replace(location.pathname+'?v='+m[1])}}catch(e){}},3500);
@@ -1564,7 +1566,18 @@ document.addEventListener('gesturestart',e=>e.preventDefault());
  document.addEventListener('touchend',e=>{const n=Date.now(),t=e.changedTouches[0],mv=t?Math.hypot(t.clientX-sx,t.clientY-sy):0;
   if(n-lt0<350&&mv<10&&e.cancelable&&!(e.target.closest&&e.target.closest('input,textarea,select'))){e.preventDefault();const b=e.target.closest&&e.target.closest('button,a,[data-t]');if(b&&!b.disabled)b.click()}
   lt0=n},{passive:false})}
+function offlineWork(sec){
+ if(!S.up||S.up.auto<3||S.broken)return;
+ let rem=Math.min(sec,43200),n=0,gain=0;const p=pw();if(!(p>0))return;
+ for(let g=0;g<4000&&rem>0;g++){
+  let o=cur();
+  if(!o){const c=S.offers.filter(x=>x.t<=S.tier).sort((a,b)=>b.e/b.w-a.e/a.w)[0];if(!c)break;S.job=c.id;o=c}
+  const need=(o.w-o.prog)/p;
+  if(need<=rem){rem-=need;const pa=pay(o);S.m+=pa;S.tot+=pa;S.life+=pa;const q=S.st;q.jobs++;if(o.ex)q.ex++;q.work+=o.w;if(pa>q.best)q.best=pa;gain+=pa;n++;S.offers=S.offers.filter(x=>x!==o);S.job=null;refill()}
+  else{o.prog+=p*rem;rem=0}}
+ if(n||gain){save();setTimeout(()=>toast('Vorarbeiter war aktiv: '+n+(n===1?' Auftrag':' Aufträge')+', +'+F(gain)),4800)}}
 function boot(){
+try{const gap=(Date.now()-LOADSEEN)/1000;if(LOADSEEN&&gap>90)offlineWork(gap)}catch(e){}
 if(T3){try{init3d();thumbs()}catch(e){T3=false;view.style.display='none'}}else view.style.display='none';
 $('#camb').hidden=!T3;
 renderOffers();renderShop();renderBets();renderTop();renderProg();buildReels()}
