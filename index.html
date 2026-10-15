@@ -154,6 +154,8 @@ button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
 .pfsub{display:flex;gap:10px;justify-content:center;align-items:center;margin-top:6px;font-size:13px;flex-wrap:wrap}
 .pfrank{color:#fff;font:700 12px var(--f2);letter-spacing:.06em;text-transform:uppercase;padding:3px 11px;border-radius:999px}
 .pfban{margin:12px 14px 0;padding:9px 12px;border-radius:12px;border:2px solid #ff2a2a;color:#ff3b3b;font:700 14px var(--f2);background:rgba(255,42,42,.08);box-shadow:0 0 10px rgba(255,42,42,.45)}
+.pfbad span.pfrole{font:800 13px var(--f2);letter-spacing:.08em;text-transform:uppercase;padding:5px 14px;background:var(--surf);border:2px solid var(--rc);color:var(--rc);box-shadow:0 0 8px var(--rc),0 0 18px var(--rc),inset 0 0 8px color-mix(in srgb,var(--rc) 45%,transparent);text-shadow:0 0 8px var(--rc)}
+.pfbad span.pfrole.r-founder{--rc:#ff2a3a}.pfbad span.pfrole.r-supporter{--rc:#2a9dff}.pfbad span.pfrole.r-helper{--rc:#ff2ad4}
 .pfbad{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:12px 14px 0}.pfbad span{background:var(--surf2);border:1px solid var(--line);border-radius:999px;padding:4px 10px;font:600 12px var(--f2)}
 .pfgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px 14px 0}
 .pft{background:var(--surf2);border-radius:14px;padding:10px 6px;display:grid;gap:2px}.pft span{font-size:18px}.pft b{font:700 17px var(--f1);font-variant-numeric:tabular-nums;word-break:break-word}.pft small{font:600 10px var(--f2);letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
@@ -332,7 +334,7 @@ body{padding-bottom:0}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 15.10. 21:00 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 15.10. 20:30 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -1582,10 +1584,11 @@ async function chSend(){const i=$('#chin'),v=((i&&i.value)||'').trim();if(!v||!s
  catch(e){chErr='Senden nicht möglich: '+e.message;renderBoard()}}
 setInterval(()=>{if(!$('#board').hidden&&sbSess&&lbSub!=='rank'){if(lbSub==='global')gcLoad();else pvLoad()}},4000);
 /* ---------- Spielerprofile und Nachrichten ---------- */
-let lbView=null,pfData=null,pfMsg='',pfBan={},inbox=[],inboxErr='',msgLast=0;
+let lbView=null,pfData=null,pfMsg='',pfBan={},pfRole={},inbox=[],inboxErr='',msgLast=0;
 const fdate=t=>{try{return new Date(t).toLocaleString('de-DE',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}catch(e){return''}};
 async function openProfile(uid){lbView=uid;pfData=null;pfMsg='';renderBoard();
  try{const pr=await sbReq('/rest/v1/presence?user_id=eq.'+uid+'&select=user_id,last_seen,last_login');if(pr&&pr[0])pres[uid]=pr[0]}catch(e){}
+ try{const rr=await sbReq('/rest/v1/roles?user_id=eq.'+uid+'&select=role');pfRole[uid]=(rr&&rr[0]&&rr[0].role)||''}catch(e){}
  try{const fb=await sbReq('/rest/v1/flags?user_id=eq.'+uid+'&select=banned');pfBan[uid]=!!(fb&&fb[0]&&fb[0].banned)}catch(e){}
 
  try{const r=await sbReq('/rest/v1/saves?user_id=eq.'+uid+'&select=name,rank,life,data');pfData=(r&&r[0])||{}}catch(e){pfMsg=e.message;pfData={}}
@@ -1596,7 +1599,7 @@ function pfHtml(esc,me){
  const RC=['#8a8f98','#3fb6a8','#4a90d9','#a368d9','#e08a1e','#d4a017'],col=RC[rk]||RC[0],med=['#d4a017','#9aa3ab','#b0703a'];
  const srt=(lbRows||[]).map(r=>r.id===me?{id:r.id,l:S.lic||0,m:S.m}:r).sort((a,b)=>(b.l-a.l)||(b.m-a.m)),pos=srt.findIndex(r=>r.id===lbView)+1;
  const pp=pres[lbView]||{},on=isOn(lbView),lic=+d.lic||0,jobs=+st.jobs||0,top=Math.min(+d.top||0,V.length-1),veh=V[top];
- const bad=[];if(pos&&pos<=3)bad.push(['👑','Platz '+pos]);if(lic)bad.push(['🏅',lic+(lic===1?' Lizenz':' Lizenzen')]);if(rk>=3)bad.push(['⭐',(RANKS[rk]||RANKS[0]).n]);
+ const bad=[],TRL={founder:['🛠','Founder'],supporter:['🛡','Supporter'],helper:['🤝','Helper']},trl=TRL[pfRole[lbView]];if(trl)bad.push([trl[0],trl[1],'pfrole r-'+pfRole[lbView]]);if(pos&&pos<=3)bad.push(['👑','Platz '+pos]);if(lic)bad.push(['🏅',lic+(lic===1?' Lizenz':' Lizenzen')]);if(rk>=3)bad.push(['⭐',(RANKS[rk]||RANKS[0]).n]);
  if(jobs>=500)bad.push(['🛠','500+ Aufträge']);else if(jobs>=100)bad.push(['🛠','100+ Aufträge']);if(d.up&&d.up.auto>=3)bad.push(['👷','Vorarbeiter Stufe 3']);if((+st.spins||0)>=50)bad.push(['🎰','Stammgast']);if(top>=V.length-1)bad.push(['🚜','Monster-Bagger']);
  const tile=(i,k,v)=>'<div class="pft"><span>'+i+'</span><b>'+v+'</b><small>'+k+'</small></div>';
  const ready=!!pfData,ban=own?isBan():!!pfBan[lbView];
@@ -1607,7 +1610,7 @@ function pfHtml(esc,me){
  +'<div class="pfav" style="border-color:'+col+'">'+esc((nm[0]||'?').toUpperCase())+'<i class="pdot big '+(on?'on':'off')+'"></i></div>'
  +'<div class="pfname">'+esc(nm)+(own?' <small>(du)</small>':'')+'</div>'
  +'<div class="pfsub"><span class="pfrank" style="background:'+col+'">'+esc((RANKS[rk]||RANKS[0]).n)+'</span>'+stat+'</div>'
- +(ban?'<div class="pfban">🚫 Hausverbot im Casino</div>':'')+(bad.length?'<div class="pfbad">'+bad.map(x=>'<span>'+x[0]+' '+esc(x[1])+'</span>').join('')+'</div>':'')
+ +(ban?'<div class="pfban">🚫 Hausverbot im Casino</div>':'')+(bad.length?'<div class="pfbad">'+bad.map(x=>'<span'+(x[2]?' class="'+x[2]+'"':'')+'>'+x[0]+' '+esc(x[1])+'</span>').join('')+'</div>':'')
  +(ready?'<div class="pfgrid">'+tile('💶','Geld',F(+d.m||0))+tile('🏅','Lizenzen',lic)+tile('📋','Aufträge',jobs)+tile('📈','Gesamtverdienst',F(+d.life||(pfData&&+pfData.life)||0))+'</div>'
   +'<div class="pfbag">'+img+'<div><small>Bester Bagger</small><b>'+esc(veh.n)+'</b><span class="meta">'+esc(veh.tn)+'</span></div></div>':'<div class="meta" style="padding:16px">Lade Profil …</div>')
  +'<div class="pfmeta"><span>Letzter Login</span><b>'+(pp.last_login?fdate(pp.last_login)+' · '+agoT(pp.last_login):'unbekannt')+'</b></div></div>'
@@ -1665,6 +1668,8 @@ document.addEventListener('click',e=>{
  if(admOpen&&t.dataset.pa){const pr=t.closest('.pr'),uid=pr.dataset.u;
   if(t.dataset.pa==='del'){if(!t.dataset.arm){t.dataset.arm='1';t.textContent='Wirklich löschen? Nochmal tippen';setTimeout(()=>{if(t.isConnected){delete t.dataset.arm;t.textContent='Account löschen'}},4000);return}
    t.disabled=true;sbReq('/rest/v1/rpc/admin_delete_user',{method:'POST',body:JSON.stringify({uid:uid})}).then(()=>{admPlMsg='Account gelöscht.';return admLoadPl()}).catch(er=>{admPlMsg='Fehler: '+er.message+' (supabase-loeschen.sql ausgeführt?)';admRenderPl()});return}
+  if(t.dataset.pa==='role'){const rv=pr.querySelector('.rsel').value;
+   (rv?sbReq('/rest/v1/roles?on_conflict=user_id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({user_id:uid,role:rv,updated_at:new Date().toISOString()})}):sbReq('/rest/v1/roles?user_id=eq.'+uid,{method:'DELETE'})).then(()=>{delete pfRole[uid];admPlMsg='Rolle gespeichert ✓';return admLoadPl()}).catch(er=>{admPlMsg='Fehler: '+er.message+' (supabase-rollen.sql ausgeführt?)';admRenderPl()});return}
   if(t.dataset.pa==='ban'){const w=t.dataset.v==='1';await_flag(uid,{banned:w}).then(()=>{if(uid===(sbSess&&sbSess.uid)){setBan(w,true);renderCasino()}admLoadPl()}).catch(er=>{admPlMsg='Fehler: '+er.message;admRenderPl()})}
   else{const v=parseInt((pr.querySelector('input').value||'').replace(/\D/g,''),10);if(!isFinite(v)){admPlMsg='Bitte Betrag eingeben.';admRenderPl();return}
    await_flag(uid,{cmd_money:Math.min(v,1e15),cmd_id:Date.now()}).then(()=>{if(uid===(sbSess&&sbSess.uid))flagsSync();admPlMsg='Geld gesetzt, wirkt beim Spieler innerhalb von ca. 15 s.';admLoadPl()}).catch(er=>{admPlMsg='Fehler: '+er.message;admRenderPl()})}
@@ -1782,12 +1787,13 @@ let admPl=null,admPlMsg='';
 async function admLoadPl(){if(!sbOn()||!sbSess){admPlMsg='Bitte oben im Cloud-Konto als Admin anmelden (Profil, Cloud-Speicher).';admRenderPl();return}
  admPlMsg='Lade …';admRenderPl();
  try{const[a,f]=await Promise.all([sbReq('/rest/v1/saves?select=user_id,name,rank,geld:data->>m,lz:data->>lic&limit=500'),sbReq('/rest/v1/flags?select=user_id,banned&limit=500')]);
+  const rm={};try{((await sbReq('/rest/v1/roles?select=user_id,role&limit=500'))||[]).forEach(x=>rm[x.user_id]=x.role)}catch(e){}
   const fm={};(f||[]).forEach(x=>fm[x.user_id]=!!x.banned);
-  admPl=(a||[]).map(x=>({id:x.user_id,name:x.name||'Spieler',m:parseFloat(x.geld)||0,l:parseInt(x.lz)||0,ban:!!fm[x.user_id]})).sort((p,q)=>p.name.localeCompare(q.name));admPlMsg=''}
+  admPl=(a||[]).map(x=>({id:x.user_id,name:x.name||'Spieler',m:parseFloat(x.geld)||0,l:parseInt(x.lz)||0,ban:!!fm[x.user_id],role:rm[x.user_id]||''})).sort((p,q)=>p.name.localeCompare(q.name));admPlMsg=''}
  catch(e){admPlMsg='Fehler: '+e.message}
  admRenderPl()}
 function admRenderPl(){const e=$('#admpl');if(!e)return;const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
- e.innerHTML=(admPlMsg?'<div class="meta">'+esc(admPlMsg)+'</div>':'')+(admPl?'<div class="apl">'+admPl.map(p=>'<div class="pr" data-u="'+p.id+'"><div class="row"><b>'+esc(p.name)+'</b>'+(sbSess&&p.id===sbSess.uid?'<span class="meta">(du)</span>':'')+(p.ban?'<span class="tag">Hausverbot</span>':'')+'<span class="meta" style="margin-left:auto">'+F(p.m)+' · '+p.l+' Lizenz'+(p.l===1?'':'en')+'</span></div><div class="row"><input type="text" inputmode="numeric" placeholder="Neues Geld in €"><button class="act sm" data-pa="money" type="button">Geld setzen</button></div><div class="row"><button class="act ghost sm" data-pa="ban" data-v="'+(p.ban?0:1)+'" type="button">'+(p.ban?'Casino freischalten':'Casino sperren')+'</button>'+(sbSess&&p.id===sbSess.uid?'':'<button class="act ghost sm" data-pa="del" type="button" style="margin-left:auto;color:#ff6b6b">Account löschen</button>')+'</div></div>').join('')+'</div>':'')}
+ e.innerHTML=(admPlMsg?'<div class="meta">'+esc(admPlMsg)+'</div>':'')+(admPl?'<div class="apl">'+admPl.map(p=>'<div class="pr" data-u="'+p.id+'"><div class="row"><b>'+esc(p.name)+'</b>'+(sbSess&&p.id===sbSess.uid?'<span class="meta">(du)</span>':'')+(p.ban?'<span class="tag">Hausverbot</span>':'')+(p.role?'<span class="tag">'+esc(p.role)+'</span>':'')+'<span class="meta" style="margin-left:auto">'+F(p.m)+' · '+p.l+' Lizenz'+(p.l===1?'':'en')+'</span></div><div class="row"><input type="text" inputmode="numeric" placeholder="Neues Geld in €"><button class="act sm" data-pa="money" type="button">Geld setzen</button></div><div class="row"><select class="rsel" style="flex:1;min-width:0;padding:9px 10px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit">'+[['','Keine Rolle'],['founder','Founder'],['supporter','Supporter'],['helper','Helper']].map(r=>'<option value="'+r[0]+'"'+(p.role===r[0]?' selected':'')+'>'+r[1]+'</option>').join('')+'</select><button class="act sm" data-pa="role" type="button">Rolle setzen</button></div><div class="row"><button class="act ghost sm" data-pa="ban" data-v="'+(p.ban?0:1)+'" type="button">'+(p.ban?'Casino freischalten':'Casino sperren')+'</button>'+(sbSess&&p.id===sbSess.uid?'':'<button class="act ghost sm" data-pa="del" type="button" style="margin-left:auto;color:#ff6b6b">Account löschen</button>')+'</div></div>').join('')+'</div>':'')}
 /* ---------- Blackjack ---------- */
 const BJB=[100,500,1000,2500,5000,10000],RK=['A','2','3','4','5','6','7','8','9','10','J','Q','K'],SU=['♠','♥','♦','♣'];
 let bjBet=100,bjBusy=false;
@@ -1916,7 +1922,7 @@ function clOpen(){if($('#clov'))return;const o=document.createElement('div');o.i
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#clbtn'))clOpen()});
 setTimeout(clLoad,3500);setInterval(clLoad,60000);
 /* Auto-Update: neue Version erkennen und neu laden */
-const BUILD='20261015-2100';
+const BUILD='20261015-2030';
 setTimeout(async()=>{try{if(!/^https?:/.test(location.protocol))return;
  const t=await (await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'})).text(),m=t.match(/const BUILD='([^']+)'/);
  if(m&&m[1]!==BUILD){const k='baggerUpd';if(sessionStorage.getItem(k)===m[1])return;sessionStorage.setItem(k,m[1]);location.replace(location.pathname+'?v='+m[1])}}catch(e){}},3500);
