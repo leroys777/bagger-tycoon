@@ -135,6 +135,11 @@ button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
 .offh{font:700 22px var(--f1)}.offbig{font:700 40px var(--f1);color:var(--acc);text-shadow:0 1px 0 rgba(0,0,0,.25);font-variant-numeric:tabular-nums}
 .offg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.offg div{background:var(--surf2);border-radius:12px;padding:8px 4px;display:grid;gap:2px}.offg b{font:700 15px var(--f1)}.offg span{font:600 10px var(--f2);letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
 .offl{text-align:left;border-top:1px solid var(--line)}.offl div{display:flex;justify-content:space-between;gap:8px;padding:6px 2px;border-bottom:1px solid var(--line);font-size:13px}
+.cll{display:grid;gap:8px;text-align:left;max-height:46vh;overflow-y:auto}
+.cle{border-left:3px solid #e53935;padding:4px 0 4px 10px}
+.clh{display:flex;justify-content:space-between;gap:8px;font:700 13px var(--f2);color:#e53935}.clh span{font-weight:500;font-size:11px;color:var(--mut)}.clh a{color:#e53935;text-decoration:underline;cursor:pointer;margin-left:6px}
+.clb{color:#e53935;white-space:pre-wrap;word-break:break-word;margin-top:3px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .cle{border-color:#ff6b63}:root:not([data-theme="light"]) .clh,:root:not([data-theme="light"]) .clb,:root:not([data-theme="light"]) .clh a{color:#ff6b63}}
 .cab{--ink:#eceae4;--mut:#9aa0a8;--line:#323840;--surf2:#262a31;--ok:#5fd07a;--bad:#ff7b63;color:var(--ink);background:linear-gradient(#22262d,#14171b);border-radius:24px;padding:16px;box-shadow:var(--sh);border-top:5px solid var(--acc)}
 .cab h2{font:700 15px var(--f1);letter-spacing:.2em;text-transform:uppercase;color:var(--acc);margin:0 0 12px;text-align:center}
 .reels{display:flex;gap:8px;background:#07080a;padding:10px;border-radius:16px;box-shadow:inset 0 3px 10px rgba(0,0,0,.7)}
@@ -232,7 +237,7 @@ body{padding-bottom:0}
 </head><body>
 <div id="ld"><div class="ldbg"></div><canvas id="ldc"></canvas><div class="ldvig"></div><div class="ldcut" id="ldcut"></div><div class="ldbar t"></div><div class="ldbar b"></div><div class="ldt">Bagger <span>Tycoon</span></div><div class="ldp"><i id="ldp"></i></div><div class="ldby">made by friedi</div></div>
 <script>window.LD0=performance.now()</script>
-<div id="scr"><header class="top"><div class="in"><div class="lh"><div class="brand"><i></i>Bagger Tycoon</div><button class="rkchip" id="rk" data-t="prof" type="button">Praktikant</button></div><div class="bal"><small>Kontostand</small><div id="money">0 €</div></div></div></header>
+<div id="scr"><header class="top"><div class="in"><div class="lh"><div class="brand"><i></i>Bagger Tycoon</div><div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><button class="rkchip" id="rk" data-t="prof" type="button">Praktikant</button><button class="rkchip" id="clbtn" type="button" aria-label="Changelog">📢 Changelog<i id="cldot" hidden style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#e53935;margin-left:6px;vertical-align:middle"></i></button></div></div><div class="bal"><small>Kontostand</small><div id="money">0 €</div></div></div></header>
 <main class="in">
 <section id="jobs">
  <div class="stage">
@@ -290,7 +295,7 @@ body{padding-bottom:0}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 15.10. 14:35 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 15.10. 15:00 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -331,7 +336,7 @@ const X=[
 ['Brückenabriss Rheintal',28000,700000,6,4],['Hochhaus-Abriss Frankfurt',34000,950000,6,4],['Erzmine Nordschacht',70000,1500000,7,4],
 ['Mega-Tagebau Nord',180000,5500000,8,5],['Hafen-Neubau Rotterdam',280000,8500000,8,5]];
 /* Balance: laengeres Spiel */
-const WK=1.1,PY=.25,CK=3;V.forEach(v=>{v.c*=CK});
+const WK=1.1,PY=.3125,CK=3;V.forEach(v=>{v.c*=CK});
 const ST0=()=>({jobs:0,ex:0,work:0,best:0,passive:0,repairs:0,repCost:0,breaks:0,spins:0,cstake:0,cwin:0,big:0,time:0,sold:0});
 let S={m:0,tier:0,job:null,offers:[],nid:1,up:{mot:0,hyd:0,tec:0,auto:0},lic:0,tot:0,life:0,emp:'self',st:ST0(),v:2,rk:0};
 const newState=()=>({autoMig:1,m:0,tier:0,job:null,offers:[],nid:1,up:{mot:0,hyd:0,tec:0,auto:0},lic:0,tot:0,life:0,emp:'self',unl:0,st:ST0(),v:2,rk:0,cond:100,top:0,cds:{}});
@@ -1561,8 +1566,29 @@ document.addEventListener('click',e=>{
  if(t.id==='bjdeal')bjStart();else if(t.id==='bjhit')bjHit();else if(t.id==='bjstand')bjStand();else if(t.id==='bjdbl')bjDouble()});
 
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target&&e.target.id==='chin'){e.preventDefault();chSend()}});
+/* ---------- Changelog ---------- */
+let clRows=null,clErr='',clAdmin=false;
+const clSeen=()=>{try{return +localStorage.getItem('baggerCl')||0}catch(e){return 0}};
+async function clLoad(){if(!sbOn())return;
+ try{clRows=await sbReq('/rest/v1/changelog?select=id,author,body,created_at&order=id.desc&limit=50');clErr=''}catch(e){clErr=/relation|schema|404|does not exist/i.test(e.message)?'Changelog ist noch nicht eingerichtet.':e.message}
+ if(sbSess){try{clAdmin=(await sbReq('/rest/v1/rpc/is_admin',{method:'POST',body:'{}'}))===true}catch(e){clAdmin=false}}else clAdmin=false;
+ const d=$('#cldot');if(d)d.hidden=!(clRows&&clRows.length&&+clRows[0].id>clSeen());
+ if($('#clov'))clRender()}
+function clRender(){const o=$('#clov');if(!o)return;const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+ const keep=($('#clin')||{}).value||'';
+ o.querySelector('.offc').innerHTML='<div class="offh">📢 Changelog</div>'
+  +(clAdmin?'<div style="display:grid;gap:6px;text-align:left"><textarea id="clin" maxlength="800" rows="3" placeholder="Neue Nachricht als Admin …" style="width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit;resize:none">'+esc(keep)+'</textarea><button class="act sm" id="clpost" type="button">Veröffentlichen</button></div>':'')
+  +'<div class="cll">'+(clErr?'<div class="meta">'+esc(clErr)+'</div>':!clRows?'<div class="meta">Lade …</div>':clRows.length?clRows.map(m=>'<div class="cle"><div class="clh">Admin • '+esc(m.author||'Admin')+'<span>'+fdate(m.created_at)+(clAdmin?' <a data-cld="'+m.id+'">Löschen</a>':'')+'</span></div><div class="clb">'+esc(m.body)+'</div></div>').join(''):'<div class="meta">Noch keine Einträge.</div>')+'</div><button class="act big" id="clx" type="button">Schließen</button>'}
+function clOpen(){if($('#clov'))return;const o=document.createElement('div');o.id='clov';o.className='';o.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:18px';
+ o.innerHTML='<div class="offc" style="max-height:86vh;overflow-y:auto"></div>';document.body.appendChild(o);
+ o.addEventListener('click',async e=>{const t=e.target;if(t===o||t.id==='clx'){o.remove();return}
+  if(t.id==='clpost'){const v=(($('#clin')||{}).value||'').trim();if(!v)return;try{await sbReq('/rest/v1/changelog',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({author:sbName0(),body:v.slice(0,800)})});$('#clin').value='';await clLoad()}catch(er){clErr='Fehler: '+er.message;clRender()}return}
+  if(t.dataset&&t.dataset.cld){try{await sbReq('/rest/v1/changelog?id=eq.'+t.dataset.cld,{method:'DELETE'});await clLoad()}catch(er){clErr='Fehler: '+er.message;clRender()}}});
+ clRender();clLoad().then(()=>{if(clRows&&clRows.length){try{localStorage.setItem('baggerCl',String(+clRows[0].id))}catch(e){}const d=$('#cldot');if(d)d.hidden=true}})}
+document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#clbtn'))clOpen()});
+setTimeout(clLoad,3500);setInterval(clLoad,60000);
 /* Auto-Update: neue Version erkennen und neu laden */
-const BUILD='20261015-1435';
+const BUILD='20261015-1500';
 setTimeout(async()=>{try{if(!/^https?:/.test(location.protocol))return;
  const t=await (await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'})).text(),m=t.match(/const BUILD='([^']+)'/);
  if(m&&m[1]!==BUILD){const k='baggerUpd';if(sessionStorage.getItem(k)===m[1])return;sessionStorage.setItem(k,m[1]);location.replace(location.pathname+'?v='+m[1])}}catch(e){}},3500);
