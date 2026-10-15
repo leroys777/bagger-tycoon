@@ -309,7 +309,7 @@ const X=[
 ['Brückenabriss Rheintal',28000,700000,6,4],['Hochhaus-Abriss Frankfurt',34000,950000,6,4],['Erzmine Nordschacht',70000,1500000,7,4],
 ['Mega-Tagebau Nord',180000,5500000,8,5],['Hafen-Neubau Rotterdam',280000,8500000,8,5]];
 /* Balance: laengeres Spiel */
-const WK=2.2,PY=.25,CK=3;V.forEach(v=>{v.c*=CK});
+const WK=1.1,PY=.25,CK=3;V.forEach(v=>{v.c*=CK});
 const ST0=()=>({jobs:0,ex:0,work:0,best:0,passive:0,repairs:0,repCost:0,breaks:0,spins:0,cstake:0,cwin:0,big:0,time:0,sold:0});
 let S={m:0,tier:0,job:null,offers:[],nid:1,up:{mot:0,hyd:0,tec:0,auto:0},lic:0,tot:0,life:0,emp:'self',st:ST0(),v:2,rk:0};
 const newState=()=>({m:0,tier:0,job:null,offers:[],nid:1,up:{mot:0,hyd:0,tec:0,auto:0},lic:0,tot:0,life:0,emp:'self',unl:0,st:ST0(),v:2,rk:0,cond:100,top:0,cds:{}});
