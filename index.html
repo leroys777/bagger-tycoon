@@ -309,7 +309,7 @@ const X=[
 ['Brückenabriss Rheintal',28000,700000,6,4],['Hochhaus-Abriss Frankfurt',34000,950000,6,4],['Erzmine Nordschacht',70000,1500000,7,4],
 ['Mega-Tagebau Nord',180000,5500000,8,5],['Hafen-Neubau Rotterdam',280000,8500000,8,5]];
 /* Balance: laengeres Spiel */
-const WK=1.6,PY=.5,CK=3;V.forEach(v=>{v.c*=CK});
+const WK=2.2,PY=.25,CK=3;V.forEach(v=>{v.c*=CK});
 const ST0=()=>({jobs:0,ex:0,work:0,best:0,passive:0,repairs:0,repCost:0,breaks:0,spins:0,cstake:0,cwin:0,big:0,time:0,sold:0});
 let S={m:0,tier:0,job:null,offers:[],nid:1,up:{mot:0,hyd:0,tec:0,auto:0},lic:0,tot:0,life:0,emp:'self',st:ST0(),v:2,rk:0};
 const newState=()=>({m:0,tier:0,job:null,offers:[],nid:1,up:{mot:0,hyd:0,tec:0,auto:0},lic:0,tot:0,life:0,emp:'self',unl:0,st:ST0(),v:2,rk:0,cond:100,top:0,cds:{}});
@@ -1139,7 +1139,7 @@ function renderBrk(){const b=$('#brk');b.hidden=!S.broken;if(!S.broken)return;co
 function renderEmp(){const c=$('#empcard');
  if(S.emp==='wtd'){const r=Math.max(0,S.next-Date.now()),m=Math.floor(r/60000),sc=String(Math.floor(r/1000)%60).padStart(2,'0');c.innerHTML=`<div class="emp-row"><div><b>WTD 91</b><span class="meta">Passives Einkommen</span></div><div style="text-align:right"><span class="pay">+2.100 €</span><br><span class="meta">in ${m}:${sc}</span></div></div><div class="bar"><i style="width:${100-r/3000}%"></i></div>`}
  else{const rest=Math.max(0,EMPMIN-S.life);c.innerHTML=`<div class="emp-row"><div><b>Selbstständig</b><span class="meta">${rest>0?'Arbeitgeber ab '+F(EMPMIN)+' Gesamtverdienst (noch '+F(rest)+')':'Arbeitgeber im Tab Firma wählbar'}</span></div></div>`}}
-function payTick(){if(S.emp!=='wtd')return;const n=Date.now();let c=0;while(S.next<=n&&c<144){S.m+=700;S.tot+=700;S.life+=700;S.st.passive+=700;S.next+=300000;c++}if(S.next<=n)S.next=n+300000;if(c){toast('WTD 91: +'+F(700*c));save()}}
+function payTick(){if(S.emp!=='wtd')return;const n=Date.now();let c=0;while(S.next<=n&&c<144){S.m+=350;S.tot+=350;S.life+=350;S.st.passive+=350;S.next+=300000;c++}if(S.next<=n)S.next=n+300000;if(c){toast('WTD 91: +'+F(350*c));save()}}
 let last=performance.now(),sv=0,ro=0,ccd=0;
 setInterval(()=>{const n=performance.now(),dt=Math.min(3600,(n-last)/1000);last=n;const o=cur(),now=Date.now();if(dt<2)S.st.time+=dt;if(!$('#shop').hidden&&(ccd+=dt)>1){ccd=0;renderCond()}
  if(o&&!S.broken){S.cond=Math.max(0,S.cond-dt*100/1800);if(Math.random()<dt*(1+2*dmg())/(300*(1+.5*S.up.tec))){S.broken=true;S.fix=0;S.cond=Math.min(S.cond,10);S.st.breaks++;toast('Bagger kaputt!');renderShop()}o.prog+=pw()*dt;
@@ -1165,8 +1165,8 @@ function renderFirm(){
 function empBox(){const b=$('#empbox');if(!b)return;const k=S.life>=EMPMIN?'u'+S.emp:'l';
  if(b.dataset.k!==k){b.dataset.k=k;
   if(k==='l')b.innerHTML=`<div class="emp-row"><div><b class="vn">Noch gesperrt</b><span class="meta">Ab ${F(EMPMIN)} Gesamtverdienst kannst du dir einen Arbeitgeber suchen. Es zählt alles, was du mit Aufträgen und Gehalt verdienst, auch über Firmenverkäufe hinweg. Casino und Shop zählen nicht.</span></div></div><div class="bar"><i id="ebar"></i></div><div class="emp-row"><span class="meta">Bisher verdient</span><b id="etxt"></b></div>`;
-  else if(S.emp==='wtd')b.innerHTML=`<div class="emp-row"><div><b class="vn">WTD 91</b><span class="meta">Du bist angestellt</span></div><span class="pay">+700 € / 5 Min.</span></div>`;
-  else b.innerHTML=`<div class="meta">Du bist selbstständig. Jetzt kannst du dir einen Arbeitgeber suchen:</div><div class="opt hot"><b>WTD 91</b><span class="pay">700 € <span class="meta">alle 5 Minuten</span></span><span class="meta">Läuft auch, wenn du nichts tust.</span><button class="act" data-emp="wtd" type="button">Bei WTD 91 anfangen</button></div>`}
+  else if(S.emp==='wtd')b.innerHTML=`<div class="emp-row"><div><b class="vn">WTD 91</b><span class="meta">Du bist angestellt</span></div><span class="pay">+350 € / 5 Min.</span></div>`;
+  else b.innerHTML=`<div class="meta">Du bist selbstständig. Jetzt kannst du dir einen Arbeitgeber suchen:</div><div class="opt hot"><b>WTD 91</b><span class="pay">350 € <span class="meta">alle 5 Minuten</span></span><span class="meta">Läuft auch, wenn du nichts tust.</span><button class="act" data-emp="wtd" type="button">Bei WTD 91 anfangen</button></div>`}
  if(k==='l'){$('#ebar').style.width=Math.min(100,S.life/EMPMIN*100)+'%';$('#etxt').textContent=F(S.life)+' / '+F(EMPMIN)}}
 function updateFirm(){if($('#firm').hidden||!$('#fl'))return;empBox();
  const g=gain();$('#fl').textContent=S.lic;$('#ft').textContent=F(S.tot);
