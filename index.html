@@ -129,6 +129,12 @@ button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
 .bub small{display:block;font-size:10px;opacity:.6;margin-top:2px}
 .chform{display:flex;gap:8px;margin-top:8px}.chform input{flex:1;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit}
 .cv{display:flex;gap:10px;padding:10px 12px;border-top:1px solid var(--line);cursor:pointer;align-items:center;justify-content:space-between}.cv:first-child{border-top:0}
+#offov{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:18px;animation:offin .25s ease-out}
+@keyframes offin{from{opacity:0}}
+.offc{width:100%;max-width:380px;background:var(--surf);color:var(--ink);border-radius:22px;padding:20px 18px;display:grid;gap:10px;text-align:center;border-top:5px solid var(--acc);box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.offh{font:700 22px var(--f1)}.offbig{font:700 40px var(--f1);color:var(--acc);text-shadow:0 1px 0 rgba(0,0,0,.25);font-variant-numeric:tabular-nums}
+.offg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.offg div{background:var(--surf2);border-radius:12px;padding:8px 4px;display:grid;gap:2px}.offg b{font:700 15px var(--f1)}.offg span{font:600 10px var(--f2);letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
+.offl{text-align:left;border-top:1px solid var(--line)}.offl div{display:flex;justify-content:space-between;gap:8px;padding:6px 2px;border-bottom:1px solid var(--line);font-size:13px}
 .cab{--ink:#eceae4;--mut:#9aa0a8;--line:#323840;--surf2:#262a31;--ok:#5fd07a;--bad:#ff7b63;color:var(--ink);background:linear-gradient(#22262d,#14171b);border-radius:24px;padding:16px;box-shadow:var(--sh);border-top:5px solid var(--acc)}
 .cab h2{font:700 15px var(--f1);letter-spacing:.2em;text-transform:uppercase;color:var(--acc);margin:0 0 12px;text-align:center}
 .reels{display:flex;gap:8px;background:#07080a;padding:10px;border-radius:16px;box-shadow:inset 0 3px 10px rgba(0,0,0,.7)}
@@ -284,7 +290,7 @@ body{padding-bottom:0}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 15.10. 13:45 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 15.10. 14:35 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -1160,7 +1166,7 @@ function renderEmp(){const c=$('#empcard');
 function payTick(){if(S.emp!=='wtd')return;const n=Date.now();let c=0;while(S.next<=n&&c<144){S.m+=350;S.tot+=350;S.life+=350;S.st.passive+=350;S.next+=300000;c++}if(S.next<=n)S.next=n+300000;if(c){toast('WTD 91: +'+F(350*c));save()}}
 let last=performance.now(),sv=0,ro=0,ccd=0;
 setInterval(()=>{const n=performance.now(),dt=Math.min(3600,(n-last)/1000);last=n;const o=cur(),now=Date.now();if(dt<2)S.st.time+=dt;if(!$('#shop').hidden&&(ccd+=dt)>1){ccd=0;renderCond()}
- if(o&&!S.broken){S.cond=Math.max(0,S.cond-dt*100/1800);if(Math.random()<dt*(1+2*dmg())/(300*(1+.5*S.up.tec))){S.broken=true;S.fix=0;S.cond=Math.min(S.cond,10);S.st.breaks++;toast('Bagger kaputt!');renderShop()}o.prog+=pw()*dt;
+ if(o&&!S.broken){const away=S.up.auto>=3&&dt>2;if(!away)S.cond=Math.max(0,S.cond-dt*100/1800);if(!away&&Math.random()<dt*(1+2*dmg())/(300*(1+.5*S.up.tec))){S.broken=true;S.fix=0;S.cond=Math.min(S.cond,10);S.st.breaks++;toast('Bagger kaputt!');renderShop()}o.prog+=pw()*dt;
   if(o.prog>=o.w){const p=pay(o);S.m+=p;S.tot+=p;S.life+=p;{const q=S.st;q.jobs++;if(o.ex)q.ex++;q.work+=o.w;if(p>q.best)q.best=p}toast('Auftrag erledigt: +'+F(p));S.offers=S.offers.filter(x=>x!==o);S.job=null;refill();renderOffers();save()}}
  if(!S.job&&S.up.auto&&!S.broken){const el=S.offers.filter(x=>x.t<=S.tier),c=S.up.auto>=2?el.sort((a,b)=>b.e/b.w-a.e/a.w)[0]:el[0];if(c){S.job=c.id;renderOffers()}}
  if(S.offers.some(x=>x.rush&&x.rush<now&&x.id!==S.job)){S.offers=S.offers.filter(x=>!(x.rush&&x.rush<now&&x.id!==S.job));refill();renderOffers()}
@@ -1556,7 +1562,7 @@ document.addEventListener('click',e=>{
 
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target&&e.target.id==='chin'){e.preventDefault();chSend()}});
 /* Auto-Update: neue Version erkennen und neu laden */
-const BUILD='20261015-1345';
+const BUILD='20261015-1435';
 setTimeout(async()=>{try{if(!/^https?:/.test(location.protocol))return;
  const t=await (await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'})).text(),m=t.match(/const BUILD='([^']+)'/);
  if(m&&m[1]!==BUILD){const k='baggerUpd';if(sessionStorage.getItem(k)===m[1])return;sessionStorage.setItem(k,m[1]);location.replace(location.pathname+'?v='+m[1])}}catch(e){}},3500);
@@ -1567,15 +1573,30 @@ document.addEventListener('gesturestart',e=>e.preventDefault());
   if(n-lt0<350&&mv<10&&e.cancelable&&!(e.target.closest&&e.target.closest('input,textarea,select'))){e.preventDefault();const b=e.target.closest&&e.target.closest('button,a,[data-t]');if(b&&!b.disabled)b.click()}
   lt0=n},{passive:false})}
 function offlineWork(sec){
- if(!S.up||S.up.auto<3||S.broken)return;
- let rem=Math.min(sec,43200),n=0,gain=0;const p=pw();if(!(p>0))return;
+ if(!S.up||S.up.auto<3)return;
+ const pre=new Set(S.offers.map(x=>x.id)),away=Math.min(sec,43200);let rem=away,n=0,gain=0,fixed=false,best=null;const agg={};const p=pw();if(!(p>0))return;
+ if(S.broken){S.broken=false;S.cond=Math.max(S.cond,60);S.fix=0;fixed=true}
  for(let g=0;g<4000&&rem>0;g++){
   let o=cur();
-  if(!o){const c=S.offers.filter(x=>x.t<=S.tier).sort((a,b)=>b.e/b.w-a.e/a.w)[0];if(!c)break;S.job=c.id;o=c}
+  if(!o){const c=S.offers.filter(x=>x.t<=S.tier&&(!x.ex||pre.has(x.id))).sort((a,b)=>b.e/b.w-a.e/a.w)[0];if(!c)break;S.job=c.id;o=c}
   const need=(o.w-o.prog)/p;
-  if(need<=rem){rem-=need;const pa=pay(o);S.m+=pa;S.tot+=pa;S.life+=pa;const q=S.st;q.jobs++;if(o.ex)q.ex++;q.work+=o.w;if(pa>q.best)q.best=pa;gain+=pa;n++;S.offers=S.offers.filter(x=>x!==o);S.job=null;refill()}
+  if(need<=rem){rem-=need;const pa=pay(o);S.m+=pa;S.tot+=pa;S.life+=pa;const q=S.st;q.jobs++;if(o.ex)q.ex++;q.work+=o.w;if(pa>q.best)q.best=pa;gain+=pa;n++;
+   const k=agg[o.n]=agg[o.n]||{n:0,s:0};k.n++;k.s+=pa;if(!best||pa>best.pa)best={n:o.n,pa};
+   S.offers=S.offers.filter(x=>x!==o);S.job=null;refill()}
   else{o.prog+=p*rem;rem=0}}
- if(n||gain){save();setTimeout(()=>toast('Vorarbeiter war aktiv: '+n+(n===1?' Auftrag':' Aufträge')+', +'+F(gain)),4800)}}
+ if(n||gain){S.st.offGain=(S.st.offGain||0)+gain;save();
+  const list=Object.entries(agg).sort((a,b)=>b[1].s-a[1].s).slice(0,4);
+  setTimeout(()=>offSummary({away,worked:away-rem,n,gain,fixed,best,list,total:S.st.offGain}),4600)}}
+function offSummary(d){const hm=t=>{const m=Math.round(t/60),h=Math.floor(m/60);return h?h+' Std. '+String(m%60).padStart(2,'0')+' Min.':m+' Min.'};
+ const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+ const hrs=Math.max(d.worked/3600,1/60),el=document.createElement('div');el.id='offov';
+ el.innerHTML='<div class="offc"><div class="offh">👷 Willkommen zurück</div><div class="meta">Dein Vorarbeiter hat '+hm(d.worked)+' für dich gearbeitet.</div>'
+  +'<div class="offbig">+'+F(d.gain)+'</div>'
+  +'<div class="offg"><div><b>'+d.n+'</b><span>Aufträge</span></div><div><b>'+F(d.gain/hrs)+'</b><span>pro Stunde</span></div><div><b>'+F(d.best?d.best.pa:0)+'</b><span>bester Auftrag</span></div></div>'
+  +(d.list.length?'<div class="offl">'+d.list.map(([k,v])=>'<div><span>'+v.n+'× '+esc(k)+'</span><b>'+F(v.s)+'</b></div>').join('')+'</div>':'')
+  +(d.fixed?'<div class="meta">🔧 Der Bagger war defekt und wurde repariert, kostenlos.</div>':'')
+  +'<div class="meta">Insgesamt hat der Vorarbeiter dir bisher '+F(d.total)+' erarbeitet. Offline geht nichts kaputt.</div><button class="act big" id="offok" type="button">Weiter</button></div>';
+ document.body.appendChild(el);el.querySelector('#offok').onclick=()=>el.remove();el.onclick=e=>{if(e.target===el)el.remove()}}
 function boot(){
 try{const gap=(Date.now()-LOADSEEN)/1000;if(LOADSEEN&&gap>90)offlineWork(gap)}catch(e){}
 if(T3){try{init3d();thumbs()}catch(e){T3=false;view.style.display='none'}}else view.style.display='none';
