@@ -174,6 +174,9 @@ button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
 .shk{animation:shk .6s}
 @keyframes shk{10%,50%,90%{transform:translate(-6px,3px)}30%,70%{transform:translate(6px,-3px)}}
 @media (prefers-reduced-motion:reduce){.bwr,.bwa,.bwt{animation:none}}
+.lowfx .film,.lowfx .film::after{display:none}
+.lowfx .top{-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--bg)}
+.lowfx #selfban,.lowfx .clglow{animation:none}
 .cab{--ink:#eceae4;--mut:#9aa0a8;--line:#323840;--surf2:#262a31;--ok:#5fd07a;--bad:#ff7b63;color:var(--ink);background:linear-gradient(#22262d,#14171b);border-radius:24px;padding:16px;box-shadow:var(--sh);border-top:5px solid var(--acc)}
 .cab h2{font:700 15px var(--f1);letter-spacing:.2em;text-transform:uppercase;color:var(--acc);margin:0 0 12px;text-align:center}
 .reels{display:flex;gap:8px;background:#07080a;padding:10px;border-radius:16px;box-shadow:inset 0 3px 10px rgba(0,0,0,.7)}
@@ -329,7 +332,7 @@ body{padding-bottom:0}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 15.10. 16:20 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 15.10. 16:45 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -583,7 +586,7 @@ function init3d(){
  for(let i=0;i<7;i++){const m=new THREE.Mesh(new THREE.SphereGeometry(1,8,8),new THREE.MeshBasicMaterial({color:0x2b2b2b,transparent:true,opacity:.5,depthWrite:false}));m.visible=false;scene.add(m);smk.push(m)}
  try{initFx()}catch(e){fxOff=true;console.warn('fx',e)}
  $('#camb').addEventListener('click',()=>{shot=(shot+1)%4;shotT=0;updCamBtn()});
- setExc();rs();addEventListener('resize',rs);requestAnimationFrame(loop)}
+ setExc();rs();gInit();addEventListener('resize',rs);requestAnimationFrame(loop)}
 function rs(){const w=view.clientWidth,h=view.clientHeight;R.setSize(w,h);cam.aspect=w/h;cam.updateProjectionMatrix()}
 function setExc(){if(exc)scene.remove(exc.g);exc=makeExc(S.tier);scene.add(exc.g);envK=null}
 
@@ -1143,7 +1146,25 @@ function makeRoller(sc){
  [.95,-.95].forEach(x=>rl.add(cy(.5,1.25,dr,x,.5,0,Math.PI/2)));
  rl.add(bx(2.3,.45,.8,yl,0,.85,0));rl.add(bx(.75,.85,.8,yl,-.55,1.45,0));rl.add(bx(.85,.06,.95,dk,-.55,1.9,0));
  rl.scale.setScalar(sc);rl.visible=false;return rl}
+/* ---------- Grafikqualitaet (automatisch + manuell) ---------- */
+let GM='auto',GL=0,gAcc=0,gN=0,gT=0,ctxLost=false;try{GM=localStorage.getItem('baggerQ')||'auto'}catch(e){}
+const GNAME={auto:'Auto',high:'Hoch',mid:'Mittel',low:'Niedrig'};
+function applyQ(l){GL=l;document.body.classList.toggle('lowfx',l>=1);if(!R)return;
+ try{R.setPixelRatio([Math.min(Math.max(devicePixelRatio||1,1.75),2.5),Math.min(devicePixelRatio||1,1.5),1][l]);
+  const ms=[4096,2048,1024][l];if(sun&&sun.shadow.mapSize.x!==ms){sun.shadow.mapSize.set(ms,ms);if(sun.shadow.map){sun.shadow.map.dispose();sun.shadow.map=null}}
+  const sh=l<2;if(R.shadowMap.enabled!==sh){R.shadowMap.enabled=sh;scene.traverse(o=>{if(o.material)[].concat(o.material).forEach(m=>{m.needsUpdate=true})})}
+  rs()}catch(e){}}
+function setGM(m){GM=m;try{localStorage.setItem('baggerQ',m)}catch(e){}const b=$('#gfxbtn');if(b)b.textContent='Grafik: '+GNAME[m];applyQ(m==='high'?0:m==='mid'?1:m==='low'?2:GL);gAcc=gN=0}
+function gMeter(now){if(GM!=='auto'||GL>=2)return;if(!gT){gT=now;return}
+ const d=now-gT;gT=now;if(d>500){gAcc=gN=0;return}gAcc+=d;gN++;
+ if(gAcc>2500){const fps=gN/(gAcc/1000);gAcc=gN=0;if(fps<30&&now>6000)applyQ(GL+1)}}
+function gInit(){const b=$('#gfxbtn');if(b)b.textContent='Grafik: '+GNAME[GM];
+ let l0=0;try{if((navigator.deviceMemory&&navigator.deviceMemory<=2)||(navigator.hardwareConcurrency&&navigator.hardwareConcurrency<=4))l0=1}catch(e){}
+ applyQ(GM==='high'?0:GM==='mid'?1:GM==='low'?2:l0);
+ try{R.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();ctxLost=true;if(GM==='auto')GL=Math.max(GL,2)},false);
+  R.domElement.addEventListener('webglcontextrestored',()=>{ctxLost=false;applyQ(GL)},false)}catch(e){}}
 function loop(now){
+ if(ctxLost){requestAnimationFrame(loop);return}gMeter(now);
  const dt=Math.min(.1,(now-lt)/1000);lt=now;const o=cur(),work=!!o&&!S.broken;
  const key=(o?o.id:0)+'/'+S.tier;if(key!==envK){envK=key;site=setSite(o?o.n:'')}
  boost=Math.max(0,boost-dt*2);
@@ -1653,7 +1674,8 @@ const SF={
 function sfx(n){if(!sndOn)return;sndInit();try{SF[n]&&SF[n]()}catch(e){}}
 function sfxFor(t){if(/Auftrag erledigt|kassiert|WTD 91: \+|Vorarbeiter war/.test(t))sfx('coin');else if(/kaputt/.test(t))sfx('brk');else if(/Beförderung/.test(t))sfx('win');else if(/Nachricht/.test(t))sfx('ping');else if(/repariert|gewartet|Gewartet|geflickt|verbessert|Lizenz|freigeschaltet/.test(t))sfx('up')}
 document.addEventListener('pointerdown',sndInit,{passive:true});
-document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('button');if(!b)return;if(b.id==='sndbtn'){sndOn=!sndOn;try{localStorage.setItem('baggerSnd',sndOn?'1':'0')}catch(er){}b.textContent=sndOn?'🔊':'🔇';if(sndOn){sndInit();SF.ping()}return}if(!b.disabled)SF.click&&sfx('click')});
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('button');if(!b)return;if(b.id==='gfxbtn'){const o=['auto','high','mid','low'];setGM(o[(o.indexOf(GM)+1)%4]);toast('Grafik: '+GNAME[GM]);return}
+ if(b.id==='sndbtn'){sndOn=!sndOn;try{localStorage.setItem('baggerSnd',sndOn?'1':'0')}catch(er){}b.textContent=sndOn?'🔊':'🔇';if(sndOn){sndInit();SF.ping()}return}if(!b.disabled)SF.click&&sfx('click')});
 setTimeout(()=>{const b=$('#sndbtn');if(b)b.textContent=sndOn?'🔊':'🔇'},0);
 const RM=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;
 function confetti(n,big){const c=document.createElement('canvas');c.style.cssText='position:fixed;inset:0;width:100%;height:100%;z-index:10001;pointer-events:none';document.body.appendChild(c);
@@ -1695,7 +1717,7 @@ function clOpen(){if($('#clov'))return;const o=document.createElement('div');o.i
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#clbtn'))clOpen()});
 setTimeout(clLoad,3500);setInterval(clLoad,60000);
 /* Auto-Update: neue Version erkennen und neu laden */
-const BUILD='20261015-1620';
+const BUILD='20261015-1645';
 setTimeout(async()=>{try{if(!/^https?:/.test(location.protocol))return;
  const t=await (await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'})).text(),m=t.match(/const BUILD='([^']+)'/);
  if(m&&m[1]!==BUILD){const k='baggerUpd';if(sessionStorage.getItem(k)===m[1])return;sessionStorage.setItem(k,m[1]);location.replace(location.pathname+'?v='+m[1])}}catch(e){}},3500);
