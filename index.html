@@ -332,7 +332,7 @@ body{padding-bottom:0}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 15.10. 18:30 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 15.10. 19:00 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -1620,13 +1620,14 @@ const bjVal=h=>{let t=0,a=0;h.forEach(c=>{const r=c[0];if(r===0){a++;t+=11}else 
 const bjDraw=()=>[Math.floor(Math.random()*13),Math.floor(Math.random()*4)];
 const bjCard=(c,hide)=>hide?'<div class="pc back"></div>':`<div class="pc ${c[1]===1||c[1]===2?'red':''}"><i>${RK[c[0]]}<small>${SU[c[1]]}</small></i><em>${SU[c[1]]}</em></div>`;
 function bjMsg(t,c){const m=$('#bjmsg');m.textContent=t;m.className=c||''}
+function bjSet(el,h){const o=el.__h||'';if(o===h)return;if(o&&h.startsWith(o))el.insertAdjacentHTML('beforeend',h.slice(o.length));else el.innerHTML=h;el.__h=h}
 function bjRender(){
  const g=S.bj,live=!!g&&!g.done;
  $('#bjbet').hidden=live;$('#bjplay').hidden=!live;
- $('#bjbets').innerHTML=BJB.map(b=>`<button type="button" data-bjb="${b}" class="${b===bjBet?'on':''}" ${b>S.m?'disabled':''}>${b>=1000?(b/1000)+'k':b}</button>`).join('');
+ bjSet($('#bjbets'),BJB.map(b=>`<button type="button" data-bjb="${b}" class="${b===bjBet?'on':''}" ${b>S.m?'disabled':''}>${b>=1000?(b/1000)+'k':b}</button>`).join(''));
  {const lc=splCheck('bj');$('#bjdeal').disabled=bjBusy||bjBet>S.m||!lc.ok;$('#bjdeal').textContent=!lc.ok?'Limit: weiter in '+mmss(lc.wait):'Austeilen für '+F(bjBet)}
- if(!g){$('#dh').innerHTML='';$('#ph').innerHTML='';$('#dsc').textContent='–';$('#psc').textContent='–';return}
- $('#dh').innerHTML=g.d.map((c,i)=>bjCard(c,live&&i===1)).join('');$('#ph').innerHTML=g.p.map(c=>bjCard(c)).join('');
+ if(!g){bjSet($('#dh'),'');bjSet($('#ph'),'');$('#dsc').textContent='–';$('#psc').textContent='–';return}
+ bjSet($('#dh'),g.d.map((c,i)=>bjCard(c,live&&i===1)).join(''));bjSet($('#ph'),g.p.map(c=>bjCard(c)).join(''));
  const pv=bjVal(g.p),dv=bjVal(g.d);
  $('#dsc').textContent=live?String(Math.min(g.d[0][0]===0?11:Math.min(g.d[0][0]+1,10),11)):dv;$('#dsc').className=!live&&dv>21?'bust':'';
  $('#psc').textContent=pv;$('#psc').className=pv>21?'bust':(pv===21&&g.p.length===2?'bj':'');
@@ -1740,7 +1741,7 @@ function clOpen(){if($('#clov'))return;const o=document.createElement('div');o.i
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#clbtn'))clOpen()});
 setTimeout(clLoad,3500);setInterval(clLoad,60000);
 /* Auto-Update: neue Version erkennen und neu laden */
-const BUILD='20261015-1830';
+const BUILD='20261015-1900';
 setTimeout(async()=>{try{if(!/^https?:/.test(location.protocol))return;
  const t=await (await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'})).text(),m=t.match(/const BUILD='([^']+)'/);
  if(m&&m[1]!==BUILD){const k='baggerUpd';if(sessionStorage.getItem(k)===m[1])return;sessionStorage.setItem(k,m[1]);location.replace(location.pathname+'?v='+m[1])}}catch(e){}},3500);
