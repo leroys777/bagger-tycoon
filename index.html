@@ -236,6 +236,7 @@ body{padding-bottom:0}
 <div id="cloudwrap" hidden><div class="card2" style="padding:14px;display:grid;gap:10px;margin-top:14px"><div id="cloud"></div></div></div>
 <div id="admwrap" hidden><div class="card2" style="padding:14px;display:grid;gap:10px;margin-top:14px"><div id="adm"></div></div></div>
 <section id="slot" hidden>
+ <div id="casban" class="cab" hidden style="text-align:center;padding:28px 18px"><div style="font-size:54px">🚫</div><h2 style="margin:8px 0">Hausverbot</h2><div style="font:700 18px var(--f1)">Du hast Hausverbot im Casino</div><div class="meta" style="margin-top:10px">Die Sperre bleibt bestehen, bis ein Admin sie aufhebt.</div></div>
  <div class="cas-tabs"><button type="button" class="on" data-g="slots">🎰 Spielautomat</button><button type="button" data-g="bj">🃏 Blackjack</button></div>
  <div id="slots">
  <div class="cab">
@@ -267,6 +268,7 @@ body{padding-bottom:0}
   <div id="bjplay" hidden><div class="bjact"><button class="act" id="bjhit" type="button">Karte</button><button class="act ghost" id="bjstand" type="button">Halten</button><button class="act" id="bjdbl" type="button">Doppeln</button></div></div>
   <div class="meta" style="margin-top:10px">Nur virtuelles Geld. Echtes Glücksspiel kann süchtig machen: Hilfe unter bzga.de.</div>
  </div></div>
+<div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
 <div class="foot"><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button></div>
 </main></div>
@@ -316,7 +318,7 @@ const newState=()=>({m:0,tier:0,job:null,offers:[],nid:1,up:{mot:0,hyd:0,tec:0,a
 try{const d=JSON.parse(localStorage.getItem(KEY));if(d&&d.offers)S=d}catch(e){}
 const save=()=>{if(window.__ns)return;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 if(S.pend){S.m+=S.pend;S.pend=0}
-S.up=Object.assign({mot:0,hyd:0,tec:0,auto:0},S.up||{});S.lic=S.lic||0;S.tot=S.tot||0;S.life=Math.max(S.life||0,S.tot);if(!S.emp)S.emp='self';S.st=Object.assign(ST0(),S.st||{});if(typeof S.cond!=='number')S.cond=100;if(typeof S.top!=='number')S.top=S.tier;if(!S.cds)S.cds={};if(!S.v){S.tier=[0,1,2,3,5,8][S.tier]||0;S.v=2;S.offers=[];S.job=null;S.prog=0}if(S.tier>=V.length)S.tier=0;if(S.emp==='wtd'&&S.next>Date.now()+300000)S.next=Date.now()+300000;
+S.up=Object.assign({mot:0,hyd:0,tec:0,auto:0},S.up||{});try{if(localStorage.getItem('baggerBan')==='1')S.ban=true}catch(e){}if(S.ban)try{localStorage.setItem('baggerBan','1')}catch(e){}S.lic=S.lic||0;S.tot=S.tot||0;S.life=Math.max(S.life||0,S.tot);if(!S.emp)S.emp='self';S.st=Object.assign(ST0(),S.st||{});if(typeof S.cond!=='number')S.cond=100;if(typeof S.top!=='number')S.top=S.tier;if(!S.cds)S.cds={};if(!S.v){S.tier=[0,1,2,3,5,8][S.tier]||0;S.v=2;S.offers=[];S.job=null;S.prog=0}if(S.tier>=V.length)S.tier=0;if(S.emp==='wtd'&&S.next>Date.now()+300000)S.next=Date.now()+300000;
 const pw=()=>V[S.tier].p*(1+.2*S.up.mot)/WK;
 const payM=()=>(1+.12*S.up.hyd)*(1+.35*S.lic)*(1+.05*rankIx())*((S.boostUntil||0)>Date.now()?2:1);
 const pay=o=>Math.round(o.e*PY*payM());
@@ -1237,7 +1239,7 @@ async function sbPush(manual){if(!sbOn()||!sbSess||sbBusy||sbConflict)return;sbB
  try{await sbReq('/rest/v1/saves?on_conflict=user_id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(sbRow())});sbLast=Date.now();sbSig=sbSigNow();sbMsg=manual?'Gespeichert.':sbMsg}
  catch(e){sbMsg='Speichern fehlgeschlagen: '+e.message}
  sbBusy=false;if(!$('#prof').hidden){renderCloud();if(manual&&!$('#board').hidden)lbLoad(true)}}
-const sbSigNow=()=>[sbName0(),S.life,S.m,S.lic,S.tier,S.top,S.st&&S.st.jobs,Math.round(S.cond)].join('|');
+const sbSigNow=()=>[sbName0(),S.ban?1:0,S.life,S.m,S.lic,S.tier,S.top,S.st&&S.st.jobs,Math.round(S.cond)].join('|');
 async function sbPull(manual){if(!sbOn()||!sbSess)return;sbBusy=true;sbMsg='Prüfe Cloud-Stand …';renderCloud();
  try{const r=await sbReq('/rest/v1/saves?user_id=eq.'+sbSess.uid+'&select=data,name,life,rank,updated_at');
   sbBusy=false;
@@ -1287,11 +1289,11 @@ let admOpen=false;
 const ADM_PIN='1925';
 function renderAdm(){const e=$('#adm');if(!e)return;
  if(!admOpen){e.innerHTML='<b>Admin-Panel</b><div class="meta">Zugang nur mit Code.</div><div style="display:flex;gap:8px"><input id="admpin" type="password" inputmode="numeric" maxlength="8" autocomplete="off" placeholder="Code" style="flex:1;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><button class="act" id="admgo" type="button">Öffnen</button></div><div class="meta" id="admmsg"></div>';return}
- e.innerHTML='<b>Admin-Panel</b><div class="meta">Aktuelles Geld: '+F(S.m)+'</div><div style="display:flex;gap:8px"><input id="admsum" type="text" inputmode="numeric" autocomplete="off" placeholder="Betrag in €" style="flex:1;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><button class="act" id="admset" type="button">Geld setzen</button></div><div class="meta" id="admmsg"></div><div class="meta" style="margin-top:6px">Supabase (Cloud-Speicher)</div><input id="sburl" type="text" autocomplete="off" placeholder="Projekt-URL https://xxxx.supabase.co" value="'+(sbCfg().url||'')+'" style="min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><input id="sbkey" type="text" autocomplete="off" placeholder="anon public key" value="'+(sbCfg().key||'')+'" style="min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><button class="act" id="sbsave" type="button">Supabase-Zugang speichern</button><button class="act ghost" id="admclose" type="button">Admin schließen</button>'}
+ e.innerHTML='<b>Admin-Panel</b><div class="meta">Aktuelles Geld: '+F(S.m)+'</div><div style="display:flex;gap:8px"><input id="admsum" type="text" inputmode="numeric" autocomplete="off" placeholder="Betrag in €" style="flex:1;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><button class="act" id="admset" type="button">Geld setzen</button></div><div class="meta" id="admmsg"></div><div class="meta" style="margin-top:6px">Casino: <b>'+(isBan()?'Hausverbot':'zugelassen')+'</b></div><button class="act ghost sm" id="admban" type="button">'+(isBan()?'Casino freischalten':'Hausverbot erteilen')+'</button><div class="meta" style="margin-top:6px">Supabase (Cloud-Speicher)</div><input id="sburl" type="text" autocomplete="off" placeholder="Projekt-URL https://xxxx.supabase.co" value="'+(sbCfg().url||'')+'" style="min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><input id="sbkey" type="text" autocomplete="off" placeholder="anon public key" value="'+(sbCfg().key||'')+'" style="min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><button class="act" id="sbsave" type="button">Supabase-Zugang speichern</button><button class="act ghost" id="admclose" type="button">Admin schließen</button>'}
 function resetArm(b){if(b.dataset.arm){delete b.dataset.arm;b.textContent='Spielstand zurücksetzen';return true}b.dataset.arm='1';b.textContent='Nochmal tippen zum Löschen';setTimeout(()=>{delete b.dataset.arm;b.textContent='Spielstand zurücksetzen'},3000);return false}
 document.addEventListener('click',e=>{
  const t=e.target.closest('button');if(!t)return;
- if(t.dataset.t){document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b===t));['jobs','shop','firm','pay','slot','prof','board'].forEach(id=>$('#'+id).hidden=id!==t.dataset.t);if(t.dataset.t==='board')lbLoad(true);if(t.dataset.t!=='prof')admOpen=false;$('#admwrap').hidden=t.dataset.t!=='prof';$('#cloudwrap').hidden=t.dataset.t!=='prof';renderAdm();if(t.dataset.t==='prof'){renderCloud()}if(t.dataset.t==='jobs'&&T3)rs();if(t.dataset.t==='firm')renderFirm();if(t.dataset.t==='pay')renderPay();if(t.dataset.t==='prof')renderProf();$('#rk').classList.toggle('on',t.id==='rk');$('#scr').scrollTo(0,0);return}
+ if(t.dataset.t){document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b===t));['jobs','shop','firm','pay','slot','prof','board'].forEach(id=>$('#'+id).hidden=id!==t.dataset.t);if(t.dataset.t==='board')lbLoad(true);if(t.dataset.t==='slot')renderCasino();if(t.dataset.t!=='prof')admOpen=false;$('#admwrap').hidden=t.dataset.t!=='prof';$('#cloudwrap').hidden=t.dataset.t!=='prof';renderAdm();if(t.dataset.t==='prof'){renderCloud()}if(t.dataset.t==='jobs'&&T3)rs();if(t.dataset.t==='firm')renderFirm();if(t.dataset.t==='pay')renderPay();if(t.dataset.t==='prof')renderProf();$('#rk').classList.toggle('on',t.id==='rk');$('#scr').scrollTo(0,0);return}
  if(t.dataset.job){S.job=+t.dataset.job;renderOffers();renderProg();return}
  if(t.dataset.sel){switchTo(+t.dataset.sel);return}
  if(t.dataset.buy){const i=+t.dataset.buy,v=V[i];if(S.m>=v.c&&i===S.top+1&&(!v.lic||S.lic>=v.lic)){S.m-=v.c;S.cds[S.tier]={c:S.cond,b:!!S.broken,f:S.fix||0};S.top=i;S.tier=i;S.cond=100;S.broken=false;S.job=null;S.offers=[];refill();toast(v.n+' gekauft!');if(T3)setExc();renderShop();renderOffers();renderTop();renderProg();save()}return}
@@ -1305,6 +1307,7 @@ document.addEventListener('click',e=>{
  if(t.id==='spin'){spin();return}
  if(t.id==='admgo'){if(($('#admpin').value||'').trim()===ADM_PIN){admOpen=true;renderAdm()}else{$('#admmsg').textContent='Falscher Code.';$('#admpin').value=''}return}
  if(admOpen&&t.id==='admset'){const v=parseInt(($('#admsum').value||'').replace(/\D/g,''),10);if(!isFinite(v)){$('#admmsg').textContent='Bitte einen Betrag eingeben.';return}S.m=Math.min(v,1e15);renderTop();renderShop();renderOffers();save();renderAdm();$('#admmsg').textContent='Geld gesetzt auf '+F(S.m)+'.';return}
+ if(admOpen&&t.id==='admban'){setBan(!isBan());renderAdm();renderCasino();$('#admmsg').textContent=isBan()?'Hausverbot erteilt.':'Casino freigeschaltet.';return}
  if(t.id==='sbsave'){try{localStorage.setItem(SBK,JSON.stringify({url:($('#sburl').value||'').trim(),key:($('#sbkey').value||'').trim()}))}catch(e){}$('#admmsg').textContent='Supabase-Zugang gespeichert.';renderCloud();return}
  if(t.id==='sbup'){sbPush(true);return}
  if(t.id==='sblogin'||t.id==='sbreg'){sbAuth(t.id==='sbreg');return}
@@ -1349,7 +1352,7 @@ function runReels(res,cb){
   if(left>0)rAF=requestAnimationFrame(frame);else setTimeout(cb,180)};
  rAF=requestAnimationFrame(frame)}
 function spin(){
- if(gam)return;if(S.pend)collect();
+ if(isBan())return;if(gam)return;if(S.pend)collect();
  const st=stake();if(spinning||st<1||st>S.m)return;
  S.m-=st;S.st.cstake+=st;S.st.spins++;spinning=true;$('#msg').className='';$('#msg').textContent='…';renderBetState();renderTop();
  const res=[pick(),pick(),pick()];runReels(res,()=>done(res,st))}
@@ -1383,6 +1386,14 @@ function done(r,st){
  else{m.className='lose';m.textContent='Verloren: −'+F(st)}
  renderLad();renderTop();save()}
 
+/* ---------- Selbstsperre ---------- */
+const isBan=()=>!!S.ban;
+function setBan(v){S.ban=!!v;try{if(v)localStorage.setItem('baggerBan','1');else localStorage.removeItem('baggerBan')}catch(e){}save()}
+function renderCasino(){const b=isBan();
+ $('#casban').hidden=!b;$('#casself').hidden=b;
+ document.querySelector('.cas-tabs').hidden=b;
+ if(b){$('#slots').hidden=true;$('#bjw').hidden=true}
+ else{const bj=document.querySelector('.cas-tabs button.on').dataset.g==='bj';$('#slots').hidden=bj;$('#bjw').hidden=!bj}}
 /* ---------- Blackjack ---------- */
 const BJB=[100,500,1000,2500,5000,10000],RK=['A','2','3','4','5','6','7','8','9','10','J','Q','K'],SU=['♠','♥','♦','♣'];
 let bjBet=100,bjBusy=false;
@@ -1403,7 +1414,7 @@ function bjRender(){
  if(live){$('#bjdbl').disabled=g.p.length!==2||g.bet>S.m}
 }
 function bjStart(){
- if(bjBusy||bjBet>S.m)return;if(S.bj&&!S.bj.done)return;
+ if(isBan())return;if(bjBusy||bjBet>S.m)return;if(S.bj&&!S.bj.done)return;
  const b=bjBet;S.m-=b;S.st.cstake+=b;S.st.spins++;
  S.bj={bet:b,p:[bjDraw(),bjDraw()],d:[bjDraw(),bjDraw()],done:false};
  bjMsg('Karte, Halten oder Doppeln?');renderTop();save();bjRender();
@@ -1427,7 +1438,8 @@ function bjStand(){const g=S.bj;if(!g||g.done)return;bjEnd()}
 function bjDouble(){const g=S.bj;if(!g||g.done||g.p.length!==2||g.bet>S.m)return;
  S.m-=g.bet;S.st.cstake+=g.bet;g.bet*=2;g.p.push(bjDraw());renderTop();bjEnd()}
 document.addEventListener('click',e=>{
- const t=e.target.closest&&e.target.closest('[data-g],[data-bjb],#bjdeal,#bjhit,#bjstand,#bjdbl');if(!t)return;
+ const t=e.target.closest&&e.target.closest('#selfban,[data-g],[data-bjb],#bjdeal,#bjhit,#bjstand,#bjdbl');if(!t)return;
+ if(t.id==='selfban'){if(!t.dataset.arm){t.dataset.arm='1';t.textContent='Wirklich sperren? Nur ein Admin kann das aufheben. Nochmal tippen.';setTimeout(()=>{delete t.dataset.arm;t.textContent='Selbstsperre: Casino für mich sperren'},4000);return}delete t.dataset.arm;setBan(true);renderCasino();toast('Selbstsperre aktiv');return}
  if(t.dataset.g){document.querySelectorAll('.cas-tabs button').forEach(b=>b.classList.toggle('on',b===t));$('#slots').hidden=t.dataset.g!=='slots';$('#bjw').hidden=t.dataset.g!=='bj';if(t.dataset.g==='bj'){if(S.bj&&S.bj.done&&!$('#dh').innerHTML)bjMsg('Wähle deinen Einsatz.');bjRender()}return}
  if(t.dataset.bjb){bjBet=+t.dataset.bjb;bjRender();return}
  if(t.id==='bjdeal')bjStart();else if(t.id==='bjhit')bjHit();else if(t.id==='bjstand')bjStand();else if(t.id==='bjdbl')bjDouble()});
