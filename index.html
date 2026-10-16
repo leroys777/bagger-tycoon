@@ -334,7 +334,7 @@ body{padding-bottom:0}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 16.10. 07:55 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 16.10. 08:05 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -1770,7 +1770,7 @@ function stopRisk(){
 function done(r,st){
  let x=0;const ch=r.filter(s=>s==='🍒').length;
  if(r[0]===r[1]&&r[1]===r[2])x=PAY[r[0]];else if(ch===2)x=1;else if(ch===1)x=.5;
- const w=Math.round(st*x);spinning=false;const m=$('#msg');if(w>0){S.pend=w;S.base=w;S.step=0}RL.forEach(r=>r.el.classList.toggle('won',w>st));
+ const w=Math.round(st*x);spinning=false;const m=$('#msg');if(w>0){if(r[0]===r[1]&&r[1]===r[2]){S.pend=w;S.base=w;S.step=0}else{S.m+=w;S.st.cwin+=w;if(w>S.st.big)S.st.big=w}}RL.forEach(r=>r.el.classList.toggle('won',w>st));
  if(w>st){m.className='win';m.textContent='Gewonnen: +'+F(w-st)+(x>=30?' 🎉 JACKPOT!':'')}
  else if(w===st){m.textContent='Einsatz zurück.'}
  else if(w>0){m.className='lose';m.textContent='Nur '+F(w)+' zurück (−'+F(st-w)+')'}
@@ -1933,7 +1933,7 @@ function clOpen(){if($('#clov'))return;const o=document.createElement('div');o.i
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#clbtn'))clOpen()});
 setTimeout(clLoad,3500);setInterval(clLoad,60000);
 /* Auto-Update: neue Version erkennen und neu laden */
-const BUILD='20261016-0755';
+const BUILD='20261016-0805';
 setTimeout(async()=>{try{if(!/^https?:/.test(location.protocol))return;
  const t=await (await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'})).text(),m=t.match(/const BUILD='([^']+)'/);
  if(m&&m[1]!==BUILD){const k='baggerUpd';if(sessionStorage.getItem(k)===m[1])return;sessionStorage.setItem(k,m[1]);location.replace(location.pathname+'?v='+m[1])}}catch(e){}},3500);
