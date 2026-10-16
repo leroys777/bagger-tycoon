@@ -389,7 +389,7 @@ body{padding-bottom:0}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 16.10. 20:49 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 16.10. 21:09 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -1930,7 +1930,7 @@ function rlBox(){const b=$('#rlbox');if(!b)return;const k=S.rl?'o'+S.lm:S.lic<5?
  if(b.dataset.k===k)return;b.dataset.k=k;
  if(S.rl)b.innerHTML=`<div class="emp-row"><div><b class="vn">Radlader-Erweiterung</b><span class="meta">${S.lm?'Du fährst in diesem Durchgang Radlader. Bagger sind bis zum Firmenverkauf gesperrt.':'Freigeschaltet. Wähle im Fuhrpark den Radlader, um zu starten.'}</span></div><span class="tag">Gekauft</span></div>`;
  else if(S.lic<5)b.innerHTML=`<div class="emp-row"><div><b class="vn">🔒 Radlader-Erweiterung</b><span class="meta">Benötigt alle 5 Baulizenzen (du hast ${S.lic}). Kostet ${F(RLP)}.</span></div></div>`;
- else b.innerHTML=`<div class="emp-row"><div><b class="vn">Radlader-Erweiterung</b><span class="meta">10 Radlader von klein bis riesig, eigene Aufträge, 7 weitere Lizenzen. Beim Kauf wird dein gesamtes Geld abgezogen (mindestens ${F(RLP)} nötig).</span></div></div><button class="act big" type="button" data-rl="1" ${S.m>=RLP?'':'disabled'}>Freischalten · ${F(RLP)}</button>`}
+ else b.innerHTML=`<div class="emp-row"><div><b class="vn">Radlader-Erweiterung</b><span class="meta">10 Radlader von klein bis riesig, eigene Aufträge, 7 weitere Lizenzen. Beim Kauf wird dein gesamtes Geld abgezogen und der laufende Auftrag abgebrochen (mindestens ${F(RLP)} nötig).</span></div></div><button class="act big" type="button" data-rl="1" ${S.m>=RLP?'':'disabled'}>Freischalten · ${F(RLP)}</button>`}
 function updateFirm(){if($('#firm').hidden||!$('#fl'))return;empBox();rlBox();
  const g=gain();$('#fl').textContent=licN();$('#fln').textContent=S.lm?'Radlader-Lizenzen':'Baulizenzen';$('#ft').textContent=F(S.tot);
  const pb=$('#prest');if(!pb.dataset.arm){pb.textContent=g>=1?'Firma verkaufen · +'+g+(g>1?' Lizenzen':' Lizenz'):(licN()>=LCm().length?'Alle Lizenzen erworben':'Noch keine Lizenz verfügbar')}pb.disabled=g<1;
@@ -2142,7 +2142,7 @@ document.addEventListener('click',e=>{
  const t=e.target.closest('button');if(!t)return;
  if(t.dataset.t){document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b===t));['jobs','shop','firm','pay','slot','prof','board'].forEach(id=>$('#'+id).hidden=id!==t.dataset.t);if(t.dataset.t==='board'){lbView=null;lbLoad(true);if(lbSub==='global')gcLoad();if(lbSub==='priv')pvLoad()}if(t.dataset.t==='slot')renderCasino();if(t.dataset.t!=='prof')admOpen=false;$('#admwrap').hidden=t.dataset.t!=='prof';$('#cloudwrap').hidden=t.dataset.t!=='prof';$('#inboxwrap').hidden=t.dataset.t!=='prof'||!inbox.length;if(t.dataset.t==='prof')inboxSeen();renderAdm();if(t.dataset.t==='prof'){renderCloud()}if(t.dataset.t==='jobs'&&T3)rs();if(t.dataset.t==='firm')renderFirm();if(t.dataset.t==='pay')renderPay();if(t.dataset.t==='prof')renderProf();$('#rk').classList.toggle('on',t.id==='rk');$('#scr').scrollTo(0,0);return}
  if(t.dataset.stab){shopTab=+t.dataset.stab;renderShop();return}
- if(t.dataset.rl){if(!S.rl&&S.lic>=5&&S.m>=RLP){if(!t.dataset.arm){t.dataset.arm='1';t.textContent='Nochmal tippen: ganzes Geld wird abgezogen';setTimeout(()=>{delete t.dataset.arm;if(t.isConnected)t.textContent='Freischalten · '+F(RLP)},3500);return}S.m=0;S.rl=1;toast('Radlader-Erweiterung freigeschaltet! Dein gesamtes Geld wurde abgezogen.');const b=$('#rlbox');if(b)delete b.dataset.k;updateFirm();renderShop();renderTop();save()}return}
+ if(t.dataset.rl){if(!S.rl&&S.lic>=5&&S.m>=RLP){if(!t.dataset.arm){t.dataset.arm='1';t.textContent='Nochmal tippen: ganzes Geld wird abgezogen';setTimeout(()=>{delete t.dataset.arm;if(t.isConnected)t.textContent='Freischalten · '+F(RLP)},3500);return}S.m=0;S.rl=1;S.job=null;S.offers=[];refill();renderOffers();renderProg();toast('Radlader-Erweiterung freigeschaltet! Dein gesamtes Geld wurde abgezogen, laufender Auftrag abgebrochen.');const b=$('#rlbox');if(b)delete b.dataset.k;updateFirm();renderShop();renderTop();save()}return}
  if(t.dataset.lstart){if(!S.rl||S.lm)return;if(!t.dataset.arm){t.dataset.arm='1';t.textContent='Nochmal tippen: Bagger sind dann gesperrt';setTimeout(()=>{delete t.dataset.arm;if(t.isConnected)t.textContent='Mit dem Hoflader starten'},3500);return}startLoaderMode();return}
  if(t.dataset.job){S.job=+t.dataset.job;renderOffers();renderProg();return}
  if(t.dataset.sel){switchTo(+t.dataset.sel);return}
@@ -2529,7 +2529,7 @@ function clOpen(){if($('#clov'))return;const o=document.createElement('div');o.i
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#clbtn'))clOpen()});
 setTimeout(clLoad,3500);setInterval(clLoad,60000);
 /* Auto-Update: neue Version erkennen und neu laden */
-const BUILD='20261016-2049';
+const BUILD='20261016-2109';
 setTimeout(async()=>{try{if(!/^https?:/.test(location.protocol))return;
  const t=await (await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'})).text(),m=t.match(/const BUILD='([^']+)'/);
  if(m&&m[1]!==BUILD){const k='baggerUpd';if(sessionStorage.getItem(k)===m[1])return;sessionStorage.setItem(k,m[1]);location.replace(location.pathname+'?v='+m[1])}}catch(e){}},3500);
