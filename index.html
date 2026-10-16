@@ -129,7 +129,7 @@ button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
 .bub small{display:block;font-size:10px;opacity:.6;margin-top:2px}
 .chform{display:flex;gap:8px;margin-top:8px}.chform input{flex:1;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit}
 .cv{display:flex;gap:10px;padding:10px 12px;border-top:1px solid var(--line);cursor:pointer;align-items:center;justify-content:space-between}.cv:first-child{border-top:0}
-#offov{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:18px;animation:offin .25s ease-out}
+#offov,#afkov{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:18px;animation:offin .25s ease-out}
 @keyframes offin{from{opacity:0}}
 .offc{width:100%;max-width:380px;background:var(--surf);color:var(--ink);border-radius:22px;padding:20px 18px;display:grid;gap:10px;text-align:center;border-top:5px solid var(--acc);box-shadow:0 20px 60px rgba(0,0,0,.5)}
 .offh{font:700 22px var(--f1)}.offbig{font:700 40px var(--f1);color:var(--acc);text-shadow:0 1px 0 rgba(0,0,0,.25);font-variant-numeric:tabular-nums}
@@ -334,7 +334,7 @@ body{padding-bottom:0}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 15.10. 20:45 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 16.10. 07:50 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -1342,7 +1342,7 @@ function gInit(){const b=$('#gfxbtn');if(b)b.textContent='Grafik: '+GNAME[GM];
   R.domElement.addEventListener('webglcontextrestored',()=>{ctxLost=false;applyQ(GL)},false)}catch(e){}}
 function loop(now){
  if(ctxLost){requestAnimationFrame(loop);return}gMeter(now);
- const dt=Math.min(.05,(now-lt)/1000);lt=now;const o=cur(),work=!!o&&!S.broken;
+ const dt=Math.min(.05,(now-lt)/1000);lt=now;const o=cur(),work=!!o&&!S.broken&&!afk;
  const key=(o?o.id:0)+'/'+S.tier;if(key!==envK){envK=key;site=setSite(o?o.n:'')}
  boost=Math.max(0,boost-dt*2);
  if(work)tm+=dt*(.3+V[S.tier].z*.05)*(1+boost*2)*(site.spd||1);
@@ -1401,11 +1401,21 @@ function renderEmp(){const c=$('#empcard');
  if(S.emp==='wtd'){const r=Math.max(0,S.next-Date.now()),m=Math.floor(r/60000),sc=String(Math.floor(r/1000)%60).padStart(2,'0');c.innerHTML=`<div class="emp-row"><div><b>WTD 91</b><span class="meta">Passives Einkommen</span></div><div style="text-align:right"><span class="pay">+2.100 €</span><br><span class="meta">in ${m}:${sc}</span></div></div><div class="bar"><i style="width:${100-r/3000}%"></i></div>`}
  else{const rest=Math.max(0,EMPMIN-S.life);c.innerHTML=`<div class="emp-row"><div><b>Selbstständig</b><span class="meta">${rest>0?'Arbeitgeber ab '+F(EMPMIN)+' Gesamtverdienst (noch '+F(rest)+')':'Arbeitgeber im Tab Firma wählbar'}</span></div></div>`}}
 function payTick(){if(S.emp!=='wtd')return;const n=Date.now();let c=0;while(S.next<=n&&c<144){S.m+=350;S.tot+=350;S.life+=350;S.st.passive+=350;S.next+=300000;c++}if(S.next<=n)S.next=n+300000;if(c){toast('WTD 91: +'+F(350*c));save()}}
+/* ---------- AFK-Check ---------- */
+const AFK_MS=150000;let afk=false,lastAct=Date.now();
+function afkAct(){if(!afk)lastAct=Date.now()}
+['pointerdown','touchstart','mousedown','keydown'].forEach(ev=>addEventListener(ev,afkAct,{passive:true,capture:true}));
+document.addEventListener('visibilitychange',()=>{if(!afk)lastAct=Date.now()});
+function afkShow(){if(document.getElementById('afkov'))return;const el=document.createElement('div');el.id='afkov';
+ el.innerHTML='<div class="offc"><div class="offh">😴 Bist du noch da?</div><div class="meta">Du warst 2,5 Minuten inaktiv. Deine Bagger stehen still, bis du bestätigst.</div><button class="act big" id="afkok" type="button">Ich bin noch da</button></div>';
+ document.body.appendChild(el);try{sfx('ping')}catch(e){}
+ el.querySelector('#afkok').onclick=()=>{afk=false;lastAct=Date.now();el.remove()}}
+function afkCheck(){if(afk||document.visibilityState!=='visible')return;if(Date.now()-lastAct>=AFK_MS){afk=true;afkShow()}}
 let last=performance.now(),sv=0,ro=0,ccd=0;
-setInterval(()=>{const n=performance.now(),dt=Math.min(3600,(n-last)/1000);last=n;const o=cur(),now=Date.now();if(dt<2)S.st.time+=dt;if(!$('#shop').hidden&&(ccd+=dt)>1){ccd=0;renderCond()}
- if(o&&!S.broken){const away=S.up.auto>=3&&dt>2;if(!away)S.cond=Math.max(0,S.cond-dt*100/1800);if(!away&&Math.random()<dt*(1+2*dmg())/(300*(1+.5*S.up.tec))){S.broken=true;S.fix=0;S.cond=Math.min(S.cond,10);S.st.breaks++;toast('Bagger kaputt!');renderShop()}o.prog+=pw()*dt;
+setInterval(()=>{const n=performance.now(),dt=Math.min(3600,(n-last)/1000);last=n;const o=cur(),now=Date.now();afkCheck();if(dt<2&&!afk)S.st.time+=dt;if(!$('#shop').hidden&&(ccd+=dt)>1){ccd=0;renderCond()}
+ if(o&&!S.broken&&!afk){const away=S.up.auto>=3&&dt>2;if(!away)S.cond=Math.max(0,S.cond-dt*100/1800);if(!away&&Math.random()<dt*(1+2*dmg())/(300*(1+.5*S.up.tec))){S.broken=true;S.fix=0;S.cond=Math.min(S.cond,10);S.st.breaks++;toast('Bagger kaputt!');renderShop()}o.prog+=pw()*dt;
   if(o.prog>=o.w){const p=pay(o);S.m+=p;S.tot+=p;S.life+=p;{const q=S.st;q.jobs++;if(o.ex)q.ex++;q.work+=o.w;if(p>q.best)q.best=p}toast('Auftrag erledigt: +'+F(p));S.offers=S.offers.filter(x=>x!==o);S.job=null;refill();renderOffers();save()}}
- if(!S.job&&S.up.auto&&!S.broken){const el=S.offers.filter(x=>x.t<=S.tier),c=S.up.auto>=2?el.sort((a,b)=>b.e/b.w-a.e/a.w)[0]:el[0];if(c){S.job=c.id;renderOffers()}}
+ if(!S.job&&S.up.auto&&!S.broken&&!afk){const el=S.offers.filter(x=>x.t<=S.tier),c=S.up.auto>=2?el.sort((a,b)=>b.e/b.w-a.e/a.w)[0]:el[0];if(c){S.job=c.id;renderOffers()}}
  if(S.offers.some(x=>x.rush&&x.rush<now&&x.id!==S.job)){S.offers=S.offers.filter(x=>!(x.rush&&x.rush<now&&x.id!==S.job));refill();renderOffers()}
  document.querySelectorAll('.rush').forEach(e=>{const q=Math.max(0,Math.ceil((e.dataset.r-now)/1000));e.textContent='EILIG ×3 · '+Math.floor(q/60)+':'+String(q%60).padStart(2,'0')});
  if(S.life>=EMPMIN&&!S.unl){S.unl=1;toast('Arbeitgeber freigeschaltet: siehe Tab Firma');save()}
@@ -1693,8 +1703,9 @@ document.addEventListener('click',e=>{
 const SY=[['🍒',30],['🍋',25],['🔔',20],['⭐',14],['7️⃣',8],['💎',3]],PAY={'🍒':5,'🍋':8,'🔔':15,'⭐':30,'7️⃣':100,'💎':300};
 const pick=()=>{let r=Math.random()*100;for(const[s,w]of SY){if((r-=w)<0)return s}return'🍒'};
 let bet=10,spinning=false;
-const stake=()=>bet==='all'?Math.floor(S.m):bet;
-function renderBets(){$('#bets').innerHTML=[10,50,250,1000,'all'].map(b=>`<button data-bet="${b}" class="${b===bet?'on':''}">${b==='all'?'Alles!':F(b)}</button>`).join('');renderBetState()}
+const MAXB=10000;
+const stake=()=>Math.max(0,Math.min(MAXB,bet==='all'?Math.floor(S.m):bet));
+function renderBets(){$('#bets').innerHTML=[10,50,250,1000,'all'].map(b=>`<button data-bet="${b}" class="${b===bet?'on':''}">${b==='all'?'Max':F(b)}</button>`).join('');renderBetState()}
 /* ---------- Spin-Limit (vom Admin steuerbar) ---------- */
 let SPL={on:false,spins:5,minutes:10,bj:false};try{Object.assign(SPL,JSON.parse(localStorage.getItem('baggerSplCfg')||'{}'))}catch(e){}
 const splT=()=>{try{return JSON.parse(localStorage.getItem('baggerSplT')||'[]')}catch(e){return[]}};
@@ -1747,7 +1758,7 @@ function risk(){
  if(gam||!S.pend)return;
  gam=true;rk={st:0,t:null,auto:null};renderLad();renderBetState();
  $('#msg').className='';$('#msg').textContent='Drück Stopp!';
- const flick=()=>{if(!rk)return;rk.st^=1;$('#dw').classList.toggle('lit',!!rk.st);$('#dl').classList.toggle('lit',!rk.st);rk.t=setTimeout(flick,45+Math.random()*70)};
+ const flick=()=>{if(!rk)return;rk.st=Math.random()<.5?1:0;$('#dw').classList.toggle('lit',!!rk.st);$('#dl').classList.toggle('lit',!rk.st);rk.t=setTimeout(flick,Math.random()<.3?160+Math.random()*320:25+Math.random()*130)};
  flick();rk.auto=setTimeout(stopRisk,6000)}
 function stopRisk(){
  if(!rk)return;const r=rk;clearTimeout(r.t);clearTimeout(r.auto);rk=null;
@@ -1812,7 +1823,7 @@ function bjRender(){
  const pv=bjVal(g.p),dv=bjVal(g.d);
  $('#dsc').textContent=live?String(Math.min(g.d[0][0]===0?11:Math.min(g.d[0][0]+1,10),11)):dv;$('#dsc').className=!live&&dv>21?'bust':'';
  $('#psc').textContent=pv;$('#psc').className=pv>21?'bust':(pv===21&&g.p.length===2?'bj':'');
- if(live){$('#bjdbl').disabled=g.p.length!==2||g.bet>S.m}
+ if(live){$('#bjdbl').disabled=g.p.length!==2||g.bet>S.m||g.bet*2>MAXB}
 }
 function bjStart(){
  if(isBan())return;if(!splCheck('bj').ok){splUi();return}if(bjBusy||bjBet>S.m)return;if(S.bj&&!S.bj.done)return;
@@ -1836,7 +1847,7 @@ function bjEnd(){
  bjMsg(txt,cls);renderTop();save();bjRender();if(pay>g.bet)celebrate(pay-g.bet);else if(pay===g.bet)sfx('ping');else sfx('lose')}
 function bjHit(){const g=S.bj;if(!g||g.done)return;sfx('card');g.p.push(bjDraw());const v=bjVal(g.p);save();bjRender();if(v>=21)bjEnd()}
 function bjStand(){const g=S.bj;if(!g||g.done)return;bjEnd()}
-function bjDouble(){const g=S.bj;if(!g||g.done||g.p.length!==2||g.bet>S.m)return;
+function bjDouble(){const g=S.bj;if(!g||g.done||g.p.length!==2||g.bet>S.m||g.bet*2>MAXB)return;
  S.m-=g.bet;S.st.cstake+=g.bet;g.bet*=2;g.p.push(bjDraw());renderTop();bjEnd()}
 document.addEventListener('click',e=>{
  const pf=e.target.closest&&e.target.closest('[data-pf]');
@@ -1922,7 +1933,7 @@ function clOpen(){if($('#clov'))return;const o=document.createElement('div');o.i
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#clbtn'))clOpen()});
 setTimeout(clLoad,3500);setInterval(clLoad,60000);
 /* Auto-Update: neue Version erkennen und neu laden */
-const BUILD='20261015-2045';
+const BUILD='20261016-0750';
 setTimeout(async()=>{try{if(!/^https?:/.test(location.protocol))return;
  const t=await (await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'})).text(),m=t.match(/const BUILD='([^']+)'/);
  if(m&&m[1]!==BUILD){const k='baggerUpd';if(sessionStorage.getItem(k)===m[1])return;sessionStorage.setItem(k,m[1]);location.replace(location.pathname+'?v='+m[1])}}catch(e){}},3500);
