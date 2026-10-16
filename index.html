@@ -343,7 +343,7 @@ body{padding-bottom:0}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 16.10. 20:25 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 16.10. 21:05 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -403,13 +403,13 @@ const VL=[
 {n:'Hoflader',tn:'2,5 t',p:1.5,c:0,col:0xf2b705,z:0,sc:.5,lic:0},
 {n:'Kompaktlader',tn:'4,5 t',p:5,c:1500,col:0xf08a1c,z:1,sc:.72,lic:0},
 {n:'Radlader S',tn:'8 t',p:18,c:12000,col:0xd8452b,z:2,sc:.92,lic:0},
-{n:'Radlader M',tn:'14 t',p:55,c:80000,col:0x2f78c4,z:3,sc:1.15,lic:1},
-{n:'Radlader L',tn:'20 t',p:140,c:350000,col:0x1f9d8a,z:3.6,sc:1.42,lic:2},
-{n:'Großradlader',tn:'30 t',p:320,c:1400000,col:0x2e9b57,z:4,sc:1.75,lic:3},
-{n:'Schwerlast-Radlader',tn:'48 t',p:700,c:4000000,col:0xc62828,z:5,sc:2.1,lic:4},
-{n:'Steinbruch-Radlader',tn:'75 t',p:1500,c:12000000,col:0xe6e9ec,z:5.5,sc:2.45,lic:5},
-{n:'Bergbau-Radlader',tn:'130 t',p:3200,c:40000000,col:0xe4741a,z:6,sc:2.8,lic:6},
-{n:'Giga-Radlader',tn:'260 t',p:7000,c:120000000,col:0xf2d21c,z:6.5,sc:3.2,lic:7}];
+{n:'Radlader M',tn:'14 t',p:55,c:80000,col:0x2f78c4,z:3,sc:1.15,lic:0},
+{n:'Radlader L',tn:'20 t',p:140,c:350000,col:0x1f9d8a,z:3.6,sc:1.42,lic:0},
+{n:'Großradlader',tn:'30 t',p:320,c:1400000,col:0x2e9b57,z:4,sc:1.75,lic:0},
+{n:'Schwerlast-Radlader',tn:'48 t',p:700,c:4000000,col:0xc62828,z:5,sc:2.1,lic:0},
+{n:'Steinbruch-Radlader',tn:'75 t',p:1500,c:12000000,col:0xe6e9ec,z:5.5,sc:2.45,lic:1},
+{n:'Bergbau-Radlader',tn:'130 t',p:3200,c:40000000,col:0xe4741a,z:6,sc:2.8,lic:2},
+{n:'Giga-Radlader',tn:'260 t',p:7000,c:120000000,col:0xf2d21c,z:6.5,sc:3.2,lic:3}];
 VL.forEach((v,i)=>{v.loader=1;v.c*=CK;v.dig=+(7*v.sc).toFixed(2);v.rch=+(5.5*v.sc).toFixed(2);v.spd=1/((5+.5*i)*(.3+v.z*.05))});
 const RTL=[3.4,4.2,4.8,5.6,6.6,7.6,8.6,9.6,10.8,12];
 const JLN=[
@@ -722,11 +722,13 @@ function makeGiant(ti){
  return{g,up,boom,stick,bucket,wheel,rig,amber,lamp,exh,drv,giant:1,belts:[beltTex],dis,disTip}}
 /* ---------- Radlader (Modell) ---------- */
 function makeLoader(ti){
- const sp=V[ti],g=new THREE.Group(),H=Math.PI/2,sc=sp.sc,R=.95;
+ const sp=V[ti],g=new THREE.Group(),H=Math.PI/2,sc=sp.sc,R=[.8,.84,.88,.92,.95,.98,1.02,1.08,1.1,1.14][ti];
  const body=paint(sp.col),dk=M(0x1b1d20,.85,.1),dg=M(0x3a3e44,.65,.4),gy=M(0x9aa0a6,.35,.7),rub=M(0x141516,.95,0),rub2=M(0x0d0e0f,1,0),steel=M(0x2a2c30,.5,.55),chrome=M(0xd5d9dd,.2,.9),hz=M(0xf2c200,.6,.1);
  const gl=new THREE.MeshPhysicalMaterial({color:0x7fb4cf,roughness:.05,metalness:.2,transparent:true,opacity:.45,clearcoat:1});
  const lamp=new THREE.MeshStandardMaterial({color:0xffe9a8,emissive:0xffd36a,emissiveIntensity:.8}),amber=new THREE.MeshStandardMaterial({color:0xffa000,emissive:0xff8a00,emissiveIntensity:.9}),tail=new THREE.MeshStandardMaterial({color:0xaa0d0d,emissive:0xff1a1a,emissiveIntensity:.5});
  const up=new THREE.Group();g.add(up);
+ const wh=M(0xf2f4f6,.5,.2),acc=[body,M(0x555a60,.5,.5),body,wh,M(0x23262a,.5,.5),body,M(0xf2c200,.5,.3),M(0xe6761a,.5,.3),M(0x23262a,.5,.5),M(0xc62828,.5,.3)][ti],rimM=ti%2===0?M(sp.col,.5,.3):gy;
+ if(ti<=1){gl.opacity=0}else if(ti%2)gl.color.set(0x6fae9c);
  /* Hinterwagen */
  g.add(bx(3.3,.62,1.5,dk,-1.65,1.15,0));
  g.add(rbox(2.0,1.2,1.95,.14,body,-2.35,2.05,0));
@@ -749,27 +751,27 @@ function makeLoader(ti){
  /* Raeder + Fender */
  const wheels=[];
  const wheel=(par,x,z)=>{const w=new THREE.Group();w.position.set(x,R,z);
-  w.add(cy(R,.78,rub,0,0,0,H));w.add(cy(R*.58,.82,gy,0,0,0,H));w.add(cy(R*.3,.9,steel,0,0,0,H));
+  w.add(cy(R,.78,rub,0,0,0,H));w.add(cy(R*.58,.82,rimM,0,0,0,H));w.add(cy(R*.3,.9,steel,0,0,0,H));
   for(let i=0;i<22;i++){const a=i/22*6.283,l=bx(.34,.17,.8,rub2,Math.cos(a)*(R+.03),Math.sin(a)*(R+.03),0);l.rotation.z=a;w.add(l)}
   for(let i=0;i<8;i++){const a=i/8*6.283,b=cy(.045,.06,chrome,Math.cos(a)*R*.44,Math.sin(a)*R*.44,z>0?.42:-.42,H);w.add(b)}
   par.add(w);wheels.push(w)};
- [1.2,-1.2].forEach(z=>{wheel(g,-1.95,z);const f=bx(1.5,.1,1.0,body,-1.95,2.1,z);g.add(f)});
+ [1.2,-1.2].forEach(z=>{wheel(g,-1.95,z);const f=bx(1.5,.1,1.0,acc,-1.95,2.1,z);g.add(f)});
  /* Vorderwagen (knickt ein) */
  up.add(bx(2.3,.62,1.5,dk,1.25,1.15,0));up.add(bx(.7,.9,.9,dg,.3,1.5,0));
  up.add(rbox(.6,.7,1.5,.1,body,2.05,1.5,0));
- [1.2,-1.2].forEach(z=>{wheel(up,1.4,z);up.add(bx(1.5,.1,1.0,body,1.4,2.1,z))});
+ [1.2,-1.2].forEach(z=>{wheel(up,1.4,z);up.add(bx(1.5,.1,1.0,acc,1.4,2.1,z))});
  [-.55,.55].forEach(z=>{up.add(bx(.1,.2,.34,lamp,2.42,1.6,z));up.add(bx(.12,.5,.1,dk,.25,2.2,z*1.3))});
  up.add(bx(.18,.18,1.55,dg,2.45,.55,0));
  /* Hubarme + Schaufel */
  const boom=new THREE.Group(),stick=new THREE.Group(),bucket=new THREE.Group();boom.position.set(.6,2.25,0);up.add(boom);boom.add(stick);
  [.82,-.82].forEach(z=>{
   boom.add(bx(.35,.42,.2,steel,0,0,z));
-  const bm=bx(3.62,.38,.26,body,1.75,-.55,z);bm.rotation.z=Math.atan2(-1.1,3.5);const q=new THREE.Group();q.add(bm);q.position.set(0,0,0);boom.add(bm);
+  const bm=bx(3.62,.38,.26,acc,1.75,-.55,z);bm.rotation.z=Math.atan2(-1.1,3.5);const q=new THREE.Group();q.add(bm);q.position.set(0,0,0);boom.add(bm);
   boom.add(bx(.3,.5,.34,steel,3.5,-1.1,z))});
  boom.add(bx(.14,.14,1.8,steel,2.0,-.62,0));
  bucket.position.set(3.5,-1.1,0);boom.add(bucket);
  {const sh=new THREE.Shape();sh.moveTo(-.2,-.5);sh.lineTo(.2,-.7);sh.lineTo(1.5,-.62);sh.lineTo(1.6,-.5);sh.lineTo(.28,-.5);sh.lineTo(.02,.62);sh.lineTo(-.22,.6);sh.lineTo(-.2,-.5);
-  const geo=new THREE.ExtrudeGeometry(sh,{depth:2.7,bevelEnabled:false});geo.translate(0,0,-1.35);const b=new THREE.Mesh(geo,M(0x2b2d31,.5,.6));b.castShadow=b.receiveShadow=true;bucket.add(b);
+  const geo=new THREE.ExtrudeGeometry(sh,{depth:2.7,bevelEnabled:false});geo.translate(0,0,-1.35);const b=new THREE.Mesh(geo,M(ti<3?sp.col:ti>=7?0x15161a:0x2b2d31,.5,.6));b.castShadow=b.receiveShadow=true;bucket.add(b);
   [-1.35,1.35].forEach(z=>{const sid=new THREE.Mesh(new THREE.ExtrudeGeometry((()=>{const s2=new THREE.Shape();s2.moveTo(-.2,-.5);s2.lineTo(.2,-.7);s2.lineTo(1.55,-.64);s2.lineTo(.3,-.3);s2.lineTo(.02,.62);s2.lineTo(-.22,.6);return s2})(),{depth:.08,bevelEnabled:false}),M(0x3a3d42,.5,.6));sid.position.z=z-(z>0?0:-0);sid.position.z=z>0?z-.08:z;sid.castShadow=true;bucket.add(sid)});
   for(let i=0;i<7;i++)bucket.add(bx(.3,.16,.22,chrome,1.62,-.58,-1.2+i*.4));
   bucket.add(bx(.12,.3,.9,steel,-.1,.25,0))}
@@ -786,6 +788,24 @@ function makeLoader(ti){
  g.scale.setScalar(sc);rig();
  const exh=new THREE.Object3D();exh.position.set(-1.75,3.9,.62);g.add(exh);
  if(ti>=6){g.add(bx(.08,1.4,.5,dg,-1.5,1.4,-1.12));g.add(bx(.5,.06,.9,steel,-1.5,2.05,-1.1))}
+ bucket.scale.set(...[[.85,.8,.8],[.9,.85,.85],[.95,.95,.95],[1,1,1],[1,1,1],[1.1,1.1,1.05],[1.2,1.2,1.1],[1.3,1.3,1.15],[1.4,1.4,1.2],[1.5,1.5,1.25]][ti]);
+ /* Typ-spezifische Optik */
+ {const cx=-.95,cb=1.55;
+  if(ti===0){g.add(bx(.5,.3,1.2,steel,-3.55,1.0,0));up.add(bx(.14,.6,.14,steel,.2,2.5,.55));up.add(bx(.14,.6,.14,steel,.2,2.5,-.55));g.add(bx(1.8,.06,1.8,dg,cx-.1,cb+2.12,0))}
+  if(ti===1){g.add(rbox(.9,.5,2.05,.08,body,-1.2,2.8,0));up.add(bx(.2,.5,1.7,steel,2.5,.95,0));g.add(cy(.07,.8,chrome,-3.0,3.1,-.7))}
+  if(ti===2){g.add(bx(.8,.4,.8,steel,-2.5,2.85,.4));g.add(bx(.05,.2,2.0,wh,-2.35,2.62,0));up.add(bx(.12,.3,.12,amber,2.2,2.0,.5))}
+  if(ti===3){g.add(bx(1.75,.05,1.98,wh,cx,cb+2.0,0));g.add(bx(2.03,.12,1.98,wh,-2.35,2.35,0));g.add(cy(.1,1.1,chrome,-1.75,3.25,-.62))}
+  if(ti>=4)g.add(rbox(1.3,.35+.05*ti,1.8,.08,body,-2.6,2.75+.1*ti,0));
+  if(ti>=4){g.add(bx(.2,.14,1.3,lamp,-.8,cb+2.18,0));g.add(bx(2.04,.16,1.99,ti===4?wh:ti===5?dk:ti===8?dk:ti===9?dk:wh,-2.35,2.3,0))}
+  if(ti===4){g.add(bx(1.75,.05,1.98,wh,cx,cb+2.0,0));g.add(bx(.08,.5,.5,wh,-3.0,1.0,1.1));g.add(bx(.08,.5,.5,wh,-3.0,1.0,-1.1))}
+  if(ti===5){[-.55,.55].forEach(z=>g.add(bx(.12,.12,.3,lamp,cx+.7,cb+1.7,z)));g.add(bx(.5,1.3,.1,steel,-1.5,1.7,1.0));g.add(bx(.5,1.3,.1,steel,-1.5,1.7,-1.0));for(let k=0;k<5;k++)bucket.add(bx(.2,.2,.3,steel,1.7,-.58,-1.0+k*.5))}
+  if(ti>=6){for(let k=0;k<5;k++)g.add(bx(.04,1.6,.06,steel,cx+.74,cb+.95,-.7+k*.35));g.add(cy(.13,1.1,chrome,-1.75,3.25,-.62));g.add(bx(.2,.5,2.2,steel,3.1,1.35,0))}
+  if(ti===6){for(let k=0;k<5;k++)bucket.add(bx(.45,.2,.3,steel,1.8,-.58,-1.0+k*.5))}
+  if(ti>=7){[1,2,3].forEach(k=>g.add(bx(.55,.05,.22,hz,cx,.35+k*.4,-1.0)));g.add(bx(.06,1.5,.06,steel,cx-.3,1.0,-1.0));g.add(bx(.06,1.5,.06,steel,cx+.3,1.0,-1.0));g.add(bx(1.4,.06,.06,steel,cx,cb+.55,-.95));for(let k=0;k<5;k++)bucket.add(bx(.55,.28,.32,steel,1.9,-.6,-1.0+k*.5))}
+  if(ti===7){g.add(bx(1.75,.06,1.98,dk,cx,cb+2.0,0));g.add(bx(.04,.35,2.04,amber,-2.35,1.7,0))}
+  if(ti===8){for(const z of [.97,-.97]){g.add(bx(1.9,.05,.05,hz,-2.35,3.0,z));[-3.1,-2.35,-1.6].forEach(x=>g.add(bx(.05,.6,.05,hz,x,2.8,z)))}g.add(bx(.05,.3,1.9,hz,-1.5,3.0,0));g.add(bx(1.75,.05,1.98,wh,cx,cb+2.0,0))}
+  if(ti===9){g.add(rbox(1.2,.5,1.7,.1,body,-2.55,3.0,0));[-.6,.6].forEach(z=>g.add(bx(.18,.18,.18,amber,-.4,cb+2.3,z)));g.add(bx(.06,.9,1.8,steel,3.2,1.4,0));for(let k=0;k<7;k++)g.add(bx(.04,.8,.06,chrome,3.24,1.4,-.8+k*.27));for(const z of [.97,-.97]){g.add(bx(1.9,.05,.05,hz,-2.35,3.35,z))}}
+ }
  g.traverse(o=>{if(o.isMesh)o.castShadow=true});
  return{g,up,boom,stick,bucket,wheels,rig,amber,lamp,exh,drv,loader:1,ld,ldM,lip,R:R*sc}}
 
@@ -1864,7 +1884,7 @@ function rlBox(){const b=$('#rlbox');if(!b)return;const k=S.rl?'o'+S.lm:S.lic<5?
  if(b.dataset.k===k)return;b.dataset.k=k;
  if(S.rl)b.innerHTML=`<div class="emp-row"><div><b class="vn">Radlader-Erweiterung</b><span class="meta">${S.lm?'Du fährst in diesem Durchgang Radlader. Bagger sind bis zum Firmenverkauf gesperrt.':'Freigeschaltet. Wähle im Fuhrpark den Radlader, um zu starten.'}</span></div><span class="tag">Gekauft</span></div>`;
  else if(S.lic<5)b.innerHTML=`<div class="emp-row"><div><b class="vn">🔒 Radlader-Erweiterung</b><span class="meta">Benötigt alle 5 Baulizenzen (du hast ${S.lic}). Kostet ${F(RLP)}.</span></div></div>`;
- else b.innerHTML=`<div class="emp-row"><div><b class="vn">Radlader-Erweiterung</b><span class="meta">10 Radlader von klein bis riesig, eigene Aufträge, 7 weitere Lizenzen.</span></div></div><button class="act big" type="button" data-rl="1" ${S.m>=RLP?'':'disabled'}>Freischalten · ${F(RLP)}</button>`}
+ else b.innerHTML=`<div class="emp-row"><div><b class="vn">Radlader-Erweiterung</b><span class="meta">10 Radlader von klein bis riesig, eigene Aufträge, 7 weitere Lizenzen. Beim Kauf wird dein gesamtes Geld abgezogen (mindestens ${F(RLP)} nötig).</span></div></div><button class="act big" type="button" data-rl="1" ${S.m>=RLP?'':'disabled'}>Freischalten · ${F(RLP)}</button>`}
 function updateFirm(){if($('#firm').hidden||!$('#fl'))return;empBox();rlBox();
  const g=gain();$('#fl').textContent=licN();$('#fln').textContent=S.lm?'Radlader-Lizenzen':'Baulizenzen';$('#ft').textContent=F(S.tot);
  const pb=$('#prest');if(!pb.dataset.arm){pb.textContent=g>=1?'Firma verkaufen · +'+g+(g>1?' Lizenzen':' Lizenz'):(licN()>=LCm().length?'Alle Lizenzen erworben':'Noch keine Lizenz verfügbar')}pb.disabled=g<1;
@@ -2076,7 +2096,7 @@ document.addEventListener('click',e=>{
  const t=e.target.closest('button');if(!t)return;
  if(t.dataset.t){document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b===t));['jobs','shop','firm','pay','slot','prof','board'].forEach(id=>$('#'+id).hidden=id!==t.dataset.t);if(t.dataset.t==='board'){lbView=null;lbLoad(true);if(lbSub==='global')gcLoad();if(lbSub==='priv')pvLoad()}if(t.dataset.t==='slot')renderCasino();if(t.dataset.t!=='prof')admOpen=false;$('#admwrap').hidden=t.dataset.t!=='prof';$('#cloudwrap').hidden=t.dataset.t!=='prof';$('#inboxwrap').hidden=t.dataset.t!=='prof'||!inbox.length;if(t.dataset.t==='prof')inboxSeen();renderAdm();if(t.dataset.t==='prof'){renderCloud()}if(t.dataset.t==='jobs'&&T3)rs();if(t.dataset.t==='firm')renderFirm();if(t.dataset.t==='pay')renderPay();if(t.dataset.t==='prof')renderProf();$('#rk').classList.toggle('on',t.id==='rk');$('#scr').scrollTo(0,0);return}
  if(t.dataset.stab){shopTab=+t.dataset.stab;renderShop();return}
- if(t.dataset.rl){if(!S.rl&&S.lic>=5&&S.m>=RLP){S.m-=RLP;S.rl=1;toast('Radlader-Erweiterung freigeschaltet!');const b=$('#rlbox');if(b)delete b.dataset.k;updateFirm();renderShop();renderTop();save()}return}
+ if(t.dataset.rl){if(!S.rl&&S.lic>=5&&S.m>=RLP){if(!t.dataset.arm){t.dataset.arm='1';t.textContent='Nochmal tippen: ganzes Geld wird abgezogen';setTimeout(()=>{delete t.dataset.arm;if(t.isConnected)t.textContent='Freischalten · '+F(RLP)},3500);return}S.m=0;S.rl=1;toast('Radlader-Erweiterung freigeschaltet! Dein gesamtes Geld wurde abgezogen.');const b=$('#rlbox');if(b)delete b.dataset.k;updateFirm();renderShop();renderTop();save()}return}
  if(t.dataset.lstart){if(!S.rl||S.lm)return;if(!t.dataset.arm){t.dataset.arm='1';t.textContent='Nochmal tippen: Bagger sind dann gesperrt';setTimeout(()=>{delete t.dataset.arm;if(t.isConnected)t.textContent='Mit dem Hoflader starten'},3500);return}startLoaderMode();return}
  if(t.dataset.job){S.job=+t.dataset.job;renderOffers();renderProg();return}
  if(t.dataset.sel){switchTo(+t.dataset.sel);return}
@@ -2390,7 +2410,7 @@ function clOpen(){if($('#clov'))return;const o=document.createElement('div');o.i
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#clbtn'))clOpen()});
 setTimeout(clLoad,3500);setInterval(clLoad,60000);
 /* Auto-Update: neue Version erkennen und neu laden */
-const BUILD='20261016-2025';
+const BUILD='20261016-2105';
 setTimeout(async()=>{try{if(!/^https?:/.test(location.protocol))return;
  const t=await (await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'})).text(),m=t.match(/const BUILD='([^']+)'/);
  if(m&&m[1]!==BUILD){const k='baggerUpd';if(sessionStorage.getItem(k)===m[1])return;sessionStorage.setItem(k,m[1]);location.replace(location.pathname+'?v='+m[1])}}catch(e){}},3500);
