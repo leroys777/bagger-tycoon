@@ -389,7 +389,7 @@ body{padding-bottom:0}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 16.10. 20:42 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 16.10. 20:49 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -2001,7 +2001,7 @@ async function sbPush(manual){if(!sbOn()||!sbSess||sbBusy||sbConflict)return;sbB
  try{await sbReq('/rest/v1/saves?on_conflict=user_id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(sbRow())});sbLast=Date.now();sbSig=sbSigNow();sbMsg=manual?'Gespeichert.':sbMsg}
  catch(e){sbMsg='Speichern fehlgeschlagen: '+e.message}
  sbBusy=false;if(!$('#prof').hidden){renderCloud();if(manual&&!$('#board').hidden)lbLoad(true)}}
-const sbSigNow=()=>[sbName0(),S.ban?1:0,S.life,S.m,S.lic,S.tier,S.top,S.st&&S.st.jobs,Math.round(S.cond)].join('|');
+const sbSigNow=()=>[sbName0(),S.ban?1:0,S.life,S.m,S.lic,S.llic,S.lm,S.tier,S.top,S.st&&S.st.jobs,Math.round(S.cond)].join('|');
 async function sbPull(manual){if(!sbOn()||!sbSess)return;sbBusy=true;sbMsg='Prüfe Cloud-Stand …';renderCloud();
  try{const r=await sbReq('/rest/v1/saves?user_id=eq.'+sbSess.uid+'&select=data,name,life,rank,updated_at');
   sbBusy=false;
@@ -2032,7 +2032,7 @@ if(sbOn()&&sbSess)setTimeout(()=>{sbSig=sbSigNow()},500);
 let lbRows=null,lbT=0,lbErr='',lbBusy=false,pres={};
 async function lbLoad(force){if(!sbOn()||!sbSess){lbRows=null;renderBoard();return}
  if(lbBusy||(!force&&Date.now()-lbT<20000))return;lbBusy=true;
- try{const r=await sbReq('/rest/v1/saves?select=user_id,name,rank,geld:data->>m,lz:data->>lic&limit=500');lbRows=(r||[]).map(x=>({id:x.user_id,name:x.name||'Spieler',rank:+x.rank||0,m:Math.max(0,parseFloat(x.geld)||0),l:Math.max(0,parseInt(x.lz)||0)}));lbErr=''}catch(e){lbErr=e.message}
+ try{const r=await sbReq('/rest/v1/saves?select=user_id,name,rank,geld:data->>m,lz:data->>lic,rz:data->>llic&limit=500');lbRows=(r||[]).map(x=>({id:x.user_id,name:x.name||'Spieler',rank:+x.rank||0,m:Math.max(0,parseFloat(x.geld)||0),b:Math.max(0,parseInt(x.lz)||0),w:Math.max(0,parseInt(x.rz)||0),l:Math.max(0,parseInt(x.lz)||0)+Math.max(0,parseInt(x.rz)||0)}));lbErr=''}catch(e){lbErr=e.message}
  try{const pr=await sbReq('/rest/v1/presence?select=user_id,last_seen,last_login&limit=500');const m={};(pr||[]).forEach(x=>m[x.user_id]=x);pres=m}catch(e){}
  lbT=Date.now();lbBusy=false;if(!lbView)renderBoard()}
 function renderBoard(){const e=$('#board');if(!e)return;if(document.activeElement&&(document.activeElement.id==='lbnm'||document.activeElement.id==='msgtxt'))return;
@@ -2043,13 +2043,13 @@ function renderBoard(){const e=$('#board');if(!e)return;if(document.activeElemen
  e.dataset.k='rank';
  if(!lbRows){e.innerHTML=h+'<div class="card2" style="padding:16px"><div class="meta">'+(lbErr?esc(lbErr):'Lade Bestenliste …')+'</div></div>';return}
  const me0=sbSess.uid;if(lbView){e.innerHTML=h+pfHtml(esc,me0);return}
- const me=sbSess.uid,rows=lbRows.map(r=>r.id===me?{id:r.id,name:sbName0(),rank:rankIx(),m:S.m,l:S.lic||0}:r).sort((a,b)=>(b.l-a.l)||(b.m-a.m)),pos=rows.findIndex(r=>r.id===me)+1;
+ const me=sbSess.uid,rows=lbRows.map(r=>r.id===me?{id:r.id,name:sbName0(),rank:rankIx(),m:S.m,b:S.lic||0,w:S.llic||0,l:(S.lic||0)+(S.llic||0)}:r).sort((a,b)=>(b.l-a.l)||(b.m-a.m)),pos=rows.findIndex(r=>r.id===me)+1;
  const med=['#d4a017','#9aa3ab','#b0703a'];
  e.innerHTML=h+(nameSet()?'':'<div class="card2" style="padding:12px 14px;display:grid;gap:8px"><div class="meta">Lege deinen Spielernamen fest. Er erscheint hier und kann nur einmal gesetzt werden.</div><div style="display:flex;gap:8px"><input id="lbnm" type="text" maxlength="20" autocomplete="nickname" placeholder="Dein Name" style="flex:1;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><button class="act" id="lbname" type="button">Speichern</button></div></div>')+'<div class="card2" style="padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:10px"><div class="meta">'+(pos?'Deine Platzierung: <b>'+pos+'</b> von '+rows.length:rows.length+' Spieler')+'</div><button class="act ghost sm" id="lbref" type="button" '+(lbBusy?'disabled':'')+'>Aktualisieren</button></div>'
   +'<div class="card2" style="padding:6px 0">'+(rows.length?rows.slice(0,100).map((r,i)=>{const top=i<3,cr=top?'<svg viewBox="0 0 24 20" width="30" height="25" aria-label="Platz '+(i+1)+'"><path d="M2 17L.5 5l6 5L12 2l5.5 8 6-5L22 17z" fill="'+med[i]+'" stroke="rgba(0,0,0,.35)" stroke-width=".8" stroke-linejoin="round"/><rect x="2" y="17" width="20" height="2.6" rx="1" fill="'+med[i]+'" stroke="rgba(0,0,0,.35)" stroke-width=".8"/><circle cx="12" cy="2.5" r="1.6" fill="#fff" opacity=".7"/></svg>':'';
    const bg=r.id===me?'background:color-mix(in srgb,var(--acc) 22%,transparent);':(top?'background:linear-gradient(90deg,color-mix(in srgb,'+med[i]+' 22%,transparent),transparent 85%);':'');
-   return '<div data-pf="'+r.id+'" style="cursor:pointer;display:flex;align-items:center;gap:10px;padding:'+(top?'12px':'10px')+' 14px;'+bg+(i?'border-top:1px solid var(--line)':'')+'"><div style="width:34px;text-align:center;display:flex;flex-direction:column;align-items:center;line-height:1">'+(top?cr+'<b style="font:700 12px var(--f1);color:'+med[i]+';margin-top:2px">'+(i+1)+'</b>':'<b style="font:700 18px var(--f1);color:var(--mut)">'+(i+1)+'</b>')+'</div><div style="flex:1;min-width:0"><div style="font-weight:'+(top?700:600)+';overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+dotH(r.id)+esc(r.name)+(r.id===me?' <span class="meta">(du)</span>':'')+'</div><div class="meta">'+esc((RANKS[r.rank]||RANKS[0]).n)+' · 🏅 '+r.l+(r.l===1?' Lizenz':' Lizenzen')+'</div></div><b style="font:700 17px var(--f1);font-variant-numeric:tabular-nums">'+F(r.m)+'</b><span class="meta">›</span></div>'}).join(''):'<div class="meta" style="padding:14px">Noch keine Einträge.</div>')+'</div>'
-  +'<div class="meta" style="padding:0 4px">Sortiert nach Lizenzen, bei gleich vielen nach Geld. Aktualisierung alle 30 Sekunden.</div>'}
+   return '<div data-pf="'+r.id+'" style="cursor:pointer;display:flex;align-items:center;gap:10px;padding:'+(top?'12px':'10px')+' 14px;'+bg+(i?'border-top:1px solid var(--line)':'')+'"><div style="width:34px;text-align:center;display:flex;flex-direction:column;align-items:center;line-height:1">'+(top?cr+'<b style="font:700 12px var(--f1);color:'+med[i]+';margin-top:2px">'+(i+1)+'</b>':'<b style="font:700 18px var(--f1);color:var(--mut)">'+(i+1)+'</b>')+'</div><div style="flex:1;min-width:0"><div style="font-weight:'+(top?700:600)+';overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+dotH(r.id)+esc(r.name)+(r.id===me?' <span class="meta">(du)</span>':'')+'</div><div class="meta">'+esc((RANKS[r.rank]||RANKS[0]).n)+' · 🏅 '+r.l+(r.l===1?' Lizenz':' Lizenzen')+'</div><div class="meta">Bagger-Lizenzen: <b>'+(r.b||0)+'</b> · Radlader-Lizenzen: <b>'+(r.w||0)+'</b></div></div><b style="font:700 17px var(--f1);font-variant-numeric:tabular-nums">'+F(r.m)+'</b><span class="meta">›</span></div>'}).join(''):'<div class="meta" style="padding:14px">Noch keine Einträge.</div>')+'</div>'
+  +'<div class="meta" style="padding:0 4px">Sortiert nach allen Lizenzen (Bagger + Radlader), bei gleich vielen nach Geld. Aktualisierung alle 30 Sekunden.</div>'}
 setInterval(()=>{if(!$('#board').hidden&&sbSess)lbLoad(true)},30000);
 /* ---------- Online-Status ---------- */
 const isOn=id=>{if(sbSess&&id===sbSess.uid)return true;const p=pres[id];return !!p&&Date.now()-new Date(p.last_seen).getTime()<100000};
@@ -2099,13 +2099,13 @@ function pfHtml(esc,me){
  const own=lbView===me,row=(lbRows||[]).find(x=>x.id===lbView),d=own?S:((pfData&&pfData.data)||{}),st=d.st||{};
  const nm=own?sbName0():((pfData&&pfData.name)||(row&&row.name)||'Spieler'),rk=own?rankIx():(+((pfData&&pfData.rank)||(row&&row.rank))||0);
  const RC=['#8a8f98','#3fb6a8','#4a90d9','#a368d9','#e08a1e','#d4a017'],col=RC[rk]||RC[0],med=['#d4a017','#9aa3ab','#b0703a'];
- const srt=(lbRows||[]).map(r=>r.id===me?{id:r.id,l:S.lic||0,m:S.m}:r).sort((a,b)=>(b.l-a.l)||(b.m-a.m)),pos=srt.findIndex(r=>r.id===lbView)+1;
- const pp=pres[lbView]||{},on=isOn(lbView),lic=+d.lic||0,jobs=+st.jobs||0,top=Math.min(+d.top||0,V.length-1),veh=V[top];
- const bad=[],TRL={founder:['🛠','Founder'],supporter:['🛡','Supporter'],helper:['🤝','Helper']},trl=TRL[pfRole[lbView]];if(pos&&pos<=3)bad.push(['👑','Platz '+pos]);if(lic)bad.push(['🏅',lic+(lic===1?' Lizenz':' Lizenzen')]);if(rk>=3)bad.push(['⭐',(RANKS[rk]||RANKS[0]).n]);
- if(jobs>=500)bad.push(['🛠','500+ Aufträge']);else if(jobs>=100)bad.push(['🛠','100+ Aufträge']);if(d.up&&d.up.auto>=3)bad.push(['👷','Vorarbeiter Stufe 3']);{const sp=+st.spins||0,T=[[20000,'rubin','Rubin'],[10000,'smaragd','Smaragd'],[2500,'gold','Gold'],[500,'silber','Silber'],[150,'bronze','Bronze'],[50,'norm','']].find(t=>sp>=t[0]);if(T)bad.push(['🎰','Stammgast'+(T[2]?' '+T[2]:''),'sg '+T[1]])}if(top>=V.length-1)bad.push(['🚜','Monster-Bagger']);
+ const srt=(lbRows||[]).map(r=>r.id===me?{id:r.id,l:(S.lic||0)+(S.llic||0),m:S.m}:r).sort((a,b)=>(b.l-a.l)||(b.m-a.m)),pos=srt.findIndex(r=>r.id===lbView)+1;
+ const pp=pres[lbView]||{},on=isOn(lbView),lic=+d.lic||0,llic=+d.llic||0,PV=d.lm?VL:VB,jobs=+st.jobs||0,top=Math.min(+d.top||0,PV.length-1),veh=PV[top];
+ const bad=[],TRL={founder:['🛠','Founder'],supporter:['🛡','Supporter'],helper:['🤝','Helper']},trl=TRL[pfRole[lbView]];if(pos&&pos<=3)bad.push(['👑','Platz '+pos]);if(lic+llic)bad.push(['🏅',(lic+llic)+(lic+llic===1?' Lizenz':' Lizenzen')]);if(rk>=3)bad.push(['⭐',(RANKS[rk]||RANKS[0]).n]);
+ if(jobs>=500)bad.push(['🛠','500+ Aufträge']);else if(jobs>=100)bad.push(['🛠','100+ Aufträge']);if(d.up&&d.up.auto>=3)bad.push(['👷','Vorarbeiter Stufe 3']);{const sp=+st.spins||0,T=[[20000,'rubin','Rubin'],[10000,'smaragd','Smaragd'],[2500,'gold','Gold'],[500,'silber','Silber'],[150,'bronze','Bronze'],[50,'norm','']].find(t=>sp>=t[0]);if(T)bad.push(['🎰','Stammgast'+(T[2]?' '+T[2]:''),'sg '+T[1]])}if(top>=PV.length-1)bad.push(d.lm?['🏗','Giga-Radlader']:['🚜','Monster-Bagger']);
  const tile=(i,k,v)=>'<div class="pft"><span>'+i+'</span><b>'+v+'</b><small>'+k+'</small></div>';
  const ready=!!pfData,ban=own?isBan():!!pfBan[lbView];
- const img=(typeof TH!=='undefined'&&TH&&TH[top])?'<img src="'+TH[top]+'" alt="" class="pfimg">':'<div class="pfimg pfno">🚜</div>';
+ const TT=d.lm?(typeof THL!=='undefined'?THL:[]):(typeof TH!=='undefined'?TH:[]),img=(TT&&TT[top])?'<img src="'+TT[top]+'" alt="" class="pfimg">':'<div class="pfimg pfno">🚜</div>';
  const stat=on?'<span style="color:#2ecc71;font-weight:700">● Online</span>':'<span class="meta">Zuletzt online '+agoT(pp.last_seen)+'</span>';
  return '<button class="act ghost sm" id="lbback" type="button">‹ Zurück zur Bestenliste</button>'
  +'<div class="pfc"><div class="pfcov" style="background:linear-gradient(135deg,'+col+',color-mix(in srgb,'+col+' 35%,#11141a))">'+(pos&&pos<=3?'<div class="pfpos" style="color:'+med[pos-1]+'">👑 Platz '+pos+'</div>':(pos?'<div class="pfpos">Platz '+pos+'</div>':''))+'</div>'
@@ -2113,8 +2113,8 @@ function pfHtml(esc,me){
  +'<div class="pfname">'+(trl?'<span class="pfrole r-'+pfRole[lbView]+'">'+trl[0]+' '+trl[1]+'</span>':'')+esc(nm)+(own?' <small>(du)</small>':'')+'</div>'
  +'<div class="pfsub"><span class="pfrank" style="background:'+col+'">'+esc((RANKS[rk]||RANKS[0]).n)+'</span>'+stat+'</div>'
  +(ban?'<div class="pfban">🚫 Hausverbot im Casino</div>':'')+(bad.length?'<div class="pfbad">'+bad.map(x=>'<span'+(x[2]?' class="'+x[2]+'"':'')+'>'+x[0]+' '+esc(x[1])+'</span>').join('')+'</div>':'')
- +(ready?'<div class="pfgrid">'+tile('💶','Geld',F(+d.m||0))+tile('🏅','Lizenzen',lic)+tile('📋','Aufträge',jobs)+tile('📈','Gesamtverdienst',F(+d.life||(pfData&&+pfData.life)||0))+'</div>'
-  +'<div class="pfbag">'+img+'<div><small>Bester Bagger</small><b>'+esc(veh.n)+'</b><span class="meta">'+esc(veh.tn)+'</span></div></div>':'<div class="meta" style="padding:16px">Lade Profil …</div>')
+ +(ready?'<div class="pfgrid">'+tile('💶','Geld',F(+d.m||0))+tile('🏅','Bagger-Lizenzen',lic)+tile('🏗','Radlader-Lizenzen',llic)+tile('📋','Aufträge',jobs)+tile('📈','Gesamtverdienst',F(+d.life||(pfData&&+pfData.life)||0))+'</div>'
+  +'<div class="pfbag">'+img+'<div><small>Bestes Fahrzeug</small><b>'+esc(veh.n)+'</b><span class="meta">'+esc(veh.tn)+'</span></div></div>':'<div class="meta" style="padding:16px">Lade Profil …</div>')
  +'<div class="pfmeta"><span>Letzter Login</span><b>'+(pp.last_login?fdate(pp.last_login)+' · '+agoT(pp.last_login):'unbekannt')+'</b></div></div>'
  +(own?'':'<div class="card2" style="padding:14px;display:grid;gap:8px;margin-top:10px"><b>Nachricht an '+esc(nm)+'</b><textarea id="msgtxt" maxlength="200" rows="2" placeholder="Schreib etwas …" style="width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit;resize:none"></textarea><button class="act" id="msgsend" type="button">Senden</button>'+(pfMsg?'<div class="meta">'+esc(pfMsg)+'</div>':'')+'</div>')}
 async function msgSend(){const t=$('#msgtxt'),v=((t&&t.value)||'').trim();if(!v||!lbView||!sbSess)return;
@@ -2529,7 +2529,7 @@ function clOpen(){if($('#clov'))return;const o=document.createElement('div');o.i
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#clbtn'))clOpen()});
 setTimeout(clLoad,3500);setInterval(clLoad,60000);
 /* Auto-Update: neue Version erkennen und neu laden */
-const BUILD='20261016-2042';
+const BUILD='20261016-2049';
 setTimeout(async()=>{try{if(!/^https?:/.test(location.protocol))return;
  const t=await (await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'})).text(),m=t.match(/const BUILD='([^']+)'/);
  if(m&&m[1]!==BUILD){const k='baggerUpd';if(sessionStorage.getItem(k)===m[1])return;sessionStorage.setItem(k,m[1]);location.replace(location.pathname+'?v='+m[1])}}catch(e){}},3500);
