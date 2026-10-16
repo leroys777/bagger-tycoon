@@ -334,7 +334,7 @@ body{padding-bottom:0}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 16.10. 07:50 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 16.10. 07:55 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -1653,7 +1653,7 @@ document.addEventListener('click',e=>{
  if(t.dataset.sel){switchTo(+t.dataset.sel);return}
  if(t.dataset.buy){const i=+t.dataset.buy,v=V[i];if(S.m>=v.c&&i===S.top+1&&(!v.lic||S.lic>=v.lic)){S.m-=v.c;S.cds[S.tier]={c:S.cond,b:!!S.broken,f:S.fix||0};S.top=i;S.tier=i;S.cond=100;S.broken=false;S.job=null;S.offers=[];refill();toast(v.n+' gekauft!');if(T3)setExc();renderShop();renderOffers();renderTop();renderProg();save()}return}
  if(t.id==='dig'){const o=cur();if(!o){toast('Erst einen Auftrag annehmen');return}if(S.broken){toast('Bagger ist kaputt');return}o.prog+=Math.max(1,pw()*.3);boost=1;renderProg();return}
- if(t.dataset.bet){bet=t.dataset.bet==='all'?'all':+t.dataset.bet;renderBets();return}
+ if(t.dataset.bet){bet=Math.min(10000,+t.dataset.bet||10);renderBets();return}
  if(t.dataset.emp){if(S.life>=EMPMIN&&t.dataset.emp==='wtd'&&S.emp!=='wtd'){S.emp='wtd';S.next=Date.now()+300000;toast('Willkommen bei WTD 91');renderEmp();updateFirm();save()}return}
  if(t.id==='rep'||t.id==='frep'){const c=FULLC();if(S.m>=c&&S.cond<100){S.m-=c;S.cond=100;S.broken=false;S.st.repairs++;S.st.repCost+=c;toast('Komplett repariert: −'+F(c));renderShop();renderBrk();renderTop();save()}return}
  if(t.id==='mnt'||t.id==='fmnt'){const c=MAINTC();if(S.m>=c&&S.cond<100){S.m-=c;S.cond=Math.min(100,S.cond+30);S.broken=false;S.st.repairs++;S.st.repCost+=c;toast('Gewartet: +30 % Zustand, −'+F(c));renderShop();renderBrk();renderTop();save()}return}
@@ -1704,8 +1704,8 @@ const SY=[['🍒',30],['🍋',25],['🔔',20],['⭐',14],['7️⃣',8],['💎',3
 const pick=()=>{let r=Math.random()*100;for(const[s,w]of SY){if((r-=w)<0)return s}return'🍒'};
 let bet=10,spinning=false;
 const MAXB=10000;
-const stake=()=>Math.max(0,Math.min(MAXB,bet==='all'?Math.floor(S.m):bet));
-function renderBets(){$('#bets').innerHTML=[10,50,250,1000,'all'].map(b=>`<button data-bet="${b}" class="${b===bet?'on':''}">${b==='all'?'Max':F(b)}</button>`).join('');renderBetState()}
+const stake=()=>Math.max(0,Math.min(MAXB,+bet||10));
+function renderBets(){$('#bets').innerHTML=[10,50,250,1000,5000,10000].map(b=>`<button data-bet="${b}" class="${b===bet?'on':''}">${F(b)}</button>`).join('');renderBetState()}
 /* ---------- Spin-Limit (vom Admin steuerbar) ---------- */
 let SPL={on:false,spins:5,minutes:10,bj:false};try{Object.assign(SPL,JSON.parse(localStorage.getItem('baggerSplCfg')||'{}'))}catch(e){}
 const splT=()=>{try{return JSON.parse(localStorage.getItem('baggerSplT')||'[]')}catch(e){return[]}};
@@ -1933,7 +1933,7 @@ function clOpen(){if($('#clov'))return;const o=document.createElement('div');o.i
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#clbtn'))clOpen()});
 setTimeout(clLoad,3500);setInterval(clLoad,60000);
 /* Auto-Update: neue Version erkennen und neu laden */
-const BUILD='20261016-0750';
+const BUILD='20261016-0755';
 setTimeout(async()=>{try{if(!/^https?:/.test(location.protocol))return;
  const t=await (await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'})).text(),m=t.match(/const BUILD='([^']+)'/);
  if(m&&m[1]!==BUILD){const k='baggerUpd';if(sessionStorage.getItem(k)===m[1])return;sessionStorage.setItem(k,m[1]);location.replace(location.pathname+'?v='+m[1])}}catch(e){}},3500);
