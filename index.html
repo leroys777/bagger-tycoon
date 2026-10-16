@@ -90,7 +90,7 @@ button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
 /* Spielothek */
 
 .cas-tabs{display:flex;gap:6px;margin-bottom:10px;background:var(--surf2,#e9e6df);padding:4px;border-radius:999px}
-.cas-tabs button{flex:1;border:0;background:transparent;color:inherit;font:700 14px var(--f2);padding:9px 0;border-radius:999px;cursor:pointer;letter-spacing:.04em}
+.cas-tabs button{flex:1;border:0;background:transparent;color:inherit;font:700 13px var(--f2);padding:9px 0;border-radius:999px;cursor:pointer;letter-spacing:.04em}
 .cas-tabs button.on{background:var(--acc);color:var(--accink)}
 .felt{position:relative;margin:4px 0 12px;padding:14px 10px 12px;border-radius:120px 120px 22px 22px/46px 46px 22px 22px;background:radial-gradient(ellipse at 50% 20%,#1f8a52,#0e5a33 60%,#073a20);box-shadow:inset 0 0 0 4px #5a3a1c,inset 0 0 0 6px #b98a4a,inset 0 10px 40px rgba(0,0,0,.55),0 6px 18px rgba(0,0,0,.4);color:#f4efe0;text-align:center}
 .felt .arc{font:600 10px var(--f2);letter-spacing:.28em;color:rgba(255,230,160,.55);text-transform:uppercase;margin:2px 0 8px}
@@ -199,6 +199,39 @@ button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
 .bets button{padding:8px 14px;border:1px solid var(--line);background:var(--surf2);color:var(--ink);border-radius:999px;font:600 14px var(--f2);cursor:pointer;font-variant-numeric:tabular-nums}
 .bets button.on{background:var(--acc);color:var(--accink);border-color:var(--acc)}
 .cab .act.big{margin-top:14px}
+/* Roulette */
+.rou{--acc:#e9b872;--accink:#2a1a0c;background:radial-gradient(120% 80% at 50% 0%,#3a2a1f,#1d1510 70%);border-top-color:#e9b872;--surf2:#2d2118;--line:#4a3a2c}
+.rou h2{color:#e9b872}
+.rwrap{position:relative;width:min(300px,82%);aspect-ratio:1;margin:4px auto 10px;border-radius:50%;background:radial-gradient(circle at 35% 25%,#8a5a34,#4a2c18 60%,#2e1a0e);padding:3.5%;box-shadow:0 14px 30px -12px #000,inset 0 2px 6px rgba(255,220,170,.35)}
+.rw,.rb{position:absolute;inset:3.5%;border-radius:50%}
+.rw svg{width:100%;height:100%;display:block}
+.rw{transition:transform 5.4s cubic-bezier(.12,.55,.22,1)}
+.rb{transition:transform 5.4s cubic-bezier(.22,.5,.12,1);pointer-events:none}
+.rb i{position:absolute;left:50%;top:0%;width:4.6%;height:4.6%;margin-left:-2.3%;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#d8d4cc 60%,#9d988e);box-shadow:0 2px 4px rgba(0,0,0,.6);transition:top 5.4s cubic-bezier(.75,0,1,.9)}
+.rb.in i{top:7%}
+.rhub{position:absolute;left:50%;top:50%;width:30%;aspect-ratio:1;margin:-15% 0 0 -15%;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f3d9a8,#b4803c 70%,#6b4620);display:flex;align-items:center;justify-content:center;font:700 clamp(18px,7vw,28px) var(--f1);color:#2a1a0c;box-shadow:0 3px 8px rgba(0,0,0,.5),inset 0 1px 3px rgba(255,255,255,.5);z-index:2}
+.rhub.r{background:radial-gradient(circle at 35% 30%,#ff9a86,#c23a22 70%,#6d1a0e);color:#fff}.rhub.b{background:radial-gradient(circle at 35% 30%,#6a6f78,#23262c 70%,#0b0c0e);color:#fff}.rhub.g{background:radial-gradient(circle at 35% 30%,#8de0a6,#1f8f4a 70%,#0d4a26);color:#fff}
+.rhist{display:flex;gap:5px;justify-content:center;flex-wrap:wrap;min-height:26px;margin-bottom:8px}
+.rhist b{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:700 12px var(--f2);color:#fff;background:#23262c}
+.rhist b.r{background:#c23a22}.rhist b.g{background:#1f8f4a}
+#rlmsg{min-height:26px;font:700 19px var(--f1);letter-spacing:.03em;text-align:center;margin-bottom:8px}
+.rtab{background:linear-gradient(#1c5a48,#103d31);border-radius:16px;padding:8px;box-shadow:inset 0 2px 10px rgba(0,0,0,.45),0 0 0 3px #5a3a22;display:grid;gap:4px}
+.rg{display:grid;gap:3px}
+.rg.n{grid-template-columns:repeat(13,1fr)}.rg.d{grid-template-columns:repeat(3,1fr)}.rg.o{grid-template-columns:repeat(6,1fr)}
+.rc{position:relative;border:1px solid rgba(255,235,200,.28);border-radius:7px;background:rgba(0,0,0,.14);color:#fdf3df;font:700 12px var(--f2);min-height:34px;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s,transform .1s}
+.rc:active{transform:scale(.94)}
+.rc.r{background:#b8341f}.rc.k{background:#16181c}.rc.z{grid-column:1/-1;background:#1f8f4a;min-height:30px}
+.rc.o{font-size:11px;letter-spacing:.02em}
+.rc.hit{outline:3px solid #ffe08a;outline-offset:-2px;box-shadow:0 0 14px #ffe08a;z-index:1}
+.rc em{position:absolute;right:-2px;top:-5px;min-width:20px;padding:1px 4px;border-radius:999px;background:radial-gradient(circle at 35% 30%,#ffe9b8,#e9b872);color:#2a1a0c;font:700 10px/1.3 var(--f2);font-style:normal;box-shadow:0 1px 3px rgba(0,0,0,.6);text-align:center;pointer-events:none}
+.rchips{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:12px 0 4px}
+.rchips button{width:46px;height:46px;border-radius:50%;border:3px dashed rgba(255,255,255,.7);background:#7b4b9a;color:#fff;font:700 12px var(--f2);cursor:pointer;box-shadow:0 3px 6px rgba(0,0,0,.5)}
+.rchips button:nth-child(1){background:#2f78c4}.rchips button:nth-child(2){background:#1f9d8a}.rchips button:nth-child(3){background:#c62828}.rchips button:nth-child(4){background:#7b4b9a}.rchips button:nth-child(5){background:#c9892a}
+.rchips button.on{transform:translateY(-4px) scale(1.1);box-shadow:0 8px 14px rgba(0,0,0,.55),0 0 0 3px #e9b872}
+.rtool{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.rsum{display:flex;justify-content:space-between;margin-top:10px;font:600 14px var(--f2);color:var(--mut)}.rsum b{color:var(--ink)}
+@media (prefers-reduced-motion:reduce){.rw,.rb,.rb i{transition-duration:.01s}}
+
 .lad{display:flex;flex-direction:column;gap:4px;margin:8px 0}
 .st{padding:5px 8px;border:1px solid var(--line);background:var(--surf2);border-radius:8px;text-align:center;opacity:.6;font:600 17px var(--f1);font-variant-numeric:tabular-nums}
 .st.cur{background:var(--acc);color:var(--accink);opacity:1;border-color:var(--acc)}
@@ -310,7 +343,7 @@ body{padding-bottom:0}
 <div id="admwrap" hidden><div class="card2" style="padding:14px;display:grid;gap:10px;margin-top:14px"><div id="adm"></div></div></div>
 <section id="slot" hidden>
  <div id="casban" class="cab" hidden style="text-align:center;padding:28px 18px"><div style="font-size:54px">🚫</div><h2 style="margin:8px 0">Hausverbot</h2><div style="font:700 18px var(--f1)">Du hast Hausverbot im Casino</div><div class="meta" style="margin-top:10px">Die Sperre bleibt bestehen, bis ein Admin sie aufhebt.</div></div>
- <div class="cas-tabs"><button type="button" class="on" data-g="slots">🎰 Spielautomat</button><button type="button" data-g="bj">🃏 Blackjack</button></div>
+ <div class="cas-tabs"><button type="button" class="on" data-g="slots">🎰 Spielautomat</button><button type="button" data-g="bj">🃏 Blackjack</button><button type="button" data-g="rl">🎡 Roulette</button></div>
  <div id="slots">
  <div class="cab">
   <h2>Spielothek</h2>
@@ -341,9 +374,22 @@ body{padding-bottom:0}
   <div id="bjplay" hidden><div class="bjact"><button class="act" id="bjhit" type="button">Karte</button><button class="act ghost" id="bjstand" type="button">Halten</button><button class="act" id="bjdbl" type="button">Doppeln</button></div></div>
   <div class="meta" style="margin-top:10px">Nur virtuelles Geld. Echtes Glücksspiel kann süchtig machen: Hilfe unter bzga.de.</div>
  </div></div>
+ <div id="rlw" hidden><div class="cab rou">
+  <h2>Roulette</h2>
+  <div class="rwrap"><div class="rw" id="rlwheel"></div><div class="rb" id="rlball"><i></i></div><div class="rhub" id="rlhub">–</div></div>
+  <div class="rhist" id="rlhist"></div>
+  <div id="rlmsg">Setze deine Chips auf den Tisch.</div>
+  <div class="rtab" id="rltab"></div>
+  <div class="rchips" id="rlchips"></div>
+  <div class="rtool"><button class="act ghost sm" id="rlundo" type="button">↶ Zurück</button><button class="act ghost sm" id="rlclear" type="button">Leeren</button><button class="act ghost sm" id="rlrep" type="button">Wiederholen</button></div>
+  <div class="rsum"><span>Einsatz gesamt</span><b id="rlsum">0 €</b></div>
+  <div class="meta splinfo" hidden style="margin-top:10px;text-align:center"></div><button class="act big" id="rlspin" type="button">Drehen</button>
+  <table><tr><td>Zahl (0–36)</td><td align="right">×36</td><td>Dutzend / Spalte</td><td align="right">×3</td></tr><tr><td>Rot / Schwarz</td><td align="right">×2</td><td>Gerade / 1–18 …</td><td align="right">×2</td></tr></table>
+  <div class="meta" style="margin-top:10px">Europäisches Roulette mit einer 0. Nur virtuelles Geld. Echtes Glücksspiel kann süchtig machen: Hilfe unter bzga.de.</div>
+ </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 16.10. 21:05 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 16.10. 20:42 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -2159,7 +2205,7 @@ const mmss=ms=>{const t=Math.ceil(ms/1000);return Math.floor(t/60)+':'+String(t%
 function splUi(){document.querySelectorAll('.splinfo').forEach(e=>{const isBj=!!e.closest('#bjw');if(!SPL.on||(isBj&&!SPL.bj)){e.hidden=true;return}
   const c=splCheck(isBj?'bj':'slot');e.hidden=false;
   e.innerHTML=c.ok?'⏱ Limit: <b>'+c.used+' / '+c.lim+'</b> '+(isBj?'Runden':'Spins')+' in '+SPL.minutes+' Min.':'⛔ Limit erreicht ('+c.lim+' in '+SPL.minutes+' Min.). Weiter in <b>'+mmss(c.wait)+'</b>'});
- renderBetState();if(typeof bjRender==='function'&&!$('#bjw').hidden)bjRender()}
+ renderBetState();if(typeof rlBtn==='function')rlBtn();if(typeof bjRender==='function'&&!$('#bjw').hidden)bjRender()}
 async function splLoad(){if(!sbOn())return;try{const r=await sbReq('/rest/v1/settings?key=eq.spinlimit&select=value');if(r&&r[0]&&r[0].value){Object.assign(SPL,{on:false,spins:5,minutes:10,bj:false},r[0].value);try{localStorage.setItem('baggerSplCfg',JSON.stringify(SPL))}catch(e){}}else if(r&&!r.length){SPL.on=false}}catch(e){}splUi()}
 setInterval(()=>{if(SPL.on)splUi()},1000);setInterval(splLoad,30000);setTimeout(splLoad,2500);
 function renderBetState(){const s=$('#spin');if(!s)return;const lc=splCheck('slot');s.disabled=spinning||gam||stake()<1||stake()>S.m||!lc.ok;s.textContent=spinning?'Läuft…':!lc.ok?'Limit: weiter in '+mmss(lc.wait):'Drehen für '+F(stake())}
@@ -2225,8 +2271,8 @@ function setBan(v,srv){S.ban=!!v;if(v&&!srv&&sbOn()&&sbSess){S.banPend=true;setT
 function renderCasino(){const b=isBan();
  $('#casban').hidden=!b;$('#casself').hidden=b;
  document.querySelector('.cas-tabs').hidden=b;
- if(b){$('#slots').hidden=true;$('#bjw').hidden=true}
- else{const bj=document.querySelector('.cas-tabs button.on').dataset.g==='bj';$('#slots').hidden=bj;$('#bjw').hidden=!bj}}
+ if(b){$('#slots').hidden=true;$('#bjw').hidden=true;$('#rlw').hidden=true}
+ else{const g=document.querySelector('.cas-tabs button.on').dataset.g;$('#slots').hidden=g!=='slots';$('#bjw').hidden=g!=='bj';$('#rlw').hidden=g!=='rl';if(g==='rl')rlBuild()}}
 /* ---------- Spieler-Verwaltung (Admin) ---------- */
 const await_flag=(uid,o)=>sbReq('/rest/v1/flags?on_conflict=user_id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(Object.assign({user_id:uid,updated_at:new Date().toISOString()},o))});
 const cmdGet=()=>{try{return +localStorage.getItem('baggerCmd')||0}catch(e){return 0}};
@@ -2282,6 +2328,79 @@ async function admDetAct(a){const D=admDet;if(!D)return;
    Object.keys(patch).forEach(k=>{const p=k.split('.'),l=p.pop(),o=p.reduce((x,y)=>x[y]||(x[y]={}),D.d);o[l]=patch[k]});
    if(D.uid===(sbSess&&sbSess.uid))flagsSync();admDetRender('Gespeichert ✓ ('+Object.keys(patch).length+' Werte)');return}
  }catch(er){admDetRender('Fehler: '+er.message+(/cmd_patch/.test(er.message)?' – bitte supabase-spieler.sql ausführen.':''))}}
+/* ---------- Roulette ---------- */
+const RLO=[0,32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,23,10,5,24,16,33,1,20,14,31,9,22,18,29,7,28,12,35,3,26];
+const RLR=new Set([1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36]);
+const rlCol=n=>n===0?'g':RLR.has(n)?'r':'b';
+const RLCH=[10,50,250,1000,5000],RLMAX=100000;
+let rlBets=[],rlChip=1,rlBusy=false,rlLast=[],rlRot=0,rlBall=0;
+const RLB={};
+const rlTot=()=>rlBets.reduce((a,b)=>a+b[1],0);
+const rlKeys=()=>{const m={};rlBets.forEach(b=>m[b[0]]=(m[b[0]]||0)+b[1]);return m};
+function rlWin(k,n){if(k[0]==='n')return +k.slice(1)===n?36:0;if(n===0)return 0;
+ switch(k){case'red':return RLR.has(n)?2:0;case'blk':return RLR.has(n)?0:2;case'odd':return n%2?2:0;case'even':return n%2?0:2;case'lo':return n<=18?2:0;case'hi':return n>=19?2:0;
+  case'd1':return n<=12?3:0;case'd2':return n>12&&n<=24?3:0;case'd3':return n>24?3:0;
+  case'c1':return n%3===1?3:0;case'c2':return n%3===2?3:0;case'c3':return n%3===0?3:0}return 0}
+function rlBuild(){
+ const W=$('#rlwheel');if(!W||W.dataset.b)return;W.dataset.b=1;
+ const N=37,st=2*Math.PI/N,c=150;let p='',t='';
+ for(let i=0;i<N;i++){const n=RLO[i],a0=(i-.5)*st-Math.PI/2,a1=(i+.5)*st-Math.PI/2,R1=146,R2=104;
+  const f=(r,a)=>(c+r*Math.cos(a)).toFixed(1)+' '+(c+r*Math.sin(a)).toFixed(1);
+  p+=`<path d="M${f(R1,a0)}A${R1} ${R1} 0 0 1 ${f(R1,a1)}L${f(R2,a1)}A${R2} ${R2} 0 0 0 ${f(R2,a0)}Z" fill="${n===0?'#1f8f4a':RLR.has(n)?'#b8341f':'#17191d'}" stroke="#d9b36c" stroke-width=".8"/>`;
+  const am=i*st-Math.PI/2,tx=c+125*Math.cos(am),ty=c+125*Math.sin(am);
+  t+=`<text x="${tx.toFixed(1)}" y="${ty.toFixed(1)}" transform="rotate(${(i*360/N).toFixed(2)} ${tx.toFixed(1)} ${ty.toFixed(1)})" text-anchor="middle" dominant-baseline="central" font-size="11" font-weight="700" fill="#fff5e0" font-family="Barlow,Arial">${n}</text>`}
+ W.innerHTML=`<svg viewBox="0 0 300 300"><circle cx="150" cy="150" r="149" fill="#2a1a0c"/>${p}${t}<circle cx="150" cy="150" r="103" fill="#5b3a20" stroke="#d9b36c" stroke-width="2"/><circle cx="150" cy="150" r="82" fill="#3d2815"/><circle cx="150" cy="150" r="60" fill="#6b4626"/>${[0,1,2,3].map(k=>`<rect x="146" y="${k%2?150:90}" width="8" height="60" rx="4" fill="#e9b872" transform="rotate(${k*45} 150 150)"/>`).join('')}</svg>`;
+ let h='<button class="rc z" data-rb="n0">0</button>';
+ const cell=n=>`<button class="rc ${rlCol(n)==='r'?'r':'k'}" data-rb="n${n}">${n}</button>`;
+ h='<div class="rg n"><button class="rc z" style="grid-column:1/14" data-rb="n0">0</button>';
+ for(const row of [3,2,1]){for(let k=0;k<12;k++)h+=cell(row+3*k);h+=`<button class="rc o" data-rb="c${row}">2:1</button>`}
+ h+='</div><div class="rg d"><button class="rc o" data-rb="d1">1.–12.</button><button class="rc o" data-rb="d2">13.–24.</button><button class="rc o" data-rb="d3">25.–36.</button></div>';
+ h+='<div class="rg o"><button class="rc o" data-rb="lo">1–18</button><button class="rc o" data-rb="even">Gerade</button><button class="rc o r" data-rb="red">Rot</button><button class="rc o k" data-rb="blk">Schwarz</button><button class="rc o" data-rb="odd">Ungerade</button><button class="rc o" data-rb="hi">19–36</button></div>';
+ $('#rltab').innerHTML=h;
+ $('#rlchips').innerHTML=RLCH.map((v,i)=>`<button type="button" data-rc="${i}">${v>=1000?v/1000+'k':v}</button>`).join('');
+ rlRender()}
+function rlRender(){
+ if(!$('#rlwheel'))return;
+ const k=rlKeys();document.querySelectorAll('#rltab [data-rb]').forEach(b=>{const v=k[b.dataset.rb],e=b.querySelector('em');if(v){if(e)e.textContent=v>=1000?(v/1000).toFixed(v%1000?1:0)+'k':v;else b.insertAdjacentHTML('beforeend','<em>'+(v>=1000?(v/1000).toFixed(v%1000?1:0)+'k':v)+'</em>')}else if(e)e.remove()});
+ document.querySelectorAll('#rlchips button').forEach((b,i)=>b.classList.toggle('on',i===rlChip));
+ $('#rlsum').textContent=F(rlTot());
+ const h=(S.rlh||[]).slice(-12).reverse();$('#rlhist').innerHTML=h.map(n=>`<b class="${rlCol(n)}">${n}</b>`).join('');
+ rlBtn()}
+function rlBtn(){const s=$('#rlspin');if(!s)return;const lc=splCheck('rl'),t=rlTot();
+ s.disabled=rlBusy||t<1||t>S.m||!lc.ok;s.textContent=rlBusy?'Kugel rollt…':!lc.ok?'Limit: weiter in '+mmss(lc.wait):t>S.m?'Nicht genug Geld':'Drehen für '+F(t)}
+function rlAdd(key){if(rlBusy||isBan())return;const v=RLCH[rlChip];if(rlTot()+v>RLMAX){toast('Maximal '+F(RLMAX)+' pro Runde');return}if(rlTot()+v>S.m){toast('Nicht genug Geld');return}
+ rlBets.push([key,v]);sfx('card');rlRender()}
+function rlSpin(){
+ if(rlBusy||isBan())return;const lc=splCheck('rl');if(!lc.ok){splUi();return}const tot=rlTot();if(tot<1||tot>S.m)return;
+ const n=Math.floor(Math.random()*37),keys=rlKeys();let pay=0;for(const k in keys)pay+=keys[k]*rlWin(k,n);
+ rlLast=rlBets.slice();rlBusy=true;S.m-=tot;splRec('rl');S.st.cstake+=tot;S.st.spins++;S.rlp=pay;save();renderTop();
+ $('#rlmsg').className='';$('#rlmsg').textContent='…';$('#rlhub').className='rhub';$('#rlhub').textContent='–';
+ document.querySelectorAll('#rltab .hit').forEach(e=>e.classList.remove('hit'));rlBtn();
+ const W=$('#rlwheel'),B=$('#rlball');
+ W.style.transition=B.style.transition='none';B.querySelector('i').style.transition='none';B.classList.remove('in');
+ rlRot=((rlRot%360)+360)%360;rlBall=((rlBall%360)+360)%360;W.style.transform='rotate('+rlRot+'deg)';B.style.transform='rotate('+rlBall+'deg)';void W.offsetWidth;
+ const idx=RLO.indexOf(n),wf=rlRot+360*3+Math.random()*360,target=((wf+idx*360/37)%360+360)%360;
+ const bf=-(360*7)+target-0;
+ W.style.transition='';B.style.transition='';B.querySelector('i').style.transition='';
+ W.style.transform='rotate('+wf+'deg)';B.style.transform='rotate('+bf+'deg)';B.classList.add('in');
+ rlRot=wf;rlBall=bf;sfx('card');setTimeout(()=>sfx('card'),900);
+ setTimeout(()=>rlDone(n,tot),5600)}
+function rlDone(n,tot){
+ const pay=S.rlp||0;S.rlp=0;if(pay>0){S.m+=pay;S.st.cwin+=pay;if(pay>S.st.big)S.st.big=pay}
+ S.rlh=(S.rlh||[]).concat(n).slice(-30);rlBusy=false;
+ const hub=$('#rlhub');hub.textContent=n;hub.className='rhub '+rlCol(n);
+ const m=$('#rlmsg'),net=pay-tot;const nm=n===0?'Grün':rlCol(n)==='r'?'Rot':'Schwarz';
+ if(net>0){m.className='win';m.textContent=n+' · '+nm+' — Gewinn +'+F(net)}else if(pay>0){m.className='lose';m.textContent=n+' · '+nm+' — nur '+F(pay)+' zurück'}else{m.className='lose';m.textContent=n+' · '+nm+' — verloren −'+F(tot)}
+ Object.keys(rlKeys()).forEach(k=>{if(rlWin(k,n)){const b=document.querySelector('#rltab [data-rb="'+k+'"]');if(b)b.classList.add('hit')}});
+ rlBets=[];save();renderTop();rlRender();if(net>0)celebrate(net);else if(pay===0)sfx('lose');else sfx('ping')}
+(function(){if(S.rlp>0){S.m+=S.rlp;S.st.cwin+=S.rlp;S.rlp=0;save()}})();
+document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('#rlw button');if(!t)return;
+ if(t.dataset.rb){rlAdd(t.dataset.rb);return}
+ if(t.dataset.rc){rlChip=+t.dataset.rc;rlRender();return}
+ if(rlBusy)return;
+ if(t.id==='rlundo'){rlBets.pop();rlRender()}else if(t.id==='rlclear'){rlBets=[];rlRender()}
+ else if(t.id==='rlrep'){const a=rlLast.slice();let s=0;rlBets=[];for(const b of a){if(s+b[1]>Math.min(S.m,RLMAX))break;s+=b[1];rlBets.push(b)}rlRender()}
+ else if(t.id==='rlspin')rlSpin()});
 /* ---------- Blackjack ---------- */
 const BJB=[100,500,1000,2500,5000,10000],RK=['A','2','3','4','5','6','7','8','9','10','J','Q','K'],SU=['♠','♥','♦','♣'];
 let bjBet=100,bjBusy=false;
@@ -2339,7 +2458,7 @@ document.addEventListener('click',e=>{
  if(t.dataset.reply){const u=t.dataset.reply;document.querySelector('nav button[data-t=board]').click();lbSub='priv';privWith=u;$('#board').dataset.k='';pvLoad();renderBoard();return}
  if(t.dataset.mdel){sbReq('/rest/v1/messages?id=eq.'+t.dataset.mdel,{method:'DELETE'}).then(inboxLoad).catch(()=>{});return}
  if(t.id==='selfban'){if(!t.dataset.arm){t.dataset.arm='1';t.textContent='Wirklich sperren? Nur ein Admin kann das aufheben. Nochmal tippen.';setTimeout(()=>{delete t.dataset.arm;t.textContent='Selbstsperre: Casino für mich sperren'},4000);return}delete t.dataset.arm;setBan(true);renderCasino();toast('Selbstsperre aktiv');return}
- if(t.dataset.g){document.querySelectorAll('.cas-tabs button').forEach(b=>b.classList.toggle('on',b===t));$('#slots').hidden=t.dataset.g!=='slots';$('#bjw').hidden=t.dataset.g!=='bj';if(t.dataset.g==='bj'){if(S.bj&&S.bj.done&&!$('#dh').innerHTML)bjMsg('Wähle deinen Einsatz.');bjRender()}return}
+ if(t.dataset.g){document.querySelectorAll('.cas-tabs button').forEach(b=>b.classList.toggle('on',b===t));$('#slots').hidden=t.dataset.g!=='slots';$('#bjw').hidden=t.dataset.g!=='bj';$('#rlw').hidden=t.dataset.g!=='rl';if(t.dataset.g==='rl')rlBuild();if(t.dataset.g==='bj'){if(S.bj&&S.bj.done&&!$('#dh').innerHTML)bjMsg('Wähle deinen Einsatz.');bjRender()}return}
  if(t.dataset.bjb){bjBet=+t.dataset.bjb;bjRender();return}
  if(t.id==='bjdeal')bjStart();else if(t.id==='bjhit')bjHit();else if(t.id==='bjstand')bjStand();else if(t.id==='bjdbl')bjDouble()});
 
@@ -2410,7 +2529,7 @@ function clOpen(){if($('#clov'))return;const o=document.createElement('div');o.i
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#clbtn'))clOpen()});
 setTimeout(clLoad,3500);setInterval(clLoad,60000);
 /* Auto-Update: neue Version erkennen und neu laden */
-const BUILD='20261016-2105';
+const BUILD='20261016-2042';
 setTimeout(async()=>{try{if(!/^https?:/.test(location.protocol))return;
  const t=await (await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'})).text(),m=t.match(/const BUILD='([^']+)'/);
  if(m&&m[1]!==BUILD){const k='baggerUpd';if(sessionStorage.getItem(k)===m[1])return;sessionStorage.setItem(k,m[1]);location.replace(location.pathname+'?v='+m[1])}}catch(e){}},3500);
