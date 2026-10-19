@@ -134,7 +134,8 @@ begin
   if not public.is_admin() then raise exception 'nur Admin'; end if;
   update public.saves set life=0, rank=0, updated_at=now(),
     data=jsonb_build_object('m',0,'lic',0,'llic',0,'life',0,'tier',0,'top',0,'lm',0,
-      'st',jsonb_build_object('jobs',0,'sold',0,'spins',0));
+      'st',jsonb_build_object('jobs',0,'sold',0,'spins',0))
+    where true;
   delete from public.weekly where true;
 end
 $$;
