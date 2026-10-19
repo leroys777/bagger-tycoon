@@ -396,7 +396,7 @@ body{padding-bottom:0}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 19.10. 10:40 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 19.10. 10:58 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -482,7 +482,7 @@ const LLC=[1000000,4000000,7000000,15000000,30000000,100000000,350000000,1000000
 let V=VB,J=JB,X=XB;
 var shopTab=0;function setMode(m){shopTab=m?1:0;V=m?VL:VB;J=m?JL:JB;X=m?XL:XB;if(typeof S!=='undefined'&&S)S.lm=m?1:0}
 
-const ST0=()=>({jobs:0,ex:0,work:0,best:0,passive:0,repairs:0,repCost:0,breaks:0,spins:0,cstake:0,cwin:0,big:0,time:0,sold:0});
+const ST0=()=>({jobs:0,ex:0,work:0,best:0,passive:0,repairs:0,repCost:0,breaks:0,spins:0,cstake:0,cwin:0,big:0,time:0,sold:0,dig:0});
 let S={m:0,tier:0,job:null,offers:[],nid:1,up:{mot:0,hyd:0,tec:0,auto:0},lic:0,tot:0,life:0,emp:'self',st:ST0(),v:2,rk:0};
 const newState=()=>({autoMig:1,lm:0,m:0,tier:0,job:null,offers:[],nid:1,up:{mot:0,hyd:0,tec:0,auto:0},lic:0,tot:0,life:0,emp:'self',unl:0,st:ST0(),v:2,rk:0,cond:100,top:0,cds:{}});
 try{const d=JSON.parse(localStorage.getItem(KEY));if(d&&d.offers)S=d}catch(e){}
@@ -978,7 +978,7 @@ function init3d(){
  setExc();rs();gInit();addEventListener('resize',rs);requestAnimationFrame(loop)}
 const qpr=()=>{const w=view.clientWidth||390,d=devicePixelRatio||1;return[Math.max(d,Math.min(5,1920/w)),Math.min(d,1.5),1][GL]||1};
 function rs(){const w=view.clientWidth,h=view.clientHeight;R.setPixelRatio(qpr());R.setSize(w,h);cam.aspect=w/h;cam.updateProjectionMatrix()}
-function setExc(){if(exc)scene.remove(exc.g);exc=makeExc(S.tier);scene.add(exc.g);envK=null;envDirty=true}
+function setExc(){if(exc)scene.remove(exc.g);RBW.length=0;PRL.length=0;exc=makeExc(S.tier);scene.add(exc.g);envK=null;envDirty=true}
 
 /* ---------- Umgebungen passend zum Auftrag ---------- */
 function themeOf(n){const T=(id,g)=>({id,g});
@@ -1979,7 +1979,7 @@ function renderProf(){
  const num=n=>Math.round(n).toLocaleString('de-DE');
  $('#prof').innerHTML=`<div class="card2"><div class="meta">Dein Rang · ${sbName0().replace(/[&<>"]/g,'')}</div><div class="rankname">${R.n}</div><div class="meta">Rang ${ri+1} von ${RANKS.length} · Rangbonus +${ri*5} % Lohn</div><div class="bar"><i style="width:${N?Math.min(100,(S.life-R.at)/(N.at-R.at)*100):100}%"></i></div><div class="meta">${N?'Noch '+F(N.at-S.life)+' Gesamtverdienst bis '+N.n:'Höchster Rang erreicht'}</div></div>
  <h2 class="sec">Karriere</h2><div class="card2">${RANKS.map((k,i)=>`<div class="rk ${i<ri?'done':i===ri?'now':''}"><div class="rkd">${i<ri?'✓':i+1}</div><div class="rkm"><b>${k.n}</b><span class="meta">${i?'ab '+F(k.at)+' Gesamtverdienst':'Startrang'} · ${k.u}</span></div></div>`).join('')}</div>
- <h2 class="sec">Arbeit</h2><div class="card2">${row('Aufträge absolviert',num(q.jobs))}${row('davon exklusiv',num(q.ex))}${row('Bestes Honorar',F(q.best))}${row('Bewegte Masse',num(q.work)+' Einheiten')}${row('Spielzeit',fmtT(q.time))}</div>
+ <h2 class="sec">Arbeit</h2><div class="card2">${row('Aufträge absolviert',num(q.jobs))}${row('davon exklusiv',num(q.ex))}${row('Bestes Honorar',F(q.best))}${row('Bewegte Masse',num(q.work)+' Einheiten')}${row('Selbst mitgeschaufelt',num(q.dig||0)+' Mal')}${row('Spielzeit',fmtT(q.time))}</div>
  <h2 class="sec">Finanzen</h2><div class="card2">${row('Gesamtverdienst',F(S.life))}${row('davon Gehalt',F(q.passive))}${row('Arbeitgeber',S.emp==='wtd'?'WTD 91':'selbstständig')}${row('Defekte',num(q.breaks))}${row('Reparaturen',num(q.repairs)+' · '+F(q.repCost))}</div>
  <h2 class="sec">Fuhrpark</h2><div class="card2">${row(S.lm?'Aktueller Radlader':'Aktueller Bagger',V[S.tier].n+' ('+V[S.tier].tn+')')}${row('Fuhrpark',(S.top+1)+' von '+V.length)}${row('Baulizenzen',num(S.lic))}${row('Firmen verkauft',num(q.sold))}</div>
  <h2 class="sec">Casino</h2><div class="card2">${row('Drehs',num(q.spins))}${row('Einsätze gesamt',F(q.cstake))}${row('Auszahlungen gesamt',F(q.cwin))}${row('Bilanz',(bil>=0?'+':'−')+F(Math.abs(bil)),bil>=0?'win':'lose')}${row('Größte Auszahlung',F(q.big))}</div>
@@ -2160,7 +2160,7 @@ document.addEventListener('click',e=>{
  if(t.dataset.job){S.job=+t.dataset.job;renderOffers();renderProg();return}
  if(t.dataset.sel){switchTo(+t.dataset.sel);return}
  if(t.dataset.buy){const i=+t.dataset.buy,v=V[i];if(S.m>=v.c&&i===S.top+1&&(!v.lic||licN()>=v.lic)){S.m-=v.c;S.cds[S.tier]={c:S.cond,b:!!S.broken,f:S.fix||0};S.top=i;S.tier=i;S.cond=100;S.broken=false;S.job=null;S.offers=[];refill();toast(v.n+' gekauft!');if(T3)setExc();renderShop();renderOffers();renderTop();renderProg();save()}return}
- if(t.id==='dig'){const o=cur();if(!o){toast('Erst einen Auftrag annehmen');return}if(S.broken){toast(V[S.tier].loader?'Radlader ist kaputt':'Bagger ist kaputt');return}o.prog+=Math.max(1,pw()*.3);boost=1;renderProg();return}
+ if(t.id==='dig'){const o=cur();if(!o){toast('Erst einen Auftrag annehmen');return}if(S.broken){toast(V[S.tier].loader?'Radlader ist kaputt':'Bagger ist kaputt');return}S.st.dig=(S.st.dig||0)+1;o.prog+=Math.max(1,pw()*.3);boost=1;renderProg();return}
  if(t.dataset.bet){bet=t.dataset.bet==='max'?'max':Math.min(10000,+t.dataset.bet||10);renderBets();return}
  if(t.dataset.emp){if(S.life>=EMPMIN&&t.dataset.emp==='wtd'&&S.emp!=='wtd'){S.emp='wtd';S.next=Date.now()+300000;toast('Willkommen bei WTD 91');renderEmp();updateFirm();save()}return}
  if(t.id==='rep'||t.id==='frep'){const c=FULLC();if(S.m>=c&&S.cond<100){S.m-=c;S.cond=100;S.broken=false;S.st.repairs++;S.st.repCost+=c;toast('Komplett repariert: −'+F(c));renderShop();renderBrk();renderTop();save()}return}
@@ -2454,19 +2454,21 @@ function applyCos(r,ti){const ty=V[ti].loader?'l':'b',e=c=>COSC[c].it[cosEq(ty,c
   const w=Math.max(2,box.max.x-box.min.x),d=Math.max(2,box.max.z-box.min.z),cx=(box.max.x+box.min.x)/2,cz=(box.max.z+box.min.z)/2;
   const mk=(k,op)=>{const mt=new THREE.MeshBasicMaterial({map:glowT(),color:ui[2]==='rb'?0xffffff:ui[2],transparent:true,opacity:op,blending:THREE.AdditiveBlending,depthWrite:false,fog:false});if(ui[2]==='rb')RBW.push(mt);
    const mm=new THREE.Mesh(new THREE.PlaneGeometry(1,1),mt);mm.rotation.x=-Math.PI/2;const kk=r.loader?.42:1;mm.scale.set(w*k*kk,d*k*kk*(r.loader?.9:1),1);mm.position.set(cx,.05,cz);mm.renderOrder=2;r.g.add(mm)};mk(2.0,.95);if(!r.loader)mk(2.4,.3)}}
-setInterval(()=>{const t=Date.now();if(RBW.length){const h=(t/2500)%1;RBW.forEach(m=>{m.color.setHSL(h,1,.55);if(m.userData.rbe)m.emissive.setHSL(h,1,.5)})}
- if(PRL.length){const w=Math.sin(t/1400)*.5+.5;PRL.forEach(([m,f])=>{const h=f.f?(t/6000)%1:f.h+(w-.5)*.12;m.sheen.setHSL(h,.9,.62);m.emissive.setHSL(h,.8,.4)})}},90);
+function rbTick(){const t=Date.now();if(RBW.length){const h=(t/2500)%1;RBW.forEach(m=>{m.color.setHSL(h,1,.55);if(m.userData.rbe)m.emissive.setHSL(h,1,.5)})}
+ if(PRL.length){const w=Math.sin(t/1400)*.5+.5;PRL.forEach(([m,f])=>{const h=f.f?(t/6000)%1:f.h+(w-.5)*.12;m.sheen.setHSL(h,.9,.62);m.emissive.setHSL(h,.8,.4)})}}
+setInterval(rbTick,90);
 function cosShot(ty){const ti=ty==='b'?(S.lm?0:S.tier):(S.lm?S.tier:0);
  const key=ty+ti+COSK.map(c=>cosEq(ty,c)).join(',');cosUsePrev=true;const k2=ty+ti+COSK.map(c=>cosEq(ty,c)).join(',');cosUsePrev=false;
  if(cosImgC[k2])return cosImgC[k2];
  const sv=V;V=ty==='l'?VL:VB;cosUsePrev=true;noCos=false;let url='';
+const rl0=RBW.length,pl0=PRL.length;
  try{const r=new THREE.WebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:true});r.setSize(480,300);r.toneMapping=THREE.ACESFilmicToneMapping;r.toneMappingExposure=1.05;const ev=makeEnv(r);
   const sc=new THREE.Scene();sc.environment=ev;sc.add(new THREE.AmbientLight(0xffffff,.25));const l=new THREE.DirectionalLight(0xffffff,.9);l.position.set(4,6,5);sc.add(l);
-  const e=makeExc(ti);let c,fl=1;
+  const e=makeExc(ti);rbTick();let c,fl=1;
   if(ty==='l'){const k=VL[ti].sc;e.boom.rotation.z=.12;e.bucket.rotation.z=.15;e.up.rotation.y=-.12;e.rig();c=new THREE.PerspectiveCamera(40,480/300,.1,200);const d=k*9.2+1;c.position.set(d*.42,d*.3,d*.98);c.lookAt(k*.95,k*1.5,0);fl=k*7}
   else{e.boom.rotation.z=.5;e.stick.rotation.z=-1.1;e.bucket.rotation.z=-.4;e.up.rotation.y=-.35;e.rig&&e.rig();c=new THREE.PerspectiveCamera(40,480/300,.1,80);const d=3.4+reachOf(ti)*1.25;c.position.set(d*.8,d*.5,d*.9);c.lookAt(.5,.9,0);fl=d*2}
   const fm=new THREE.Mesh(new THREE.CircleGeometry(fl,48),new THREE.MeshStandardMaterial({color:0x22252a,roughness:.9,metalness:0}));fm.rotation.x=-Math.PI/2;sc.add(fm);sc.add(e.g);
-  r.render(sc,c);url=r.domElement.toDataURL();r.dispose()}catch(er){url=''}finally{V=sv;cosUsePrev=false}
+  r.render(sc,c);url=r.domElement.toDataURL();r.dispose()}catch(er){url=''}finally{V=sv;cosUsePrev=false;RBW.length=Math.min(RBW.length,rl0);PRL.length=Math.min(PRL.length,pl0)}
  return cosImgC[k2]=url}
 function renderGarage(){
  const own=cosS();if(cosTy==='l'&&!S.rl)cosTy='b';
@@ -2594,9 +2596,9 @@ function achHtml(ach){const n=Object.keys(ach||{}).length;
   return '<div class="ach '+(on?'on':'off')+'"><span class="aci">'+a.ic+'</span><b>'+a.n+'</b><span class="meta">'+a.d+'</span><div class="bar"><i style="width:'+p+'%"></i></div></div>'}).join('')+'</div>'}
 /* Tagesbelohnung */
 const dayN=()=>{const d=new Date();return Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/864e5)};
-const DAYR=[{h:.08},{h:.12},{h:.2,b:10},{h:.33},{h:.5,b:20},{h:.9},{h:2,v:25e6}];
+const DAYR=[{h:.03},{h:.05},{h:.08,b:5},{h:.12},{h:.2,b:10},{h:.35},{h:.8,v:10e6}];
 function dailyNext(){const dr=S.dr||{l:0,s:0},t=dayN();if(t<=dr.l)return null;let s=dr.l?Math.max(0,dr.s-3*Math.max(0,t-dr.l-1)):0;return s+1}
-function dailyRew(s){const cp=(s-1)%7,wm=Math.min(3,1+.25*Math.floor((s-1)/7)),r=DAYR[cp];return{cp,money:packAmt({h:r.h*wm}),boost:r.b||0,v:r.v?Math.round(r.v*wm):0}}
+function dailyRew(s){const cp=(s-1)%7,wm=Math.min(2,1+.15*Math.floor((s-1)/7)),r=DAYR[cp];return{cp,money:packAmt({h:r.h*wm}),boost:r.b||0,v:r.v?Math.round(r.v*wm):0}}
 const dailyTxt=r=>F(r.money)+(r.boost?' + '+r.boost+' Min. 2× Lohn':'')+(r.v?' + Garage-Gutschein '+F(r.v):'');
 function renderDaily(){const e=$('#dailyc');if(!e)return;const nx=dailyNext(),dr=S.dr||{l:0,s:0},s=nx||dr.s,r=nx?dailyRew(nx):null,cp=s?((s-1)%7):0;
  const pips=[0,1,2,3,4,5,6].map(i=>`<i class="dpip ${(nx?i<cp:i<=cp)&&s?'done':''} ${nx&&i===cp?'now':''}">${i+1}</i>`).join('');
