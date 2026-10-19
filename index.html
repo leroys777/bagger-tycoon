@@ -470,7 +470,7 @@ body{padding-bottom:0}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 19.10. 14:05 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 19.10. 14:20 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -1968,12 +1968,12 @@ function renderEmp(){const c=$('#empcard');if(c){c.innerHTML='';return}
  else{const rest=Math.max(0,EMPMIN-S.life);c.innerHTML=`<div class="emp-row"><div><b>Selbstständig</b><span class="meta">${rest>0?'Arbeitgeber ab '+F(EMPMIN)+' Gesamtverdienst (noch '+F(rest)+')':'Arbeitgeber im Tab Firma wählbar'}</span></div></div>`}}
 function payTick(){return;const n=Date.now();let c=0;while(S.next<=n&&c<144){S.m+=350;S.tot+=350;S.life+=350;S.st.passive+=350;S.next+=300000;c++}if(S.next<=n)S.next=n+300000;if(c){toast('WTD 91: +'+F(350*c));save()}}
 /* ---------- AFK-Check ---------- */
-const AFK_MS=150000;let afk=false,lastAct=Date.now();
+const AFK_MS=600000;let afk=false,lastAct=Date.now();
 function afkAct(){if(!afk)lastAct=Date.now()}
 ['pointerdown','touchstart','mousedown','keydown'].forEach(ev=>addEventListener(ev,afkAct,{passive:true,capture:true}));
 document.addEventListener('visibilitychange',()=>{if(!afk)lastAct=Date.now()});
 function afkShow(){if(document.getElementById('afkov'))return;const el=document.createElement('div');el.id='afkov';
- el.innerHTML='<div class="offc"><div class="offh">😴 Bist du noch da?</div><div class="meta">Du warst 2,5 Minuten inaktiv. Deine Bagger stehen still, bis du bestätigst.</div><button class="act big" id="afkok" type="button">Ich bin noch da</button></div>';
+ el.innerHTML='<div class="offc"><div class="offh">😴 Bist du noch da?</div><div class="meta">Du warst 10 Minuten inaktiv. Deine Bagger stehen still, bis du bestätigst.</div><button class="act big" id="afkok" type="button">Ich bin noch da</button></div>';
  document.body.appendChild(el);try{sfx('ping')}catch(e){}
  el.querySelector('#afkok').onclick=()=>{afk=false;lastAct=Date.now();el.remove()}}
 function afkCheck(){if(afk||document.visibilityState!=='visible')return;if(Date.now()-lastAct>=AFK_MS){afk=true;afkShow()}}
