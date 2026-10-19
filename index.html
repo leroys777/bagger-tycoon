@@ -199,6 +199,10 @@ button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
 .bets button{padding:8px 14px;border:1px solid var(--line);background:var(--surf2);color:var(--ink);border-radius:999px;font:600 14px var(--f2);cursor:pointer;font-variant-numeric:tabular-nums}
 .bets button.on{background:var(--acc);color:var(--accink);border-color:var(--acc)}
 .cab .act.big{margin-top:14px}
+#dailyov{position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:18px;animation:offin .25s ease-out}
+.dpips{display:flex;gap:6px;margin:8px 0 2px}.dpip{flex:1;text-align:center;font:700 13px var(--f1);padding:6px 0;border-radius:10px;background:var(--surf2);color:var(--mut);font-style:normal}.dpip.done{background:var(--ok);color:#fff}.dpip.now{outline:2px solid var(--acc);color:var(--ink)}
+.achg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}.ach{background:var(--surf);border:1px solid var(--line);border-radius:14px;padding:10px;display:grid;gap:3px;align-content:start}.ach.on{border-color:var(--ok)}.ach.off{opacity:.65}.aci{font-size:22px}.ach b{font:700 14px var(--f1)}.ach .meta{font-size:12px}
+.cas-tabs.w4 button{font-size:12px;padding:9px 2px}
 .gprev{background:linear-gradient(#2d3138,#15171b);border-radius:20px;padding:6px;margin-bottom:10px;text-align:center}.gprev img{width:100%;border-radius:14px;display:block}
 .cgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.cc{background:var(--surf);border:1px solid var(--line);border-radius:16px;padding:10px;display:grid;gap:6px;cursor:pointer;align-content:start}.cc.pv{outline:2px solid var(--acc)}.cc.eq{border-color:var(--ok)}.cc b{font:700 15px var(--f1);letter-spacing:.02em}.sw{width:100%;height:26px;border-radius:8px;display:block;border:1px solid rgba(0,0,0,.18)}
 /* Roulette */
@@ -331,6 +335,7 @@ body{padding-bottom:0}
   <div class="hud-b"><div class="r"><div id="cur"></div><div id="pct"></div></div><div class="bar"><i id="pb"></i></div></div>
  </div>
  <button class="act big" id="dig" type="button">Mitschaufeln</button>
+ <div class="card2" id="dailyc" style="margin-bottom:12px"></div>
  <div class="emp" id="empcard"></div>
  <h2 class="sec">Aufträge</h2>
  <div id="offers"></div>
@@ -391,7 +396,7 @@ body{padding-bottom:0}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 19.10. 09:48 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 19.10. 09:58 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -473,7 +478,7 @@ const JLN=[
 ['Mega-Mine Haufwerk Sohle 1','Lithium-Mine Erzhalde','Bauxit-Verladung Großhafen','Eisenerz-Mine Nordfeld','Riesen-Steinbruch Gesamtabraum','Kohle-Großlager Kraftwerk']];
 const JL=[];JLN.forEach((a,t)=>a.forEach((n,i)=>{const sec=34+((i*7+t*3)%5)*6,e=Math.round(sec*VL[t].p);JL.push([n,e,Math.round(e*RTL[t]),t])}));
 const XL=[['Gemeinde-Auftrag: Laubsammlung Stadtpark',0,1,60],['Erntedank: Getreidetransport Landwirtschaft',1,1,70],['Winterdienst-Vorrat Autobahnmeisterei',2,1,80],['Staatsauftrag: Hochwasserschutz Sandsäcke',3,2,90],['Gleisbau Großbaustelle Schotterlieferung',4,2,95],['Flughafen-Neubau Erdarbeiten',5,3,100],['Staatsauftrag: Deichbau Nordsee Sand',6,3,105],['Kraftwerk-Großauftrag Kohlezufuhr',7,4,110],['Kupfermine Großauftrag Chile',8,4,115],['Mega-Mine Jahrhundertauftrag',9,5,120],['Hafenausbau Schüttgut Rotterdam',9,5,125]].map(([n,t,r,sec])=>{const e=Math.round(sec*VL[t].p);return[n,e,Math.round(e*RTL[t]*1.7),t,r]});
-const LLC=[1000000,4000000,7000000,15000000,30000000,100000000,350000000];
+const LLC=[1000000,4000000,7000000,15000000,30000000,100000000,350000000,1000000000,2500000000,6000000000];
 let V=VB,J=JB,X=XB;
 var shopTab=0;function setMode(m){shopTab=m?1:0;V=m?VL:VB;J=m?JL:JB;X=m?XL:XB;if(typeof S!=='undefined'&&S)S.lm=m?1:0}
 
@@ -488,7 +493,7 @@ if(S.pend){S.m+=S.pend;S.pend=0}
 S.rl=S.rl?1:0;S.llic=S.llic||0;S.lm=S.lm&&S.rl?1:0;V=S.lm?VL:VB;J=S.lm?JL:JB;X=S.lm?XL:XB;
 S.up=Object.assign({mot:0,hyd:0,tec:0,auto:0},S.up||{});try{if(localStorage.getItem('baggerBan')==='1')S.ban=true}catch(e){}if(S.ban)try{localStorage.setItem('baggerBan','1')}catch(e){}S.lic=S.lic||0;S.tot=S.tot||0;S.life=Math.max(S.life||0,S.tot);if(!S.emp)S.emp='self';S.st=Object.assign(ST0(),S.st||{});if(typeof S.cond!=='number')S.cond=100;if(typeof S.top!=='number')S.top=S.tier;if(!S.cds)S.cds={};if(!S.v){S.tier=[0,1,2,3,5,8][S.tier]||0;S.v=2;S.offers=[];S.job=null;S.prog=0}if(S.tier>=V.length)S.tier=0;if(S.emp==='wtd'&&S.next>Date.now()+300000)S.next=Date.now()+300000;
 const pw=()=>V[S.tier].p*(1+.2*S.up.mot)/WK;
-const payM=()=>(1+.12*S.up.hyd)*(1+.35*(S.lic+S.llic))*(1+.05*rankIx())*((S.boostUntil||0)>Date.now()?2:1);
+const payM=()=>(1+.12*S.up.hyd)*(1+.35*(S.lic+S.llic))*(1+.05*rankIx())*(1+.02*Math.min(25,(S.st&&S.st.sold)||0))*((S.boostUntil||0)>Date.now()?2:1);
 const pay=o=>Math.round(o.e*PY*payM());
 const newIds=new Set();
 const RANKS=[{n:'Praktikant',at:0,u:'Standardaufträge'},{n:'Azubi',at:10000,u:'erste exklusive Aufträge'},{n:'Geselle',at:150000,u:'Staatsaufträge im Tiefbau'},{n:'Alt-Geselle',at:2000000,u:'Flughäfen und Großbaustellen'},{n:'Meister',at:25000000,u:'Abrisse und Bergwerke'},{n:'Bauingenieur',at:250000000,u:'Mega-Projekte im Tagebau'}];
@@ -1915,12 +1920,12 @@ const UP=[
  {k:'mot',n:'Motor-Tuning',d:l=>'Leistung +'+l*20+' %',max:12,c:l=>Math.round(2000*Math.pow(2.6,l))},
  {k:'hyd',n:'Hydraulik und Löffel',d:l=>'Auftragslohn +'+l*12+' %',max:12,c:l=>Math.round(3000*Math.pow(2.5,l))},
  {k:'tec',n:'Wartungsplan',d:l=>'Reparatur −'+l*6+' %, Defekte seltener',max:8,c:l=>Math.round(1500*Math.pow(2.3,l))},
- {k:'auto',n:'Vorarbeiter',d:l=>['Stufe 1: nimmt automatisch den ersten Auftrag an','Stufe 2: nimmt immer den besten Auftrag an','Stufe 3: wählt den besten Auftrag und arbeitet bis zu 12 Std. auch offline','Alle Stufen freigeschaltet. Stufe 3: bester Auftrag, bis zu 12 Std. offline'][l],max:3,c:l=>[50000,100000,1000000][l]}];
+ {k:'auto',n:'Vorarbeiter',d:l=>['Stufe 1: nimmt automatisch den ersten Auftrag an','Stufe 2: nimmt immer den besten Auftrag an','Stufe 3: wählt den besten Auftrag und arbeitet bis zu 2 Std. auch offline (mit halbem Lohn)','Alle Stufen freigeschaltet. Stufe 3: bester Auftrag, bis zu 2 Std. offline (halber Lohn)'][l],max:3,c:l=>[50000,100000,1000000][l]}];
 const LC=[1000000,2500000,10000000,50000000,200000000];
 const LCm=()=>S.lm?LLC:LC,licN=()=>S.lm?S.llic:S.lic;
 const gain=()=>licN()<LCm().length&&(S.tot||0)>=LCm()[licN()]?1:0;
 function renderFirm(){
- $('#firm').innerHTML=`<h2 class="sec" style="margin-top:4px">Arbeitgeber</h2><div class="card2" id="empbox"></div><h2 class="sec">Radlader</h2><div class="card2" id="rlbox"></div><h2 class="sec">Konzern</h2><div class="card2"><div class="emp-row"><div><b class="vn" id="fln">Baulizenzen</b><span class="meta">Jede Lizenz erhöht deinen Lohn dauerhaft um 35 %</span></div><span class="pay" id="fl"></span></div><div class="emp-row"><span class="meta">Verdient in diesem Durchgang</span><b id="ft"></b></div><button class="act big" id="prest" type="button" style="margin-top:2px"></button><div class="meta" id="pn"></div></div><h2 class="sec">Werkstatt</h2>`+UP.map(u=>`<div class="job"><div class="jt" id="ul-${u.k}"></div><div class="jmain"><b>${u.n}</b><span class="meta" id="ud-${u.k}"></span></div><div class="jside"><span class="pay" id="up-${u.k}"></span><button class="act sm" data-up="${u.k}" type="button">Verbessern</button></div></div>`).join('');
+ $('#firm').innerHTML=`<h2 class="sec" style="margin-top:4px">Arbeitgeber</h2><div class="card2" id="empbox"></div><h2 class="sec">Radlader</h2><div class="card2" id="rlbox"></div><h2 class="sec">Konzern</h2><div class="card2"><div class="emp-row"><div><b class="vn" id="fln">Baulizenzen</b><span class="meta">Jede Lizenz erhöht deinen Lohn dauerhaft um 35 %</span></div><span class="pay" id="fl"></span></div><div class="emp-row"><span class="meta">Verdient in diesem Durchgang</span><b id="ft"></b></div><button class="act big" id="prest" type="button" style="margin-top:2px"></button><div class="meta" id="pn"></div><div class="meta" id="fbn" style="margin-top:6px"></div></div><h2 class="sec">Werkstatt</h2>`+UP.map(u=>`<div class="job"><div class="jt" id="ul-${u.k}"></div><div class="jmain"><b>${u.n}</b><span class="meta" id="ud-${u.k}"></span></div><div class="jside"><span class="pay" id="up-${u.k}"></span><button class="act sm" data-up="${u.k}" type="button">Verbessern</button></div></div>`).join('');
  updateFirm()}
 function empBox(){const b=$('#empbox');if(!b)return;const k=S.life>=EMPMIN?'u'+S.emp:'l';
  if(b.dataset.k!==k){b.dataset.k=k;
@@ -1933,18 +1938,19 @@ function rlBox(){const b=$('#rlbox');if(!b)return;const k=S.rl?'o'+S.lm:S.lic<5?
  if(b.dataset.k===k)return;b.dataset.k=k;
  if(S.rl)b.innerHTML=`<div class="emp-row"><div><b class="vn">Radlader-Erweiterung</b><span class="meta">${S.lm?'Du fährst in diesem Durchgang Radlader. Bagger sind bis zum Firmenverkauf gesperrt.':'Freigeschaltet. Wähle im Fuhrpark den Radlader, um zu starten.'}</span></div><span class="tag">Gekauft</span></div>`;
  else if(S.lic<5)b.innerHTML=`<div class="emp-row"><div><b class="vn">🔒 Radlader-Erweiterung</b><span class="meta">Benötigt alle 5 Baulizenzen (du hast ${S.lic}). Kostet ${F(RLP)}.</span></div></div>`;
- else b.innerHTML=`<div class="emp-row"><div><b class="vn">Radlader-Erweiterung</b><span class="meta">10 Radlader von klein bis riesig, eigene Aufträge, 7 weitere Lizenzen. Beim Kauf wird dein gesamtes Geld abgezogen, der laufende Auftrag abgebrochen und die Werkstatt-Verbesserungen (Motor, Hydraulik, Wartungsplan) auf Stufe 0 gesetzt. Der Vorarbeiter bleibt. Mindestens ${F(RLP)} nötig.</span></div></div><button class="act big" type="button" data-rl="1" ${S.m>=RLP?'':'disabled'}>Freischalten · ${F(RLP)}</button>`}
+ else b.innerHTML=`<div class="emp-row"><div><b class="vn">Radlader-Erweiterung</b><span class="meta">10 Radlader von klein bis riesig, eigene Aufträge, ${LLC.length} weitere Lizenzen. Beim Kauf wird dein gesamtes Geld abgezogen, der laufende Auftrag abgebrochen und die Werkstatt-Verbesserungen (Motor, Hydraulik, Wartungsplan) auf Stufe 0 gesetzt. Der Vorarbeiter bleibt. Mindestens ${F(RLP)} nötig.</span></div></div><button class="act big" type="button" data-rl="1" ${S.m>=RLP?'':'disabled'}>Freischalten · ${F(RLP)}</button>`}
 function updateFirm(){if($('#firm').hidden||!$('#fl'))return;empBox();rlBox();
  const g=gain();$('#fl').textContent=licN();$('#fln').textContent=S.lm?'Radlader-Lizenzen':'Baulizenzen';$('#ft').textContent=F(S.tot);
  const pb=$('#prest');if(!pb.dataset.arm){pb.textContent=g>=1?'Firma verkaufen · +'+g+(g>1?' Lizenzen':' Lizenz'):(licN()>=LCm().length?'Alle Lizenzen erworben':'Noch keine Lizenz verfügbar')}pb.disabled=g<1;
+ {const so=(S.st&&S.st.sold)||0,nt=TITLES.find(x=>so<x[0]);$('#fbn').textContent='Firmenerbe: +'+Math.min(25,so)*2+' % Lohn dauerhaft (+2 % je verkaufter Firma, bis 25). Titel: '+(titleOf(so)||'noch keiner')+(nt?' · nächster Titel "'+nt[1]+'" bei '+nt[0]+' Verkäufen':'')}
  $('#pn').textContent=g>=1?'Setzt Geld, Fahrzeuge und Werkstatt zurück. Lizenzen und Vorarbeiter bleiben.':licN()>=LCm().length?'Du besitzt alle '+LCm().length+' Lizenzen.':'Verdiene '+F(LCm()[licN()])+' in einem Durchgang für Lizenz '+(licN()+1)+'. Preise: '+LCm().map(F).join(' · ')+'.';
  UP.forEach(u=>{const l=S.up[u.k]||0,mx=l>=u.max,c=u.c(l);$('#ul-'+u.k).textContent=l;$('#ud-'+u.k).textContent=u.d(l)+(u.k==='auto'?' · Stufe '+l+'/'+u.max:' · Stufe '+l+'/'+u.max);$('#up-'+u.k).textContent=mx?'Max':F(c);const b=document.querySelector('[data-up="'+u.k+'"]');b.disabled=mx||S.m<c;b.textContent=mx?'Max':'Verbessern'})}
 function buyUp(k){const u=UP.find(x=>x.k===k),l=S.up[k]||0;if(!u||l>=u.max)return;const c=u.c(l);if(S.m<c)return;S.m-=c;S.up[k]=l+1;toast(u.n+' verbessert');renderOffers();renderTop();updateFirm();save()}
 function startLoaderMode(){S.cds={};S.tot=0;S.broken=false;S.cond=100;S.fix=0;S.job=null;S.offers=[];S.top=0;S.tier=0;setMode(1);refill();if(T3)setExc();const b=$('#rlbox');if(b)delete b.dataset.k;renderShop();renderOffers();renderTop();renderProg();renderBrk();updateFirm();toast('Radlader-Durchgang gestartet: Hoflader');save()}
 function doPrest(b){const g=gain();if(g<1)return;
  if(!b.dataset.arm){b.dataset.arm='1';b.textContent='Nochmal tippen zum Verkaufen';setTimeout(()=>{delete b.dataset.arm},3000);return}
- delete b.dataset.arm;const wasL=S.lm,keep={emp:S.emp,next:S.next,nid:S.nid,boostUntil:S.boostUntil,lic:S.lic+(S.lm?0:g),llic:S.llic+(S.lm?g:0),rl:S.rl,cos:S.cos,auto:S.up.auto,life:S.life,unl:S.unl,st:S.st};
- S=Object.assign(newState(),{emp:keep.emp,next:keep.next,nid:keep.nid,boostUntil:keep.boostUntil,lic:keep.lic,llic:keep.llic,rl:keep.rl,cos:keep.cos,life:keep.life,unl:keep.unl,st:keep.st});S.up.auto=keep.auto;S.st.sold++;setMode(0);S.rk=rankIx();
+ delete b.dataset.arm;const wasL=S.lm,keep={emp:S.emp,next:S.next,nid:S.nid,boostUntil:S.boostUntil,lic:S.lic+(S.lm?0:g),llic:S.llic+(S.lm?g:0),rl:S.rl,cos:S.cos,dr:S.dr,ach:S.ach,vc:S.vc,mx:S.mx,wk:S.wk,auto:S.up.auto,life:S.life,unl:S.unl,st:S.st};
+ S=Object.assign(newState(),{emp:keep.emp,next:keep.next,nid:keep.nid,boostUntil:keep.boostUntil,lic:keep.lic,llic:keep.llic,rl:keep.rl,cos:keep.cos,dr:keep.dr,ach:keep.ach,vc:keep.vc,mx:keep.mx,wk:keep.wk,life:keep.life,unl:keep.unl,st:keep.st});S.up.auto=keep.auto;S.st.sold++;setMode(0);S.rk=rankIx();
  refill();newIds.clear();if(T3)setExc();renderOffers();renderShop();renderTop();renderProg();renderFirm();toast('Neue Firma gegründet: '+(wasL?S.llic+' Radlader-':S.lic+' Bau')+'Lizenzen');save()}
 const PK=[{id:'p1',n:'Starterpaket',eur:'0,99',h:.25},{id:'p2',n:'Bauleiter',eur:'4,99',h:1},{id:'p3',n:'Unternehmer',eur:'9,99',h:3},{id:'p4',n:'Magnat',eur:'19,99',h:8},{id:'p5',n:'Tycoon',eur:'49,99',h:24}];
 const rate=()=>{const c=S.offers.filter(o=>o.t<=S.tier);return(c.length?Math.max(...c.map(o=>o.e/o.w)):3)*pw()*payM()*PY};
@@ -1976,7 +1982,9 @@ function renderProf(){
  <h2 class="sec">Arbeit</h2><div class="card2">${row('Aufträge absolviert',num(q.jobs))}${row('davon exklusiv',num(q.ex))}${row('Bestes Honorar',F(q.best))}${row('Bewegte Masse',num(q.work)+' Einheiten')}${row('Spielzeit',fmtT(q.time))}</div>
  <h2 class="sec">Finanzen</h2><div class="card2">${row('Gesamtverdienst',F(S.life))}${row('davon Gehalt',F(q.passive))}${row('Arbeitgeber',S.emp==='wtd'?'WTD 91':'selbstständig')}${row('Defekte',num(q.breaks))}${row('Reparaturen',num(q.repairs)+' · '+F(q.repCost))}</div>
  <h2 class="sec">Fuhrpark</h2><div class="card2">${row(S.lm?'Aktueller Radlader':'Aktueller Bagger',V[S.tier].n+' ('+V[S.tier].tn+')')}${row('Fuhrpark',(S.top+1)+' von '+V.length)}${row('Baulizenzen',num(S.lic))}${row('Firmen verkauft',num(q.sold))}</div>
- <h2 class="sec">Casino</h2><div class="card2">${row('Drehs',num(q.spins))}${row('Einsätze gesamt',F(q.cstake))}${row('Auszahlungen gesamt',F(q.cwin))}${row('Bilanz',(bil>=0?'+':'−')+F(Math.abs(bil)),bil>=0?'win':'lose')}${row('Größte Auszahlung',F(q.big))}</div>`}
+ <h2 class="sec">Casino</h2><div class="card2">${row('Drehs',num(q.spins))}${row('Einsätze gesamt',F(q.cstake))}${row('Auszahlungen gesamt',F(q.cwin))}${row('Bilanz',(bil>=0?'+':'−')+F(Math.abs(bil)),bil>=0?'win':'lose')}${row('Größte Auszahlung',F(q.big))}</div>
+ <h2 class="sec">Titel</h2><div class="card2">${row('Titel',titleOf(q.sold)||'noch keiner')}${row('Firmen verkauft',num(q.sold))}${row('Firmenerbe',`+${Math.min(25,q.sold||0)*2} % Lohn`)}${row('Tages-Serie',((S.dr&&S.dr.s)||0)+' Tage')}</div>
+ <h2 class="sec">Erfolge</h2>${achHtml(S.ach)}`}
 /* ---------- Cloud-Speicher (Supabase, ohne SDK) ---------- */
 const SBK='baggerSB',SBS='baggerSBsess',SBN='baggerName';
 const SB={url:'https://oswqjkufwmbgzdaytvhx.supabase.co',key:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9zd3Fqa3Vmd21iZ3pkYXl0dmh4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIwNDMzNjIsImV4cCI6MjEwNzYxOTM2Mn0.OXdR9H6VKEKkfhFuLE-jSg1rx_QE4Vk50VCsTuou8-Y'};
@@ -2005,7 +2013,7 @@ async function sbPush(manual){if(!sbOn()||!sbSess||sbBusy||sbConflict)return;sbB
  try{await sbReq('/rest/v1/saves?on_conflict=user_id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(sbRow())});sbLast=Date.now();sbSig=sbSigNow();sbMsg=manual?'Gespeichert.':sbMsg}
  catch(e){sbMsg='Speichern fehlgeschlagen: '+e.message}
  sbBusy=false;if(!$('#prof').hidden){renderCloud();if(manual&&!$('#board').hidden)lbLoad(true)}}
-const sbSigNow=()=>[sbName0(),S.ban?1:0,S.life,S.m,S.lic,S.llic,S.lm,S.tier,S.top,S.st&&S.st.jobs,Math.round(S.cond)].join('|');
+const sbSigNow=()=>[sbName0(),S.ban?1:0,S.life,S.m,S.lic,S.llic,S.lm,S.tier,S.top,S.st&&S.st.jobs,S.st&&S.st.sold,Object.keys(S.ach||{}).length,(S.dr&&S.dr.s)||0,Math.round(S.cond)].join('|');
 async function sbPull(manual){if(!sbOn()||!sbSess)return;sbBusy=true;sbMsg='Prüfe Cloud-Stand …';renderCloud();
  try{const r=await sbReq('/rest/v1/saves?user_id=eq.'+sbSess.uid+'&select=data,name,life,rank,updated_at');
   sbBusy=false;
@@ -2036,23 +2044,24 @@ if(sbOn()&&sbSess)setTimeout(()=>{sbSig=sbSigNow()},500);
 let lbRows=null,lbT=0,lbErr='',lbBusy=false,pres={};
 async function lbLoad(force){if(!sbOn()||!sbSess){lbRows=null;renderBoard();return}
  if(lbBusy||(!force&&Date.now()-lbT<20000))return;lbBusy=true;
- try{const r=await sbReq('/rest/v1/saves?select=user_id,name,rank,geld:data->>m,lz:data->>lic,rz:data->>llic&limit=500');lbRows=(r||[]).map(x=>({id:x.user_id,name:x.name||'Spieler',rank:+x.rank||0,m:Math.max(0,parseFloat(x.geld)||0),b:Math.max(0,parseInt(x.lz)||0),w:Math.max(0,parseInt(x.rz)||0),l:Math.max(0,parseInt(x.lz)||0)+Math.max(0,parseInt(x.rz)||0)}));lbErr=''}catch(e){lbErr=e.message}
+ try{const r=await sbReq('/rest/v1/saves?select=user_id,name,rank,geld:data->>m,lz:data->>lic,rz:data->>llic,so:data->st->>sold&limit=500');lbRows=(r||[]).map(x=>({id:x.user_id,name:x.name||'Spieler',rank:+x.rank||0,m:Math.max(0,parseFloat(x.geld)||0),t:Math.max(0,parseInt(x.so)||0),b:Math.max(0,parseInt(x.lz)||0),w:Math.max(0,parseInt(x.rz)||0),l:Math.max(0,parseInt(x.lz)||0)+Math.max(0,parseInt(x.rz)||0)}));lbErr=''}catch(e){lbErr=e.message}
  try{const pr=await sbReq('/rest/v1/presence?select=user_id,last_seen,last_login&limit=500');const m={};(pr||[]).forEach(x=>m[x.user_id]=x);pres=m}catch(e){}
  lbT=Date.now();lbBusy=false;if(!lbView)renderBoard()}
 function renderBoard(){const e=$('#board');if(!e)return;if(document.activeElement&&(document.activeElement.id==='lbnm'||document.activeElement.id==='msgtxt'))return;
  const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
  let h='<h2 class="sec">Bestenliste</h2>'+bsTabs();
  if(!sbOn()||!sbSess){e.innerHTML=h+'<div class="card2" style="padding:16px;display:grid;gap:10px"><div>Melde dich im Profil an, um die Bestenliste aller Spieler zu sehen.</div><button class="act" id="lbprof" type="button">Zum Profil</button></div>';return}
- if(lbSub!=='rank'){chatView(esc);return}
+ if(lbSub==='week'&&!lbView){weekView(esc,h);return}
+ if(lbSub!=='rank'&&lbSub!=='week'){chatView(esc);return}
  e.dataset.k='rank';
  if(!lbRows){e.innerHTML=h+'<div class="card2" style="padding:16px"><div class="meta">'+(lbErr?esc(lbErr):'Lade Bestenliste …')+'</div></div>';return}
  const me0=sbSess.uid;if(lbView){e.innerHTML=h+pfHtml(esc,me0);return}
- const me=sbSess.uid,rows=lbRows.map(r=>r.id===me?{id:r.id,name:sbName0(),rank:rankIx(),m:S.m,b:S.lic||0,w:S.llic||0,l:(S.lic||0)+(S.llic||0)}:r).sort((a,b)=>(b.l-a.l)||(b.m-a.m)),pos=rows.findIndex(r=>r.id===me)+1;
+ const me=sbSess.uid,rows=lbRows.map(r=>r.id===me?{id:r.id,name:sbName0(),rank:rankIx(),m:S.m,t:(S.st&&S.st.sold)||0,b:S.lic||0,w:S.llic||0,l:(S.lic||0)+(S.llic||0)}:r).sort((a,b)=>(b.l-a.l)||(b.m-a.m)),pos=rows.findIndex(r=>r.id===me)+1;
  const med=['#d4a017','#9aa3ab','#b0703a'];
  e.innerHTML=h+(nameSet()?'':'<div class="card2" style="padding:12px 14px;display:grid;gap:8px"><div class="meta">Lege deinen Spielernamen fest. Er erscheint hier und kann nur einmal gesetzt werden.</div><div style="display:flex;gap:8px"><input id="lbnm" type="text" maxlength="20" autocomplete="nickname" placeholder="Dein Name" style="flex:1;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><button class="act" id="lbname" type="button">Speichern</button></div></div>')+'<div class="card2" style="padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:10px"><div class="meta">'+(pos?'Deine Platzierung: <b>'+pos+'</b> von '+rows.length:rows.length+' Spieler')+'</div><button class="act ghost sm" id="lbref" type="button" '+(lbBusy?'disabled':'')+'>Aktualisieren</button></div>'
   +'<div class="card2" style="padding:6px 0">'+(rows.length?rows.slice(0,100).map((r,i)=>{const top=i<3,cr=top?'<svg viewBox="0 0 24 20" width="30" height="25" aria-label="Platz '+(i+1)+'"><path d="M2 17L.5 5l6 5L12 2l5.5 8 6-5L22 17z" fill="'+med[i]+'" stroke="rgba(0,0,0,.35)" stroke-width=".8" stroke-linejoin="round"/><rect x="2" y="17" width="20" height="2.6" rx="1" fill="'+med[i]+'" stroke="rgba(0,0,0,.35)" stroke-width=".8"/><circle cx="12" cy="2.5" r="1.6" fill="#fff" opacity=".7"/></svg>':'';
    const bg=r.id===me?'background:color-mix(in srgb,var(--acc) 22%,transparent);':(top?'background:linear-gradient(90deg,color-mix(in srgb,'+med[i]+' 22%,transparent),transparent 85%);':'');
-   return '<div data-pf="'+r.id+'" style="cursor:pointer;display:flex;align-items:center;gap:10px;padding:'+(top?'12px':'10px')+' 14px;'+bg+(i?'border-top:1px solid var(--line)':'')+'"><div style="width:34px;text-align:center;display:flex;flex-direction:column;align-items:center;line-height:1">'+(top?cr+'<b style="font:700 12px var(--f1);color:'+med[i]+';margin-top:2px">'+(i+1)+'</b>':'<b style="font:700 18px var(--f1);color:var(--mut)">'+(i+1)+'</b>')+'</div><div style="flex:1;min-width:0"><div style="font-weight:'+(top?700:600)+';overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+dotH(r.id)+esc(r.name)+(r.id===me?' <span class="meta">(du)</span>':'')+'</div><div class="meta">'+esc((RANKS[r.rank]||RANKS[0]).n)+' · 🏅 '+r.l+(r.l===1?' Lizenz':' Lizenzen')+'</div><div class="meta">Bagger-Lizenzen: <b>'+(r.b||0)+'</b> · Radlader-Lizenzen: <b>'+(r.w||0)+'</b></div></div><b style="font:700 17px var(--f1);font-variant-numeric:tabular-nums">'+F(r.m)+'</b><span class="meta">›</span></div>'}).join(''):'<div class="meta" style="padding:14px">Noch keine Einträge.</div>')+'</div>'
+   return '<div data-pf="'+r.id+'" style="cursor:pointer;display:flex;align-items:center;gap:10px;padding:'+(top?'12px':'10px')+' 14px;'+bg+(i?'border-top:1px solid var(--line)':'')+'"><div style="width:34px;text-align:center;display:flex;flex-direction:column;align-items:center;line-height:1">'+(top?cr+'<b style="font:700 12px var(--f1);color:'+med[i]+';margin-top:2px">'+(i+1)+'</b>':'<b style="font:700 18px var(--f1);color:var(--mut)">'+(i+1)+'</b>')+'</div><div style="flex:1;min-width:0"><div style="font-weight:'+(top?700:600)+';overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+dotH(r.id)+esc(r.name)+(r.id===me?' <span class="meta">(du)</span>':'')+'</div><div class="meta">'+esc((RANKS[r.rank]||RANKS[0]).n)+(r.t?' · '+titleOf(r.t):'')+' · 🏅 '+r.l+(r.l===1?' Lizenz':' Lizenzen')+'</div><div class="meta">Bagger-Lizenzen: <b>'+(r.b||0)+'</b> · Radlader-Lizenzen: <b>'+(r.w||0)+'</b></div></div><b style="font:700 17px var(--f1);font-variant-numeric:tabular-nums">'+F(r.m)+'</b><span class="meta">›</span></div>'}).join(''):'<div class="meta" style="padding:14px">Noch keine Einträge.</div>')+'</div>'
   +'<div class="meta" style="padding:0 4px">Sortiert nach allen Lizenzen (Bagger + Radlader), bei gleich vielen nach Geld. Aktualisierung alle 30 Sekunden.</div>'}
 setInterval(()=>{if(!$('#board').hidden&&sbSess)lbLoad(true)},30000);
 /* ---------- Online-Status ---------- */
@@ -2065,7 +2074,7 @@ setInterval(()=>heartbeat(false),30000);setTimeout(()=>heartbeat(true),3500);
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')heartbeat(false)});
 /* ---------- Chat ---------- */
 let lbSub='rank',privWith=null,gcMsgs=[],pvMsgs=[],chErr='',chLast=0;
-const bsTabs=()=>sbSess?'<div class="cas-tabs"><button type="button" data-bs="rank" class="'+(lbSub==='rank'?'on':'')+'">🏆 Rangliste</button><button type="button" data-bs="global" class="'+(lbSub==='global'?'on':'')+'">🌍 Global</button><button type="button" data-bs="priv" class="'+(lbSub==='priv'?'on':'')+'">✉️ Privat</button></div>':'';
+const bsTabs=()=>sbSess?'<div class="cas-tabs w4"><button type="button" data-bs="rank" class="'+(lbSub==='rank'?'on':'')+'">🏆 Rangliste</button><button type="button" data-bs="week" class="'+(lbSub==='week'?'on':'')+'">📅 Woche</button><button type="button" data-bs="global" class="'+(lbSub==='global'?'on':'')+'">🌍 Global</button><button type="button" data-bs="priv" class="'+(lbSub==='priv'?'on':'')+'">✉️ Privat</button></div>':'';
 function chatView(esc){const e=$('#board'),key=lbSub+'|'+(privWith||'');
  if(e.dataset.k!==key||!$('#chlist')){e.dataset.k=key;
   const form='<div class="chform"><input id="chin" type="text" maxlength="200" autocomplete="off" placeholder="'+(lbSub==='global'?'Nachricht an alle …':'Nachricht …')+'"><button class="act sm" id="chsend" type="button">Senden</button></div>';
@@ -2117,7 +2126,7 @@ function pfHtml(esc,me){
  +'<div class="pfname">'+(trl?'<span class="pfrole r-'+pfRole[lbView]+'">'+trl[0]+' '+trl[1]+'</span>':'')+esc(nm)+(own?' <small>(du)</small>':'')+'</div>'
  +'<div class="pfsub"><span class="pfrank" style="background:'+col+'">'+esc((RANKS[rk]||RANKS[0]).n)+'</span>'+stat+'</div>'
  +(ban?'<div class="pfban">🚫 Hausverbot im Casino</div>':'')+(bad.length?'<div class="pfbad">'+bad.map(x=>'<span'+(x[2]?' class="'+x[2]+'"':'')+'>'+x[0]+' '+esc(x[1])+'</span>').join('')+'</div>':'')
- +(ready?'<div class="pfgrid">'+tile('💶','Geld',F(+d.m||0))+tile('🏅','Bagger-Lizenzen',lic)+tile('🏗','Radlader-Lizenzen',llic)+tile('📋','Aufträge',jobs)+tile('📈','Gesamtverdienst',F(+d.life||(pfData&&+pfData.life)||0))+'</div>'
+ +(ready?'<div class="pfgrid">'+tile('💶','Geld',F(+d.m||0))+tile('🏅','Bagger-Lizenzen',lic)+tile('🏗','Radlader-Lizenzen',llic)+tile('🏆','Erfolge',Object.keys(d.ach||{}).length+' / '+ACH.length)+tile('🏢','Titel',titleOf(+st.sold||0)||'–')+tile('🔥','Tages-Serie',(d.dr&&d.dr.s)||0)+tile('📋','Aufträge',jobs)+tile('📈','Gesamtverdienst',F(+d.life||(pfData&&+pfData.life)||0))+'</div>'+(Object.keys(d.ach||{}).length?'<div class="meta" style="padding:8px 14px 0;font-size:20px;letter-spacing:2px">'+ACH.filter(a=>d.ach[a.id]).map(a=>'<span title="'+a.n+'">'+a.ic+'</span>').join('')+'</div>':'')
   +'<div class="pfbag">'+img+'<div><small>Bestes Fahrzeug</small><b>'+esc(veh.n)+'</b><span class="meta">'+esc(veh.tn)+'</span></div></div>':'<div class="meta" style="padding:16px">Lade Profil …</div>')
  +'<div class="pfmeta"><span>Letzter Login</span><b>'+(pp.last_login?fdate(pp.last_login)+' · '+agoT(pp.last_login):'unbekannt')+'</b></div></div>'
  +(own?'':'<div class="card2" style="padding:14px;display:grid;gap:8px;margin-top:10px"><b>Nachricht an '+esc(nm)+'</b><textarea id="msgtxt" maxlength="200" rows="2" placeholder="Schreib etwas …" style="width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit;resize:none"></textarea><button class="act" id="msgsend" type="button">Senden</button>'+(pfMsg?'<div class="meta">'+esc(pfMsg)+'</div>':'')+'</div>')}
@@ -2185,6 +2194,7 @@ document.addEventListener('click',e=>{
  if(t.id==='sbdown'){sbPull(true);return}
  if(t.id==='sbkeepl'){sbConflict=null;sbPush(true);return}
  if(t.id==='sbtakec'){sbApply();return}
+if(t.id==='wkref'){wkLoad();return}
  if(t.id==='lbref'){lbLoad(true);return}
  if(t.id==='lbprof'){$('#rk').click();return}
  if(t.id==='admclose'){admOpen=false;renderAdm();return}
@@ -2455,21 +2465,110 @@ function renderGarage(){
  const img=T3?cosShot(ty):'';
  let pvTot=0;COSK.forEach(c=>{const i=cosPrev[c];if(i!=null&&!cosOwn(ty,c,i))pvTot+=COSC[c].it[i][1]});
  let h=tabs+`<div class="stabs" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px"><button class="act sm ${ty==='b'?'':'ghost'}" type="button" data-cty="b">Bagger</button><button class="act sm ${ty==='l'?'':'ghost'}" type="button" data-cty="l">Radlader ${S.rl?'':'🔒'}</button></div>`
-  +`<div class="gprev">${img?`<img src="${img}" alt="Vorschau">`:'<div class="meta" style="padding:30px">Keine Vorschau verfügbar</div>'}<div class="meta" style="color:#cfd3d8;padding:6px 4px 2px">${vn}${Object.keys(cosPrev).length?' · Vorschau':''}${pvTot?' · Vorschau-Teile zusammen '+F(pvTot):''}</div>${Object.keys(cosPrev).length?'<button class="act ghost sm" type="button" data-cpx="1" style="margin:6px 0 2px">Vorschau zurücksetzen</button>':''}</div><div class="meta" style="margin:0 2px 8px">Tippe auf ein Teil für die Vorschau. Kosmetik gilt für alle ${ty==='l'?'Radlader':'Bagger'}, bleibt über Firmenverkäufe erhalten und ist nur Optik.</div>`;
+  +`<div class="gprev">${img?`<img src="${img}" alt="Vorschau">`:'<div class="meta" style="padding:30px">Keine Vorschau verfügbar</div>'}<div class="meta" style="color:#cfd3d8;padding:6px 4px 2px">${vn}${Object.keys(cosPrev).length?' · Vorschau':''}${pvTot?' · Vorschau-Teile zusammen '+F(pvTot):''}</div>${Object.keys(cosPrev).length?'<button class="act ghost sm" type="button" data-cpx="1" style="margin:6px 0 2px">Vorschau zurücksetzen</button>':''}</div><div class="meta" style="margin:0 2px 8px">${S.vc?'<b>Gutschein-Guthaben: '+F(S.vc)+'</b> (wird beim Kauf automatisch angerechnet) · ':''}Tippe auf ein Teil für die Vorschau. Kosmetik gilt für alle ${ty==='l'?'Radlader':'Bagger'}, bleibt über Firmenverkäufe erhalten und ist nur Optik.</div>`;
  COSK.forEach(c=>{const eq=cosEq(ty,c);h+=`<h2 class="sec">${COSC[c].n}</h2><div class="cgrid">`+COSC[c].it.map((it,i)=>[it,i]).sort((p,q)=>(p[0][1]-q[0][1])||(p[1]-q[1])).map(([it,i])=>{const o=cosOwn(ty,c,i),isEq=eq===i&&!cosPrev[c]&&true,real=(own.eq[ty]||{})[c]||0;const eqd=real===i,pv=cosPrev[c]===i;
   const sw=it[3]||(typeof it[2]==='number'?H6(it[2]):Array.isArray(it[2])?H6(it[2][0]):'#888');
-  return `<div class="cc ${eqd?'eq':''} ${pv?'pv':''}" data-cv="${c}|${i}"><i class="sw" style="background:${sw}"></i><b>${it[0]}</b><span class="meta">${o?(eqd?'Angelegt':'Im Besitz'):F(it[1])}</span>${eqd?'<span class="tag">Angelegt</span>':o?`<button class="act sm ghost" type="button" data-ce="${c}|${i}">Anlegen</button>`:`<button class="act sm" type="button" data-cb="${c}|${i}" ${S.m<it[1]?'disabled':''}>Kaufen</button>`}</div>`}).join('')+'</div>'});
+  return `<div class="cc ${eqd?'eq':''} ${pv?'pv':''}" data-cv="${c}|${i}"><i class="sw" style="background:${sw}"></i><b>${it[0]}</b><span class="meta">${o?(eqd?'Angelegt':'Im Besitz'):F(it[1])}</span>${eqd?'<span class="tag">Angelegt</span>':o?`<button class="act sm ghost" type="button" data-ce="${c}|${i}">Anlegen</button>`:`<button class="act sm" type="button" data-cb="${c}|${i}" ${S.m<Math.max(0,it[1]-(S.vc||0))?'disabled':''}>Kaufen</button>`}</div>`}).join('')+'</div>'});
  $('#pay').innerHTML=h}
 function cosAct(t){const sp=s=>{const a=s.split('|');return[a[0],+a[1]]};
  if(t.dataset.ptab!=null){payTab=+t.dataset.ptab;cosPrev={};renderPay();return true}
  if(t.dataset.cty){if(t.dataset.cty==='l'&&!S.rl){toast('Radlader-Erweiterung nötig');return true}cosTy=t.dataset.cty;cosPrev={};renderGarage();return true}
  if(t.dataset.cpx){cosPrev={};renderGarage();return true}
- if(t.dataset.cb){const[c,i]=sp(t.dataset.cb),it=COSC[c].it[i],ty=cosTy;if(cosOwn(ty,c,i)||S.m<it[1])return true;S.m-=it[1];const o=cosS();o.own[ty+'.'+c+'.'+i]=1;(o.eq[ty]||(o.eq[ty]={}))[c]=i;delete cosPrev[c];S.st.cosm=(S.st.cosm||0)+it[1];toast(COSC[c].n+': '+it[0]+' gekauft');if(T3)setExc();renderTop();save();renderGarage();return true}
+ if(t.dataset.cb){const[c,i]=sp(t.dataset.cb),it=COSC[c].it[i],ty=cosTy;if(cosOwn(ty,c,i))return true;const pay=Math.max(0,it[1]-(S.vc||0));if(S.m<pay)return true;S.m-=pay;S.vc=Math.max(0,(S.vc||0)-it[1]);const o=cosS();o.own[ty+'.'+c+'.'+i]=1;(o.eq[ty]||(o.eq[ty]={}))[c]=i;delete cosPrev[c];S.st.cosm=(S.st.cosm||0)+it[1];toast(COSC[c].n+': '+it[0]+' gekauft');if(T3)setExc();renderTop();save();renderGarage();return true}
  if(t.dataset.ce){const[c,i]=sp(t.dataset.ce),ty=cosTy;if(!cosOwn(ty,c,i))return true;const o=cosS();(o.eq[ty]||(o.eq[ty]={}))[c]=i;delete cosPrev[c];if(T3)setExc();save();renderGarage();return true}
  if(t.dataset.cv){const[c,i]=sp(t.dataset.cv);if(cosPrev[c]===i)delete cosPrev[c];else cosPrev[c]=i;renderGarage();return true}
  return false}
 document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('#pay [data-ptab],#pay [data-cty],#pay [data-cpx],#pay [data-cb],#pay [data-ce],#pay [data-cv]');if(!t||t.closest('#pay')==null)return;
  const b=e.target.closest('#pay [data-ptab],#pay [data-cty],#pay [data-cpx],#pay [data-cb],#pay [data-ce]');cosAct(b||t)});
+/* ---------- Fortschritt: Erfolge, Titel, Tagesbelohnung, Wochenwertung ---------- */
+const TITLES=[[1,'Firmengründer'],[3,'Unternehmer'],[5,'Serienunternehmer'],[10,'Konzernchef'],[25,'Magnat'],[50,'Legende']];
+const titleOf=n=>{let t='';TITLES.forEach(x=>{if(n>=x[0])t=x[1]});return t};
+const cosOwnN=()=>Object.keys((S.cos&&S.cos.own)||{}).length;
+const ACH=[
+ {id:'j10',ic:'🔨',n:'Frisch auf der Baustelle',d:'10 Aufträge erledigen',v:()=>S.st.jobs,g:10},
+ {id:'j100',ic:'🧱',n:'Stammkraft',d:'100 Aufträge erledigen',v:()=>S.st.jobs,g:100},
+ {id:'j500',ic:'🏗',n:'Bauprofi',d:'500 Aufträge erledigen',v:()=>S.st.jobs,g:500},
+ {id:'j2500',ic:'🏆',n:'Baustellenlegende',d:'2.500 Aufträge erledigen',v:()=>S.st.jobs,g:2500},
+ {id:'s25',ic:'🛡',n:'Sauber gearbeitet',d:'25 Aufträge ohne Defekt in Folge',v:()=>S.st.streak||0,g:25},
+ {id:'s100',ic:'💎',n:'Makellos',d:'100 Aufträge ohne Defekt in Folge',v:()=>S.st.streak||0,g:100},
+ {id:'ex25',ic:'⭐',n:'Auserwählt',d:'25 Exklusiv-Aufträge erledigen',v:()=>S.st.ex,g:25},
+ {id:'wk',ic:'🌍',n:'Erdbewegung',d:'10.000.000 Einheiten bewegen',v:()=>S.st.work,g:1e7},
+ {id:'rl1',ic:'🚜',n:'Radlader-Pionier',d:'Den ersten Radlader besitzen',v:()=>(S.mx&&S.mx.l)||0,g:1},
+ {id:'allb',ic:'🦾',n:'Alle Bagger besessen',d:'Jeden Bagger im Fuhrpark besessen haben',v:()=>(S.mx&&S.mx.b)||0,g:VB.length},
+ {id:'alll',ic:'🏁',n:'Alle 10 Radlader besessen',d:'Jeden Radlader im Fuhrpark besessen haben',v:()=>(S.mx&&S.mx.l)||0,g:VL.length},
+ {id:'lic5',ic:'📜',n:'Bauherr',d:'Alle 5 Baulizenzen erwerben',v:()=>S.lic,g:5},
+ {id:'llicA',ic:'📘',n:'Radlader-Meister',d:'Alle Radlader-Lizenzen erwerben',v:()=>S.llic,g:LLC.length},
+ {id:'lic10',ic:'🏅',n:'Lizenzsammler',d:'10 Lizenzen insgesamt besitzen',v:()=>S.lic+S.llic,g:10},
+ {id:'so1',ic:'🏢',n:'Firmengründer',d:'Die erste Firma verkaufen',v:()=>S.st.sold,g:1},
+ {id:'so5',ic:'🏙',n:'Serienunternehmer',d:'5 Firmen verkaufen',v:()=>S.st.sold,g:5},
+ {id:'so10',ic:'🌆',n:'Konzernchef',d:'10 Firmen verkaufen',v:()=>S.st.sold,g:10},
+ {id:'so25',ic:'👑',n:'Magnat',d:'25 Firmen verkaufen',v:()=>S.st.sold,g:25},
+ {id:'m1',ic:'💶',n:'Erste Million',d:'1.000.000 € Gesamtverdienst',v:()=>S.life,g:1e6},
+ {id:'m2',ic:'💰',n:'Milliardär',d:'1.000.000.000 € Gesamtverdienst',v:()=>S.life,g:1e9},
+ {id:'m3',ic:'🏦',n:'Billionär',d:'1.000.000.000.000 € Gesamtverdienst',v:()=>S.life,g:1e12},
+ {id:'c100',ic:'🎰',n:'Stammgast',d:'100 Casino-Spiele',v:()=>S.st.spins,g:100},
+ {id:'c1000',ic:'🎲',n:'Hochspieler',d:'1.000 Casino-Spiele',v:()=>S.st.spins,g:1000},
+ {id:'cj',ic:'🎉',n:'Jackpot',d:'Eine Auszahlung von 10.000.000 €',v:()=>S.st.big,g:1e7},
+ {id:'g5',ic:'🎨',n:'Hobby-Lackierer',d:'5 Garage-Teile kaufen',v:()=>cosOwnN(),g:5},
+ {id:'g20',ic:'✨',n:'Showroom',d:'20 Garage-Teile kaufen',v:()=>cosOwnN(),g:20},
+ {id:'gp',ic:'🪩',n:'Perlmutt-Fan',d:'Einen Perleffekt-Lack kaufen',v:()=>Object.keys((S.cos&&S.cos.own)||{}).some(k=>/\.pearl\./.test(k))?1:0,g:1},
+ {id:'t10',ic:'⏱',n:'Dauerbrenner',d:'10 Stunden Spielzeit',v:()=>S.st.time,g:36000},
+ {id:'d7',ic:'🔥',n:'Eine Woche dabei',d:'7 Tage Tagesbelohnung in Folge',v:()=>(S.dr&&S.dr.s)||0,g:7},
+ {id:'d30',ic:'🌟',n:'Monatsserie',d:'30 Tage Tagesbelohnung in Folge',v:()=>(S.dr&&S.dr.s)||0,g:30},
+ {id:'fm',ic:'👷',n:'Vorarbeiter-Chef',d:'Vorarbeiter auf Stufe 3',v:()=>S.up.auto,g:3}];
+let achPrev={j:(S.st&&S.st.jobs)||0,b:(S.st&&S.st.breaks)||0};
+function achTick(){const st=S.st;if(!st)return;
+ if(st.breaks>achPrev.b)st.streak=0;else if(st.jobs>achPrev.j)st.streak=(st.streak||0)+st.jobs-achPrev.j;
+ achPrev={j:st.jobs,b:st.breaks};
+ S.mx=S.mx||{b:0,l:0};const ty=S.lm?'l':'b';S.mx[ty]=Math.max(S.mx[ty]||0,(S.top||0)+1);
+ const first=!S.ach;S.ach=S.ach||{};let n=0;
+ ACH.forEach(a=>{if(S.ach[a.id])return;let ok=false;try{ok=a.v()>=a.g}catch(e){}if(ok){S.ach[a.id]=Date.now();n++;if(!first)toast('🏆 Erfolg: '+a.n)}});
+ if(n){save()}}
+setInterval(achTick,2000);
+function achHtml(ach){const n=Object.keys(ach||{}).length;
+ return '<div class="meta" style="margin:0 2px 8px">'+n+' von '+ACH.length+' Erfolgen freigeschaltet</div><div class="achg">'+ACH.map(a=>{const on=!!(ach&&ach[a.id]);let v=0;try{v=a.v()}catch(e){}const p=on?100:Math.min(100,Math.round(v/a.g*100));
+  return '<div class="ach '+(on?'on':'off')+'"><span class="aci">'+a.ic+'</span><b>'+a.n+'</b><span class="meta">'+a.d+'</span><div class="bar"><i style="width:'+p+'%"></i></div></div>'}).join('')+'</div>'}
+/* Tagesbelohnung */
+const dayN=()=>{const d=new Date();return Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/864e5)};
+const DAYR=[{h:.08},{h:.12},{h:.2,b:10},{h:.33},{h:.5,b:20},{h:.9},{h:2,v:25e6}];
+function dailyNext(){const dr=S.dr||{l:0,s:0},t=dayN();if(t<=dr.l)return null;let s=dr.l?Math.max(0,dr.s-3*Math.max(0,t-dr.l-1)):0;return s+1}
+function dailyRew(s){const cp=(s-1)%7,wm=Math.min(3,1+.25*Math.floor((s-1)/7)),r=DAYR[cp];return{cp,money:packAmt({h:r.h*wm}),boost:r.b||0,v:r.v?Math.round(r.v*wm):0}}
+const dailyTxt=r=>F(r.money)+(r.boost?' + '+r.boost+' Min. 2× Lohn':'')+(r.v?' + Garage-Gutschein '+F(r.v):'');
+function renderDaily(){const e=$('#dailyc');if(!e)return;const nx=dailyNext(),dr=S.dr||{l:0,s:0},s=nx||dr.s,r=nx?dailyRew(nx):null,cp=s?((s-1)%7):0;
+ const pips=[0,1,2,3,4,5,6].map(i=>`<i class="dpip ${(nx?i<cp:i<=cp)&&s?'done':''} ${nx&&i===cp?'now':''}">${i+1}</i>`).join('');
+ e.innerHTML=`<div class="emp-row"><div><b class="vn">🎁 Tagesbelohnung</b><span class="meta">${nx?'Heute: '+dailyTxt(r):'Heute abgeholt. Morgen gibt es die nächste Belohnung.'}</span></div><span class="pay">${s} ${s===1?'Tag':'Tage'}</span></div><div class="dpips">${pips}</div>${nx?'<button class="act big" type="button" id="dclaim" style="margin-top:8px">Abholen</button>':''}<div class="meta">Verpasste Tage schwächen die Serie nur ab (−3 Tage je verpasstem Tag), sie setzt sich nicht auf 0 zurück.${S.vc?' Gutschein-Guthaben: '+F(S.vc)+'.':''}</div>`}
+function claimDaily(){const nx=dailyNext();if(!nx)return;const r=dailyRew(nx);S.dr={l:dayN(),s:nx};S.m+=r.money;if(r.boost)S.boostUntil=Math.max(Date.now(),S.boostUntil||0)+r.boost*60000;if(r.v)S.vc=(S.vc||0)+r.v;
+ toast('Tagesbelohnung: '+dailyTxt(r));try{sfx('win')}catch(e){}const o=document.getElementById('dailyov');if(o)o.remove();renderDaily();renderTop();renderOffers();achTick();save()}
+let dailyShown=false;
+function dailyShow(){if(document.getElementById('dailyov'))return;const nx=dailyNext();if(!nx)return;dailyShown=true;const r=dailyRew(nx);const el=document.createElement('div');el.id='dailyov';
+ el.innerHTML=`<div class="offc"><div class="offh">🎁 Tagesbelohnung</div><div class="meta">Tag ${nx} deiner Serie</div><div class="offbig" style="font-size:30px">${F(r.money)}</div><div class="meta">${r.boost?r.boost+' Min. 2× Lohn dazu<br>':''}${r.v?'Garage-Gutschein '+F(r.v)+' dazu<br>':''}</div><button class="act big" id="dclaim2" type="button">Abholen</button><button class="act ghost sm" id="dlater" type="button">Später</button></div>`;
+ document.body.appendChild(el);el.querySelector('#dclaim2').onclick=claimDaily;el.querySelector('#dlater').onclick=()=>el.remove()}
+setInterval(()=>{renderDaily();if(!dailyShown&&dailyNext()&&!document.getElementById('offov')&&!document.getElementById('afkov')&&document.visibilityState==='visible')dailyShow()},15000);
+setTimeout(renderDaily,300);
+document.addEventListener('click',e=>{if(e.target&&e.target.id==='dclaim')claimDaily()});
+/* Wochenwertung */
+const wkFmt=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const wkMon=off=>{const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-((d.getDay()+6)%7)+off);return d};
+const wkKey=()=>wkFmt(wkMon(0)),wkPrevKey=()=>wkFmt(wkMon(-7));
+function wkGain(){const k=wkKey();if(!S.wk||S.wk.w!==k)S.wk={w:k,b:S.life||0};return Math.max(0,(S.life||0)-S.wk.b)}
+let wkRows=null,wkPrevRows=null,wkErr='',wkSent=0,wkLastG=-1,wkBusy=false;
+async function wkSubmit(force){if(!sbOn()||!sbSess||!nameSet())return;const g=Math.round(wkGain());if(!force&&(g===wkLastG||Date.now()-wkSent<60000))return;
+ try{await sbReq('/rest/v1/rpc/weekly_submit',{method:'POST',body:JSON.stringify({w:wkKey(),g:g,n:sbName0().slice(0,20)})});wkSent=Date.now();wkLastG=g}catch(e){}}
+async function wkLoad(){if(!sbOn()||!sbSess||wkBusy)return;wkBusy=true;await wkSubmit(true);
+ try{const a=await sbReq('/rest/v1/weekly?week=eq.'+wkKey()+'&select=user_id,name,gain&order=gain.desc&limit=100');wkRows=a||[];wkErr='';
+  try{const b=await sbReq('/rest/v1/weekly?week=eq.'+wkPrevKey()+'&select=user_id,name,gain&order=gain.desc&limit=3');wkPrevRows=b||[]}catch(e){wkPrevRows=[]}}
+ catch(e){wkErr=/relation|schema|404|does not exist|PGRST/i.test(e.message)?'Die Wochenwertung ist noch nicht eingerichtet (supabase-woche.sql ausführen).':e.message}
+ wkBusy=false;if(lbSub==='week'&&!lbView)renderBoard()}
+setInterval(()=>{wkGain();wkSubmit(false);if(!$('#board').hidden&&lbSub==='week'&&sbSess)wkLoad()},30000);
+function weekView(esc,h){const e=$('#board');e.dataset.k='week';const me=sbSess.uid,med=['#d4a017','#9aa3ab','#b0703a'];
+ const left=Math.max(0,wkMon(7).getTime()-Date.now()),dd=Math.floor(left/864e5),hh=Math.floor(left%864e5/36e5),mm=Math.floor(left%36e5/6e4);
+ let rows=(wkRows||[]).map(r=>r.user_id===me?{user_id:me,name:sbName0(),gain:Math.round(wkGain())}:r);if(wkRows&&!rows.some(r=>r.user_id===me)&&nameSet())rows.push({user_id:me,name:sbName0(),gain:Math.round(wkGain())});
+ rows.sort((a,b)=>b.gain-a.gain);const pos=rows.findIndex(r=>r.user_id===me)+1;
+ const prev=(wkPrevRows||[]).length?'<div class="meta" style="padding:0 4px 8px">Letzte Woche: '+wkPrevRows.map((r,i)=>['🥇','🥈','🥉'][i]+' '+esc(r.name||'Spieler')+' ('+F(+r.gain)+')').join(' · ')+'</div>':'';
+ e.innerHTML=h+'<div class="card2" style="padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:10px"><div class="meta">'+(wkErr?esc(wkErr):(pos?'Deine Platzierung: <b>'+pos+'</b> von '+rows.length:'Diese Woche noch keine Wertung'))+'<br>Endet in '+dd+' Tg. '+hh+' Std. '+mm+' Min.</div><button class="act ghost sm" id="wkref" type="button">Aktualisieren</button></div>'+prev
+  +(wkRows?'<div class="card2" style="padding:6px 0">'+(rows.length?rows.slice(0,100).map((r,i)=>{const top=i<3,bg=r.user_id===me?'background:color-mix(in srgb,var(--acc) 22%,transparent);':(top?'background:linear-gradient(90deg,color-mix(in srgb,'+med[i]+' 22%,transparent),transparent 85%);':'');
+   return '<div data-pf="'+r.user_id+'" style="cursor:pointer;display:flex;align-items:center;gap:10px;padding:10px 14px;'+bg+(i?'border-top:1px solid var(--line)':'')+'"><b style="width:30px;text-align:center;font:700 18px var(--f1);color:'+(top?med[i]:'var(--mut)')+'">'+(i+1)+'</b><div style="flex:1;min-width:0;font-weight:'+(top?700:600)+';overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(r.name||'Spieler')+(r.user_id===me?' <span class="meta">(du)</span>':'')+'</div><b style="font:700 17px var(--f1);font-variant-numeric:tabular-nums">'+F(r.gain)+'</b></div>'}).join(''):'<div class="meta" style="padding:14px">Noch keine Einträge diese Woche.</div>')+'</div>':(wkErr?'':'<div class="card2" style="padding:16px"><div class="meta">Lade Wochenwertung …</div></div>'))
+  +'<div class="meta" style="padding:0 4px">Gewertet wird dein Verdienst aus Aufträgen und Gehalt in dieser Woche. Reset jeden Montag um 0 Uhr, damit auch neue Spieler eine Chance haben.</div>'}
 /* ---------- Blackjack ---------- */
 const BJB=[100,500,1000,2500,5000,10000],RK=['A','2','3','4','5','6','7','8','9','10','J','Q','K'],SU=['♠','♥','♦','♣'];
 let bjBet=100,bjBusy=false;
@@ -2518,8 +2617,8 @@ document.addEventListener('click',e=>{
  const pf=e.target.closest&&e.target.closest('[data-pf]');
  if(pf&&!e.target.closest('button')){if(lbSub!=='rank'){lbSub='rank';$('#board').dataset.k=''}openProfile(pf.dataset.pf);return}
  const cv=e.target.closest&&e.target.closest('[data-cv]');if(cv){privWith=cv.dataset.cv;renderBoard();return}
- const t=e.target.closest&&e.target.closest('[data-bs],#chsend,#cvback,#lbback,#msgsend,[data-reply],[data-mdel],#selfban,[data-g],[data-bjb],#bjdeal,#bjhit,#bjstand,#bjdbl');if(!t)return;
- if(t.dataset.bs){lbSub=t.dataset.bs;privWith=null;lbView=null;chErr='';$('#board').dataset.k='';if(lbSub==='global')gcLoad();if(lbSub==='priv')pvLoad();renderBoard();return}
+ const t=e.target.closest&&e.target.closest('[data-bs],#wkref,#chsend,#cvback,#lbback,#msgsend,[data-reply],[data-mdel],#selfban,[data-g],[data-bjb],#bjdeal,#bjhit,#bjstand,#bjdbl');if(!t)return;
+ if(t.dataset.bs){lbSub=t.dataset.bs;privWith=null;lbView=null;chErr='';$('#board').dataset.k='';if(lbSub==='global')gcLoad();if(lbSub==='priv')pvLoad();if(lbSub==='week')wkLoad();renderBoard();return}
  if(t.id==='chsend'){chSend();return}
  if(t.id==='cvback'){privWith=null;renderBoard();return}
  if(t.id==='lbback'){lbView=null;renderBoard();return}
@@ -2598,7 +2697,7 @@ function clOpen(){if($('#clov'))return;const o=document.createElement('div');o.i
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#clbtn'))clOpen()});
 setTimeout(clLoad,3500);setInterval(clLoad,60000);
 /* Auto-Update: neue Version erkennen und neu laden */
-const BUILD='20261019-0948';
+const BUILD='20261019-0958';
 setTimeout(async()=>{try{if(!/^https?:/.test(location.protocol))return;
  const t=await (await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'})).text(),m=t.match(/const BUILD='([^']+)'/);
  if(m&&m[1]!==BUILD){const k='baggerUpd';if(sessionStorage.getItem(k)===m[1])return;sessionStorage.setItem(k,m[1]);location.replace(location.pathname+'?v='+m[1])}}catch(e){}},3500);
@@ -2610,13 +2709,13 @@ document.addEventListener('gesturestart',e=>e.preventDefault());
   lt0=n},{passive:false})}
 function offlineWork(sec){
  if(!S.up||S.up.auto<3)return;
- const pre=new Set(S.offers.map(x=>x.id)),away=Math.min(sec,43200);let rem=away,n=0,gain=0,fixed=false,best=null;const agg={};const p=pw();if(!(p>0))return;
+ const pre=new Set(S.offers.map(x=>x.id)),away=Math.min(sec,7200);let rem=away,n=0,gain=0,fixed=false,best=null;const agg={};const p=pw();if(!(p>0))return;
  if(S.broken){S.broken=false;S.cond=Math.max(S.cond,60);S.fix=0;fixed=true}
  for(let g=0;g<4000&&rem>0;g++){
   let o=cur();
   if(!o){const c=S.offers.filter(x=>x.t<=S.tier&&(!x.ex||pre.has(x.id))).sort((a,b)=>b.e/b.w-a.e/a.w)[0];if(!c)break;S.job=c.id;o=c}
   const need=(o.w-o.prog)/p;
-  if(need<=rem){rem-=need;const pa=pay(o);S.m+=pa;S.tot+=pa;S.life+=pa;const q=S.st;q.jobs++;if(o.ex)q.ex++;q.work+=o.w;if(pa>q.best)q.best=pa;gain+=pa;n++;
+  if(need<=rem){rem-=need;const pa=Math.round(pay(o)*.5);S.m+=pa;S.tot+=pa;S.life+=pa;const q=S.st;q.jobs++;if(o.ex)q.ex++;q.work+=o.w;if(pa>q.best)q.best=pa;gain+=pa;n++;
    const k=agg[o.n]=agg[o.n]||{n:0,s:0};k.n++;k.s+=pa;if(!best||pa>best.pa)best={n:o.n,pa};
    S.offers=S.offers.filter(x=>x!==o);S.job=null;refill()}
   else{o.prog+=p*rem;rem=0}}
