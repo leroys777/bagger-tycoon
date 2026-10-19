@@ -205,6 +205,17 @@ button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
 .cas-tabs.w4 button{font-size:12px;padding:9px 2px}
 .gprev{background:linear-gradient(#2d3138,#15171b);border-radius:20px;padding:6px;margin-bottom:10px;text-align:center}.gprev img{width:100%;border-radius:14px;display:block}
 .cgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.cc{background:var(--surf);border:1px solid var(--line);border-radius:16px;padding:10px;display:grid;gap:6px;cursor:pointer;align-content:start}.cc.pv{outline:2px solid var(--acc)}.cc.eq{border-color:var(--ok)}.cc b{font:700 15px var(--f1);letter-spacing:.02em}.sw{width:100%;height:26px;border-radius:8px;display:block;border:1px solid rgba(0,0,0,.18)}
+.cpills{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 10px;margin:0 -2px;scrollbar-width:none}.cpills::-webkit-scrollbar{display:none}
+.cp{flex:0 0 auto;display:flex;align-items:center;gap:6px;padding:9px 14px;border-radius:999px;background:var(--surf);border:1px solid var(--line);font:700 12px var(--f1);letter-spacing:.05em;text-transform:uppercase;color:var(--ink);cursor:pointer}.cp.on{background:var(--acc);color:var(--accink);border-color:transparent}.cp.dot::after{content:'';width:7px;height:7px;border-radius:50%;background:var(--ok)}
+.cgrid2{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.ct{position:relative;background:var(--surf);border:1px solid var(--line);border-radius:18px;padding:14px 6px 10px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;cursor:pointer;transition:transform .12s}.ct:active{transform:scale(.96)}.ct.pv{outline:2px solid var(--acc);outline-offset:-1px}.ct.eq{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 10%,var(--surf))}.ct.lk{opacity:.72}
+.cs{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-style:normal;border:2px solid rgba(255,255,255,.55);box-shadow:0 2px 8px rgba(0,0,0,.25),inset 0 -6px 10px rgba(0,0,0,.18)}
+.ct b{font:700 13px/1.15 var(--f1);letter-spacing:.02em}.ct .cm{font-size:11px;color:var(--mut);line-height:1.2}.ct .bd{position:absolute;top:6px;right:8px;font-size:11px}
+.cdiv{grid-column:1/-1;font:700 11px var(--f1);letter-spacing:.12em;text-transform:uppercase;color:var(--mut);padding:8px 2px 0}
+.cdock{position:sticky;bottom:84px;z-index:6;display:grid;gap:6px}.cbar2{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--surf);border:1px solid var(--acc);border-radius:18px;padding:10px 12px;box-shadow:0 8px 24px rgba(0,0,0,.28)}.cbi{display:grid;gap:2px;min-width:0}.cbi b{font:700 15px var(--f1)}
+.cbar3 .act{width:100%;white-space:nowrap}.cbar2 .act{white-space:nowrap;flex:0 0 auto}
+.gpm{display:flex;justify-content:space-between;align-items:center;gap:8px;color:#cfd3d8;font-size:13px;padding:6px 6px 2px}
+.evb{border-radius:18px;padding:12px 14px;margin-bottom:12px;background:linear-gradient(120deg,#6a2cd8,#d8467a);color:#fff;display:grid;gap:3px}.evb b{font:700 17px var(--f1)}.evb span{font-size:13px;opacity:.92}
 /* Roulette */
 .rou{--acc:#e9b872;--accink:#2a1a0c;background:radial-gradient(120% 80% at 50% 0%,#3a2a1f,#1d1510 70%);border-top-color:#e9b872;--surf2:#2d2118;--line:#4a3a2c}
 .rou h2{color:#e9b872}
@@ -335,6 +346,7 @@ body{padding-bottom:0}
   <div class="hud-b"><div class="r"><div id="cur"></div><div id="pct"></div></div><div class="bar"><i id="pb"></i></div></div>
  </div>
  <button class="act big" id="dig" type="button">Mitschaufeln</button>
+ <div id="evbar"></div>
  <div class="card2" id="dailyc" style="margin-bottom:12px"></div>
  <div class="emp" id="empcard"></div>
  <h2 class="sec">Aufträge</h2>
@@ -396,7 +408,7 @@ body{padding-bottom:0}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 19.10. 11:30 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 19.10. 12:10 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -493,7 +505,7 @@ if(S.pend){S.m+=S.pend;S.pend=0}
 if(!isFinite(S.m))S.m=0;if(!isFinite(S.tot))S.tot=0;if(!isFinite(S.life))S.life=0;S.rl=S.rl?1:0;S.llic=S.llic||0;S.lm=S.lm&&S.rl?1:0;V=S.lm?VL:VB;J=S.lm?JL:JB;X=S.lm?XL:XB;
 S.up=Object.assign({mot:0,hyd:0,tec:0,auto:0},S.up||{});try{if(localStorage.getItem('baggerBan')==='1')S.ban=true}catch(e){}if(S.ban)try{localStorage.setItem('baggerBan','1')}catch(e){}S.lic=S.lic||0;S.tot=S.tot||0;S.life=Math.max(S.life||0,S.tot);if(!S.emp)S.emp='self';S.st=Object.assign(ST0(),S.st||{});if(typeof S.cond!=='number')S.cond=100;if(typeof S.top!=='number')S.top=S.tier;if(!S.cds)S.cds={};if(!S.v){S.tier=[0,1,2,3,5,8][S.tier]||0;S.v=2;S.offers=[];S.job=null;S.prog=0}if(S.tier>=V.length)S.tier=0;if(S.emp==='wtd'&&S.next>Date.now()+300000)S.next=Date.now()+300000;
 const pw=()=>V[S.tier].p*(1+.2*S.up.mot)/WK;
-const payM=()=>(1+.12*S.up.hyd)*(1+.35*(S.lic+S.llic))*(1+.05*rankIx())*(1+.02*Math.min(25,(S.st&&S.st.sold)||0))*((S.boostUntil||0)>Date.now()?2:1);
+const payM=()=>(1+.12*S.up.hyd)*(1+.35*(S.lic+S.llic))*(1+.05*rankIx())*(1+.02*Math.min(25,(S.st&&S.st.sold)||0))*((S.boostUntil||0)>Date.now()?2:1)*(1+((evAct()||{}).pay||0)/100);
 const pay=o=>Math.round(o.e*PY*payM());
 const newIds=new Set();
 const RANKS=[{n:'Praktikant',at:0,u:'Standardaufträge'},{n:'Azubi',at:10000,u:'erste exklusive Aufträge'},{n:'Geselle',at:150000,u:'Staatsaufträge im Tiefbau'},{n:'Alt-Geselle',at:2000000,u:'Flughäfen und Großbaustellen'},{n:'Meister',at:25000000,u:'Abrisse und Bergwerke'},{n:'Bauingenieur',at:250000000,u:'Mega-Projekte im Tagebau'}];
@@ -1860,7 +1872,7 @@ function thumbsB(){
 /* ---------- UI ---------- */
 function renderOffers(){
  $('#offers').innerHTML=S.offers.map(o=>{const lock=o.t>S.tier;
-  return `<div class="job ${o.id===S.job?'act1':''} ${lock?'locked':''} ${o.ex?'ex':''} ${newIds.has(o.id)?'new':''}"><div class="jt">${o.t+1}</div><div class="jmain"><b>${o.n}</b>${o.ex?'<span class="exb">Exklusiv</span>':''}${o.rush?`<span class="rush" data-r="${o.rush}">EILIG ×3</span>`:''}<span class="meta">Aufwand ${o.w.toLocaleString('de-DE')} · ${lock?'braucht '+V[o.t].n:'ca. '+Math.max(1,Math.ceil((o.w-o.prog)/pw()))+' s'}</span></div><div class="jside"><span class="pay">${F(pay(o))}</span><button class="act sm" type="button" data-job="${o.id}" ${lock?'disabled':''}>${o.id===S.job?'Läuft':'Annehmen'}</button></div></div>`}).join('');newIds.clear()}
+  return `<div class="job ${o.id===S.job?'act1':''} ${lock?'locked':''} ${o.ex?'ex':''} ${newIds.has(o.id)?'new':''}"><div class="jt">${o.t+1}</div><div class="jmain"><b>${o.n}</b>${o.ex?'<span class="exb">Exklusiv</span>':''}${o.sp?'<span class="rush" style="background:#7b3fe4">EVENT</span>':''}${o.rush?`<span class="rush" data-r="${o.rush}">EILIG ×3</span>`:''}<span class="meta">Aufwand ${o.w.toLocaleString('de-DE')} · ${lock?'braucht '+V[o.t].n:'ca. '+Math.max(1,Math.ceil((o.w-o.prog)/pw()))+' s'}</span></div><div class="jside"><span class="pay">${F(pay(o))}</span><button class="act sm" type="button" data-job="${o.id}" ${lock?'disabled':''}>${o.id===S.job?'Läuft':'Annehmen'}</button></div></div>`}).join('');newIds.clear()}
 function switchTo(i){if(i===S.tier||i>S.top)return;S.cds[S.tier]={c:S.cond,b:!!S.broken,f:S.fix||0};S.tier=i;const d=S.cds[i]||{c:100,b:false,f:0};S.cond=d.c;S.broken=d.b;S.fix=d.f;const o=cur();if(o&&o.t>i)S.job=null;if(T3)setExc();refill();renderShop();renderOffers();renderTop();renderProg();renderBrk();save()}
 function renderCond(){const e=$('#cbar');if(!e)return;const c=Math.round(S.cond);e.style.width=c+'%';e.style.background=condCol();$('#cpct').textContent=c+' %';$('#cst').textContent=S.broken?'Defekt – steht still':c>60?'Guter Zustand':c>30?'Verschlissen – Ausfallrisiko steigt':'Schlecht – hohes Ausfallrisiko';
  const f=FULLC(),w=MAINTC(),ok=S.cond<100;$('#frep').disabled=!ok||S.m<f;$('#fmnt').disabled=!ok||S.m<w;$('#frep').textContent=ok?'Komplett reparieren · '+F(f):'Alles in Ordnung';$('#fmnt').textContent=ok?'Warten (+30 %) · '+F(w):'Keine Wartung nötig'}
@@ -1949,7 +1961,7 @@ function buyUp(k){const u=UP.find(x=>x.k===k),l=S.up[k]||0;if(!u||l>=u.max)retur
 function startLoaderMode(){S.cds={};S.tot=0;S.broken=false;S.cond=100;S.fix=0;S.job=null;S.offers=[];S.top=0;S.tier=0;setMode(1);refill();if(T3)setExc();const b=$('#rlbox');if(b)delete b.dataset.k;renderShop();renderOffers();renderTop();renderProg();renderBrk();updateFirm();toast('Radlader-Durchgang gestartet: Hoflader');save()}
 function doPrest(b){const g=gain();if(g<1)return;
  if(!b.dataset.arm){b.dataset.arm='1';b.textContent='Nochmal tippen zum Verkaufen';setTimeout(()=>{delete b.dataset.arm},3000);return}
- delete b.dataset.arm;const wasL=S.lm,keep={emp:S.emp,next:S.next,nid:S.nid,boostUntil:S.boostUntil,lic:S.lic+(S.lm?0:g),llic:S.llic+(S.lm?g:0),rl:S.rl,cos:S.cos,ev:S.ev,dr:S.dr,ach:S.ach,vc:S.vc,mx:S.mx,wk:S.wk,auto:S.up.auto,life:S.life,unl:S.unl,st:S.st};
+ delete b.dataset.arm;const wasL=S.lm,keep={emp:S.emp,next:S.next,nid:S.nid,boostUntil:S.boostUntil,lic:S.lic+(S.lm?0:g),llic:S.llic+(S.lm?g:0),rl:S.rl,cos:S.cos,ev:S.ev,evj:S.evj,dr:S.dr,ach:S.ach,vc:S.vc,mx:S.mx,wk:S.wk,auto:S.up.auto,life:S.life,unl:S.unl,st:S.st};
  S=Object.assign(newState(),{emp:keep.emp,next:keep.next,nid:keep.nid,boostUntil:keep.boostUntil,lic:keep.lic,llic:keep.llic,rl:keep.rl,cos:keep.cos,dr:keep.dr,ach:keep.ach,vc:keep.vc,mx:keep.mx,wk:keep.wk,life:keep.life,unl:keep.unl,st:keep.st});S.up.auto=keep.auto;S.st.sold++;setMode(0);S.rk=rankIx();
  refill();newIds.clear();if(T3)setExc();renderOffers();renderShop();renderTop();renderProg();renderFirm();toast('Neue Firma gegründet: '+(wasL?S.llic+' Radlader-':S.lic+' Bau')+'Lizenzen');save()}
 const PK=[{id:'p1',n:'Starterpaket',eur:'0,99',h:.25},{id:'p2',n:'Bauleiter',eur:'4,99',h:1},{id:'p3',n:'Unternehmer',eur:'9,99',h:3},{id:'p4',n:'Magnat',eur:'19,99',h:8},{id:'p5',n:'Tycoon',eur:'49,99',h:24}];
@@ -2149,7 +2161,7 @@ let admOpen=false;
 const ADM_PIN='1925';
 function renderAdm(){const e=$('#adm');if(!e)return;
  if(!admOpen){e.innerHTML='<b>Admin-Panel</b><div class="meta">Zugang nur mit Code.</div><div style="display:flex;gap:8px"><input id="admpin" type="password" inputmode="numeric" maxlength="8" autocomplete="off" placeholder="Code" style="flex:1;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><button class="act" id="admgo" type="button">Öffnen</button></div><div class="meta" id="admmsg"></div>';return}
- e.innerHTML='<b>Admin-Panel</b><div class="meta">Spielerliste (nur Ansicht). Spieler antippen zum Bearbeiten.</div><div id="admpl"></div><button class="act ghost sm" id="admpl-load" type="button">Liste neu laden</button><div class="meta" style="margin-top:10px"><b>Spin-Limit (für alle Spieler)</b></div><div class="meta" id="admsplst"></div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><input id="admspn" type="text" inputmode="numeric" placeholder="Spins" value="'+(SPL.spins||'')+'" style="width:84px;padding:10px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><span class="meta">in</span><input id="admspm" type="text" inputmode="numeric" placeholder="Minuten" value="'+(SPL.minutes||'')+'" style="width:90px;padding:10px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><span class="meta">Min.</span></div><label class="meta" style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="admspb" '+(SPL.bj?'checked':'')+'> Blackjack-Runden zählen auch</label><div style="display:flex;gap:8px"><button class="act sm" id="admspon" type="button">Limit aktivieren</button><button class="act ghost sm" id="admspoff" type="button">Ausschalten</button></div><div class="meta" id="admspmsg"></div><div class="meta" style="margin-top:10px"><b>Ankündigung an Spieler</b></div><textarea id="admann" maxlength="400" rows="3" placeholder="Text des Pop-ups (wird mit Bestätigung geschlossen) …" style="width:100%;padding:10px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit;box-sizing:border-box"></textarea><div style="display:flex;gap:14px;flex-wrap:wrap"><label class="meta" style="display:flex;gap:6px;align-items:center"><input type="radio" name="admat" value="online" checked> Nur Online-Spieler</label><label class="meta" style="display:flex;gap:6px;align-items:center"><input type="radio" name="admat" value="all"> Alle Spieler</label></div><button class="act sm" id="admannsend" type="button">Ankündigung senden</button><div class="meta" id="admannmsg"></div><div class="meta" style="margin-top:10px"><b>Neue Woche starten</b></div><div class="meta">Setzt Fortschritt und alle Erfolge aller Spieler zurück (auch deinen). Sperren bleiben bestehen.</div><button class="act ghost sm" id="admreset" type="button">Alle Spieler zurücksetzen</button><div class="meta" id="admresetmsg"></div><div class="meta" style="margin-top:10px"><b>Changelog verfassen</b></div><textarea id="admcl" maxlength="800" rows="3" placeholder="Neue Changelog-Nachricht …" style="width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit;resize:none"></textarea><button class="act sm" id="admclpost" type="button">Changelog veröffentlichen</button><div class="meta" id="admclmsg"></div><div id="admcllist"></div><div class="meta" style="margin-top:6px">Supabase (Cloud-Speicher)</div><input id="sburl" type="text" autocomplete="off" placeholder="Projekt-URL https://xxxx.supabase.co" value="'+(sbCfg().url||'')+'" style="min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><input id="sbkey" type="text" autocomplete="off" placeholder="anon public key" value="'+(sbCfg().key||'')+'" style="min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><button class="act" id="sbsave" type="button">Supabase-Zugang speichern</button><button class="act ghost" id="admclose" type="button">Admin schließen</button>';admLoadPl();admClList();admSplSt();clLoad().then(admClList)}
+ e.innerHTML='<b>Admin-Panel</b><div class="meta">Spielerliste (nur Ansicht). Spieler antippen zum Bearbeiten.</div><div id="admpl"></div><button class="act ghost sm" id="admpl-load" type="button">Liste neu laden</button><div class="meta" style="margin-top:10px"><b>Spin-Limit (für alle Spieler)</b></div><div class="meta" id="admsplst"></div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><input id="admspn" type="text" inputmode="numeric" placeholder="Spins" value="'+(SPL.spins||'')+'" style="width:84px;padding:10px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><span class="meta">in</span><input id="admspm" type="text" inputmode="numeric" placeholder="Minuten" value="'+(SPL.minutes||'')+'" style="width:90px;padding:10px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><span class="meta">Min.</span></div><label class="meta" style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="admspb" '+(SPL.bj?'checked':'')+'> Blackjack-Runden zählen auch</label><div style="display:flex;gap:8px"><button class="act sm" id="admspon" type="button">Limit aktivieren</button><button class="act ghost sm" id="admspoff" type="button">Ausschalten</button></div><div class="meta" id="admspmsg"></div><div class="meta" style="margin-top:10px"><b>Ankündigung an Spieler</b></div><textarea id="admann" maxlength="400" rows="3" placeholder="Text des Pop-ups (wird mit Bestätigung geschlossen) …" style="width:100%;padding:10px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit;box-sizing:border-box"></textarea><div style="display:flex;gap:14px;flex-wrap:wrap"><label class="meta" style="display:flex;gap:6px;align-items:center"><input type="radio" name="admat" value="online" checked> Nur Online-Spieler</label><label class="meta" style="display:flex;gap:6px;align-items:center"><input type="radio" name="admat" value="all"> Alle Spieler</label></div><button class="act sm" id="admannsend" type="button">Ankündigung senden</button><div class="meta" id="admannmsg"></div><div id="admev"></div><div class="meta" style="margin-top:10px"><b>Neue Woche starten</b></div><div class="meta">Setzt Fortschritt und alle Erfolge aller Spieler zurück (auch deinen). Sperren bleiben bestehen.</div><button class="act ghost sm" id="admreset" type="button">Alle Spieler zurücksetzen</button><div class="meta" id="admresetmsg"></div><div class="meta" style="margin-top:10px"><b>Changelog verfassen</b></div><textarea id="admcl" maxlength="800" rows="3" placeholder="Neue Changelog-Nachricht …" style="width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit;resize:none"></textarea><button class="act sm" id="admclpost" type="button">Changelog veröffentlichen</button><div class="meta" id="admclmsg"></div><div id="admcllist"></div><div class="meta" style="margin-top:6px">Supabase (Cloud-Speicher)</div><input id="sburl" type="text" autocomplete="off" placeholder="Projekt-URL https://xxxx.supabase.co" value="'+(sbCfg().url||'')+'" style="min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><input id="sbkey" type="text" autocomplete="off" placeholder="anon public key" value="'+(sbCfg().key||'')+'" style="min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><button class="act" id="sbsave" type="button">Supabase-Zugang speichern</button><button class="act ghost" id="admclose" type="button">Admin schließen</button>';admLoadPl();admClList();admSplSt();clLoad().then(admClList)}
 function resetArm(b){if(b.dataset.arm){delete b.dataset.arm;b.textContent='Spielstand zurücksetzen';return true}b.dataset.arm='1';b.textContent='Nochmal tippen zum Löschen';setTimeout(()=>{delete b.dataset.arm;b.textContent='Spielstand zurücksetzen'},3000);return false}
 document.addEventListener('click',e=>{
  const t=e.target.closest('button');if(!t)return;
@@ -2470,19 +2482,32 @@ const rl0=RBW.length,pl0=PRL.length;
   const fm=new THREE.Mesh(new THREE.CircleGeometry(fl,48),new THREE.MeshStandardMaterial({color:0x22252a,roughness:.9,metalness:0}));fm.rotation.x=-Math.PI/2;sc.add(fm);sc.add(e.g);
   r.render(sc,c);url=r.domElement.toDataURL();r.dispose()}catch(er){url=''}finally{V=sv;cosUsePrev=false;RBW.length=Math.min(RBW.length,rl0);PRL.length=Math.min(PRL.length,pl0)}
  return cosImgC[k2]=url}
+let cosCat='paint';
+const COSI={paint:'🎨',pearl:'✨',glass:'🪟',beacon:'🚨',rim:'⚙️',glow:'💡',decal:'🏷️',flag:'🚩',outfit:'🦺',deco:'🎃',horn:'📯'};
+function cosBuy(ty,c,i){const it=COSC[c].it[i];if(cosOwn(ty,c,i))return false;const mt=cosMeta(c,i);if(mt.g||(mt.ev&&!evAvail(mt)))return false;const pay=Math.max(0,it[1]-(S.vc||0));if(S.m<pay)return false;S.m-=pay;S.vc=Math.max(0,(S.vc||0)-it[1]);const o=cosS();o.own[ty+'.'+c+'.'+i]=1;(o.eq[ty]||(o.eq[ty]={}))[c]=i;delete cosPrev[c];S.st.cosm=(S.st.cosm||0)+it[1];return true}
 function renderGarage(){
  const own=cosS();if(cosTy==='l'&&!S.rl)cosTy='b';
  const ty=cosTy,ti=ty==='b'?(S.lm?0:S.tier):(S.lm?S.tier:0),vn=(ty==='l'?VL:VB)[ti].n;
  const tabs=`<div class="stabs" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px"><button class="act ${payTab?'ghost':''}" type="button" data-ptab="0">Garage</button><button class="act ${payTab?'':'ghost'}" type="button" data-ptab="1">Geldpakete</button></div>`;
  const img=T3?cosShot(ty):'';
- let pvTot=0;COSK.forEach(c=>{const i=cosPrev[c];if(i!=null&&!cosOwn(ty,c,i))pvTot+=COSC[c].it[i][1]});
- let h=tabs+`<div class="stabs" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px"><button class="act sm ${ty==='b'?'':'ghost'}" type="button" data-cty="b">Bagger</button><button class="act sm ${ty==='l'?'':'ghost'}" type="button" data-cty="l">Radlader ${S.rl?'':'🔒'}</button></div>`
-  +`<div class="gprev">${img?`<img src="${img}" alt="Vorschau">`:'<div class="meta" style="padding:30px">Keine Vorschau verfügbar</div>'}<div class="meta" style="color:#cfd3d8;padding:6px 4px 2px">${vn}${Object.keys(cosPrev).length?' · Vorschau':''}${pvTot?' · Vorschau-Teile zusammen '+F(pvTot):''}</div>${Object.keys(cosPrev).length?'<button class="act ghost sm" type="button" data-cpx="1" style="margin:6px 0 2px">Vorschau zurücksetzen</button>':''}</div><div class="meta" style="margin:0 2px 8px">${S.vc?'<b>Gutschein-Guthaben: '+F(S.vc)+'</b> (wird beim Kauf automatisch angerechnet) · ':''}Tippe auf ein Teil für die Vorschau. Kosmetik gilt für alle ${ty==='l'?'Radlader':'Bagger'}, bleibt über Firmenverkäufe erhalten und ist nur Optik.</div>`;
- h+='<div class="cchips" style="display:flex;gap:6px;flex-wrap:wrap;margin:0 0 6px">'+COSK.map(c=>`<button class="act sm ghost" type="button" data-cj="${c}">${COSC[c].n.split(' (')[0]}</button>`).join('')+'</div>';
- COSK.forEach(c=>{const eq=cosEq(ty,c);h+=`<h2 class="sec" id="cs-${c}">${COSC[c].n}</h2><div class="cgrid">`+COSC[c].it.map((it,i)=>[it,i]).sort((p,q)=>{const k=x=>(x[0][4]&&(x[0][4].g||x[0][4].ev))?1:0;return (k(p)-k(q))||(p[0][1]-q[0][1])||(p[1]-q[1])}).map(([it,i])=>{const mt=cosMeta(c,i),o=cosOwn(ty,c,i),isEq=eq===i&&!cosPrev[c]&&true,real=(own.eq[ty]||{})[c]||0;const eqd=real===i,pv=cosPrev[c]===i;
-  const sw=it[3]||(typeof it[2]==='number'?H6(it[2]):Array.isArray(it[2])?H6(it[2][0]):'#888');
-  return `<div class="cc ${eqd?'eq':''} ${pv?'pv':''}" data-cv="${c}|${i}">${sw[0]==='!'?`<i class="sw" style="background:#2b2f36;display:flex;align-items:center;justify-content:center;font-size:18px;font-style:normal">${sw.slice(1)}</i>`:`<i class="sw" style="background:${sw}"></i>`}<b>${it[0]}</b><span class="meta">${o?(eqd?'Angelegt':'Im Besitz'):mt.g?grantTxt(mt.g):(mt.ev&&!evOn(mt.ev))?EVN[mt.ev]:F(it[1])+(mt.ev?' · Event':'')}</span>${eqd?'<span class="tag">Angelegt</span>':o?`<button class="act sm ghost" type="button" data-ce="${c}|${i}">Anlegen</button>`:(mt.g||(mt.ev&&!evOn(mt.ev)))?`<span class="meta">🔒 ${mt.g?'verdienen':'nur im Event'}</span>`:`<button class="act sm" type="button" data-cb="${c}|${i}" ${S.m<Math.max(0,it[1]-(S.vc||0))?'disabled':''}>Kaufen</button>`}</div>`}).join('')+'</div>'});
- $('#pay').innerHTML=h}
+ let pvTot=0,pvN=0;COSK.forEach(k=>{const i=cosPrev[k];if(i!=null&&!cosOwn(ty,k,i)){pvTot+=COSC[k].it[i][1];pvN++}});
+ if(!COSC[cosCat])cosCat='paint';const c=cosCat,real=(own.eq[ty]||{})[c]||0;
+ const pills=COSK.map(k=>`<button type="button" class="cp ${k===c?'on':''} ${cosPrev[k]!=null?'dot':''}" data-cj="${k}"><span>${COSI[k]||'•'}</span>${COSC[k].n.split(' (')[0]}</button>`).join('');
+ const swOf=it=>it[3]||(typeof it[2]==='number'?H6(it[2]):Array.isArray(it[2])?H6(it[2][0]):'#888');
+ const list=COSC[c].it.map((it,i)=>[it,i]).filter(([it,i])=>{const mt=it[4]||{};return !(mt.ev==='adm'&&!cosOwn(ty,c,i)&&!evAvail(mt))}).sort((p,q)=>{const k=x=>(x[0][4]&&(x[0][4].g||x[0][4].ev))?1:0;return (k(p)-k(q))||(p[0][1]-q[0][1])||(p[1]-q[1])});
+ let grid='',div=false;
+ list.forEach(([it,i])=>{const mt=it[4]||{},o=cosOwn(ty,c,i),av=!mt.g&&(!mt.ev||evAvail(mt)),eqd=real===i,pv=cosPrev[c]===i,sw=swOf(it),sp=(mt.g||mt.ev);
+  if(sp&&!div){div=true;grid+='<div class="cdiv">Verdienbar und Events</div>'}
+  const st=eqd?'Angelegt':o?'Im Besitz':mt.g?grantTxt(mt.g):(!av?(mt.ev==='adm'?'Nur im Event':EVN[mt.ev]||'Event'):F(it[1])+(mt.ev?' · Event':''));
+  grid+=`<div class="ct ${eqd?'eq':''} ${pv?'pv':''} ${!o&&!av?'lk':''}" data-cv="${c}|${i}">${eqd?'<span class="bd">✅</span>':o?'<span class="bd">✓</span>':!av?'<span class="bd">🔒</span>':''}${sw[0]==='!'?`<i class="cs" style="background:#2b2f36">${sw.slice(1)}</i>`:`<i class="cs" style="background:${sw}"></i>`}<b>${it[0]}</b><span class="cm">${st}</span></div>`});
+ const si=cosPrev[c];let bar='';
+ if(si!=null&&COSC[c].it[si]){const it=COSC[c].it[si],mt=it[4]||{},o=cosOwn(ty,c,si),av=!mt.g&&(!mt.ev||evAvail(mt)),poor=S.m<Math.max(0,it[1]-(S.vc||0));
+  const btn=real===si?'<span class="tag">Angelegt</span>':o?`<button class="act sm" type="button" data-ce="${c}|${si}">Anlegen</button>`:av?`<button class="act sm" type="button" data-cb="${c}|${si}" ${poor?'disabled':''}>Kaufen · ${F(it[1])}</button>`:`<span class="meta">🔒 ${mt.g?grantTxt(mt.g):mt.ev==='adm'?'nur im Event':'nur im Event'}</span>`;
+  bar=`<div class="cdock"><div class="cbar2"><div class="cbi"><b>${it[0]}</b><span class="meta">${COSC[c].n.split(' (')[0]}${pvN>1?' · '+pvN+' Teile in der Vorschau':''}</span></div>${btn}</div>${pvN>1?`<div class="cbar3"><button class="act ghost sm" type="button" data-cball="1" ${S.m<Math.max(0,pvTot-(S.vc||0))?'disabled':''}>Alle Vorschau-Teile kaufen · ${F(pvTot)}</button></div>`:''}</div>`}
+ $('#pay').innerHTML=tabs+`<div class="stabs" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px"><button class="act sm ${ty==='b'?'':'ghost'}" type="button" data-cty="b">Bagger</button><button class="act sm ${ty==='l'?'':'ghost'}" type="button" data-cty="l">Radlader ${S.rl?'':'🔒'}</button></div>`
+  +`<div class="gprev">${img?`<img src="${img}" alt="Vorschau">`:'<div class="meta" style="padding:30px">Keine Vorschau verfügbar</div>'}<div class="gpm"><span>${vn}${Object.keys(cosPrev).length?' · Vorschau':''}</span>${Object.keys(cosPrev).length?'<button class="act ghost sm" type="button" data-cpx="1">Zurücksetzen</button>':''}</div></div>`
+  +`<div class="meta" style="margin:0 2px 10px">${S.vc?'<b>Gutschein-Guthaben: '+F(S.vc)+'</b> (wird beim Kauf angerechnet) · ':''}Tippe ein Teil an für die Vorschau. Kosmetik gilt für alle ${ty==='l'?'Radlader':'Bagger'}, bleibt über Firmenverkäufe erhalten und ist nur Optik.</div>`
+  +`<div class="cpills">${pills}</div><h2 class="sec" style="margin-top:4px">${COSC[c].n}</h2><div class="cgrid2">${grid}</div>${bar}`}
 const evOn=k=>{const d=new Date(),m=d.getMonth(),t=d.getDate();return k==='halloween'?((m===9&&t>=24)||(m===10&&t<=2)):false};
 const EVN={halloween:'Halloween-Event (24. Okt. bis 2. Nov.)'};
 const grantOk=g=>g==='wk'?!!(S.ev&&S.ev.win):(g&&g.slice(0,4)==='ach:')?!!(S.ach&&S.ach[g.slice(4)]):false;
@@ -2495,7 +2520,8 @@ function decalTex(v){const k='d'+JSON.stringify(v);if(TXC[k])return TXC[k];const
  else{x.fillStyle='#fff';x.fillRect(58,0,64,256);x.fillStyle='#15171a';x.fillRect(134,0,26,256);x.fillStyle='#fff';x.fillRect(172,0,64,256)}
  const t=new THREE.CanvasTexture(c);t.anisotropy=4;return TXC[k]=t}
 function flagTex(kind){const k='f'+kind;if(TXC[k])return TXC[k];const c=document.createElement('canvas');c.width=160;c.height=100;const x=c.getContext('2d');x.textAlign='center';x.textBaseline='middle';
- if(kind==='de'){['#111','#d00','#fc0'].forEach((cl,i)=>{x.fillStyle=cl;x.fillRect(0,i*34,160,34)})}
+ if(kind.slice(0,2)==='c:'){const p=kind.slice(2).split('|');x.fillStyle=p[0];x.fillRect(0,0,160,100);if(p[1]){x.font='64px '+emojiFont;x.fillText(p[1],80,54)}}
+ else if(kind==='de'){['#111','#d00','#fc0'].forEach((cl,i)=>{x.fillStyle=cl;x.fillRect(0,i*34,160,34)})}
  else if(kind==='karo'){for(let i=0;i<8;i++)for(let j=0;j<5;j++){x.fillStyle=(i+j)%2?'#fff':'#111';x.fillRect(i*20,j*20,20,20)}}
  else if(kind==='pirat'){x.fillStyle='#111';x.fillRect(0,0,160,100);x.font='64px '+emojiFont;x.fillText('💀',80,54)}
  else if(kind==='rbf'){['#f33','#fb3','#fe3','#3d6','#3bf','#93f'].forEach((cl,i)=>{x.fillStyle=cl;x.fillRect(0,i*17,160,17)})}
@@ -2539,13 +2565,14 @@ function cosAct(t){const sp=s=>{const a=s.split('|');return[a[0],+a[1]]};
  if(t.dataset.ptab!=null){payTab=+t.dataset.ptab;cosPrev={};renderPay();return true}
  if(t.dataset.cty){if(t.dataset.cty==='l'&&!S.rl){toast('Radlader-Erweiterung nötig');return true}cosTy=t.dataset.cty;cosPrev={};renderGarage();return true}
  if(t.dataset.cpx){cosPrev={};renderGarage();return true}
- if(t.dataset.cj){const el=document.getElementById('cs-'+t.dataset.cj);el&&el.scrollIntoView({behavior:'smooth',block:'start'});return true}
- if(t.dataset.cb){const[c,i]=sp(t.dataset.cb),it=COSC[c].it[i],ty=cosTy;if(cosOwn(ty,c,i))return true;const mt=cosMeta(c,i);if(mt.g||(mt.ev&&!evOn(mt.ev)))return true;const pay=Math.max(0,it[1]-(S.vc||0));if(S.m<pay)return true;S.m-=pay;S.vc=Math.max(0,(S.vc||0)-it[1]);const o=cosS();o.own[ty+'.'+c+'.'+i]=1;(o.eq[ty]||(o.eq[ty]={}))[c]=i;delete cosPrev[c];S.st.cosm=(S.st.cosm||0)+it[1];toast(COSC[c].n+': '+it[0]+' gekauft');if(T3)setExc();renderTop();save();renderGarage();return true}
+ if(t.dataset.cj){cosCat=t.dataset.cj;renderGarage();return true}
+ if(t.dataset.cball){const ty=cosTy;let n=0;COSK.forEach(k=>{const i=cosPrev[k];if(i!=null&&cosBuy(ty,k,i))n++});if(n){toast(n+' Teile gekauft');if(T3)setExc();renderTop();save()}renderGarage();return true}
+ if(t.dataset.cb){const[c,i]=sp(t.dataset.cb),it=COSC[c].it[i];if(cosBuy(cosTy,c,i)){toast(COSC[c].n.split(' (')[0]+': '+it[0]+' gekauft');if(T3)setExc();renderTop();save()}renderGarage();return true}
  if(t.dataset.ce){const[c,i]=sp(t.dataset.ce),ty=cosTy;if(!cosOwn(ty,c,i))return true;const o=cosS();(o.eq[ty]||(o.eq[ty]={}))[c]=i;delete cosPrev[c];if(T3)setExc();save();renderGarage();return true}
  if(t.dataset.cv){const[c,i]=sp(t.dataset.cv);if(cosPrev[c]===i)delete cosPrev[c];else cosPrev[c]=i;renderGarage();return true}
  return false}
-document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('#pay [data-ptab],#pay [data-cty],#pay [data-cpx],#pay [data-cb],#pay [data-ce],#pay [data-cv],#pay [data-cj]');if(!t||t.closest('#pay')==null)return;
- const b=e.target.closest('#pay [data-ptab],#pay [data-cty],#pay [data-cpx],#pay [data-cb],#pay [data-ce],#pay [data-cj]');cosAct(b||t)});
+document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('#pay [data-ptab],#pay [data-cty],#pay [data-cpx],#pay [data-cb],#pay [data-ce],#pay [data-cv],#pay [data-cj],#pay [data-cball]');if(!t||t.closest('#pay')==null)return;
+ const b=e.target.closest('#pay [data-ptab],#pay [data-cty],#pay [data-cpx],#pay [data-cb],#pay [data-ce],#pay [data-cj],#pay [data-cball]');cosAct(b||t)});
 /* ---------- Fortschritt: Erfolge, Titel, Tagesbelohnung, Wochenwertung ---------- */
 const TITLES=[[1,'Firmengründer'],[3,'Unternehmer'],[5,'Serienunternehmer'],[10,'Konzernchef'],[25,'Magnat'],[50,'Legende']];
 const titleOf=n=>{let t='';TITLES.forEach(x=>{if(n>=x[0])t=x[1]});return t};
@@ -2648,7 +2675,10 @@ function applyGlobalReset(r){
  if(sbOn()&&sbSess){sbConflict=null;setTimeout(()=>sbPush(true),400)}
  ovBox('rstov','<div class="offh">🔄 Neue Woche gestartet</div><div class="meta">Der Fortschritt und alle Erfolge wurden für alle Spieler zurückgesetzt. Viel Erfolg in der neuen Woche!</div>','Los geht\'s')}
 async function cfgLoad(){if(!sbOn())return;
- try{const rows=await sbReq('/rest/v1/settings?key=in.(announce,globalreset)&select=key,value');const m={};(rows||[]).forEach(x=>m[x.key]=x.value);
+ try{const rows=await sbReq('/rest/v1/settings?key=in.(announce,globalreset,event,xitems)&select=key,value');const m={};(rows||[]).forEach(x=>m[x.key]=x.value);
+  if(m.xitems&&Array.isArray(m.xitems.list)){XIT=m.xitems.list;applyXit()}
+  if(m.event&&m.event.id){EVT=m.event}else EVT=null;
+  try{evProcess()}catch(er){}
   const gr=m.globalreset;
   if(gr&&gr.id){const loc=lsGet('baggerResetId',null);
    if(loc==null){if((S.seen||0)<(gr.at||0)){applyGlobalReset(gr)}else lsSet('baggerResetId',gr.id)}
@@ -2672,6 +2702,50 @@ document.addEventListener('click',async e=>{const t=e.target.closest&&e.target.c
   delete t.dataset.arm;t.textContent='Alle Spieler zurücksetzen';
   try{let note='';try{await sbReq('/rest/v1/rpc/admin_reset_all',{method:'POST',body:'{}'})}catch(er){note=' (Cloud-Stände nicht geleert: supabase-reset.sql ausführen)'}
    const id=Date.now();await put('globalreset',{id,at:id});m.textContent='Neue Woche gestartet. Spieler werden beim nächsten Öffnen zurückgesetzt.'+note;setTimeout(cfgLoad,500)}catch(er){m.textContent='Fehler: '+er.message}}});
+/* ---------- Events (Admin): Lohn-Bonus, Sonderaufträge, Event-Kosmetik ---------- */
+var EVT=null,XIT=[];
+function evAct(){return EVT&&EVT.end>Date.now()&&(EVT.start||0)<=Date.now()?EVT:null}
+function evAvail(mt){if(mt.ev==='adm'){const e=evAct();return !!(e&&(e.xi||[]).includes(mt.xid))}const e=evAct();return evOn(mt.ev)||!!(e&&e.hal&&mt.ev==='halloween')}
+const XCAT={paint:'Lackierung',decal:'Aufkleber',outfit:'Fahrer-Outfit',flag:'Fahne'};
+const XBASE={};
+function applyXit(){COSK.forEach(c=>{if(XBASE[c]==null)XBASE[c]=COSC[c].it.length;COSC[c].it.length=XBASE[c]});
+ XIT.forEach(x=>{const c=COSC[x.c]?x.c:null;if(!c)return;const col=parseInt(String(x.col||'888888').replace('#',''),16)||0x888888,hx='#'+col.toString(16).padStart(6,'0');let v,sw;
+  if(c==='paint'){v=col;sw=hx}else if(c==='decal'){v={e:x.e||'⭐'};sw='!'+(x.e||'⭐')}else if(c==='outfit'){v={h:col,v:col};sw=hx}else{v='c:'+hx+'|'+(x.e||'');sw=x.e?'!'+x.e:hx}
+  COSC[c].it.push([String(x.n||'Teil').slice(0,24),Math.max(0,+x.p||0),v,sw,{ev:'adm',xid:x.id}])})}
+function evLeft(){const e=evAct();if(!e)return '';const l=e.end-Date.now(),d=Math.floor(l/864e5),h=Math.floor(l%864e5/36e5),m=Math.floor(l%36e5/6e4);return (d?d+' Tg. ':'')+h+' Std. '+m+' Min.'}
+function renderEv(){const el=$('#evbar');if(!el)return;const e=evAct();if(!e){el.innerHTML='';return}
+ el.innerHTML='<div class="evb"><b>🎉 '+escH(e.name||'Event')+'</b><span>'+(e.pay?'+'+e.pay+' % Lohn auf alle Aufträge · ':'')+(e.spn?'Sonderaufträge ×'+(e.spm||2)+' · ':'')+((e.xi&&e.xi.length)||e.hal?'neue Kosmetik in der Garage · ':'')+'endet in '+evLeft()+'</span></div>'}
+function evProcess(){const e=evAct();renderEv();
+ if(e&&e.spn>0&&S.evj!==e.id){S.evj=e.id;const n=Math.min(10,e.spn|0),m=Math.max(1,+e.spm||2);try{for(let k=0;k<n;k++){const o=gen();if(!o)continue;o.sp=1;o.n='🎉 '+o.n;o.e=Math.round(o.e*m);o.prog=0;S.offers.push(o)}S.offers.sort((a,b)=>(b.sp||0)-(a.sp||0)||(b.ex||0)-(a.ex||0)||a.t-b.t||a.e-b.e);renderOffers();save();toast('🎉 Event: '+n+' Sonderaufträge')}catch(er){}}
+ if(typeof renderTop==='function')try{renderTop()}catch(er){}
+ if(!$('#pay').hidden&&payTab===0)try{renderGarage()}catch(er){}}
+setInterval(renderEv,30000);
+function admEvUi(){const e=$('#admev');if(!e)return;const a=evAct();
+ const cs=Object.keys(XCAT).map(k=>'<option value="'+k+'">'+XCAT[k]+'</option>').join('');
+ const inp='width:100%;padding:9px 10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit;box-sizing:border-box';
+ e.innerHTML='<div class="meta" style="margin-top:10px"><b>Event starten</b>'+(a?' · läuft: '+escH(a.name)+' ('+evLeft()+')':' · aktuell kein Event')+'</div>'
+ +'<input id="evname" maxlength="40" placeholder="Name des Events" style="'+inp+'">'
+ +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><label class="meta">Dauer in Stunden<input id="evh" type="number" min="1" value="24" style="'+inp+'"></label><label class="meta">Lohn-Bonus in %<input id="evpay" type="number" min="0" max="500" value="0" style="'+inp+'"></label><label class="meta">Sonderaufträge (Anzahl)<input id="evspn" type="number" min="0" max="10" value="0" style="'+inp+'"></label><label class="meta">Sonderauftrag-Faktor<input id="evspm" type="number" min="1" max="50" step="0.5" value="3" style="'+inp+'"></label></div>'
+ +'<label class="meta" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="evhal"> Halloween-Teile freischalten</label>'
+ +(XIT.length?'<div class="meta">Eigene Kosmetik im Event verfügbar:</div>'+XIT.map(x=>'<label class="meta" style="display:flex;gap:6px;align-items:center"><input type="checkbox" class="evxi" value="'+x.id+'"> '+escH(x.n)+' ('+XCAT[x.c]+', '+F(+x.p||0)+')</label>').join(''):'')
+ +'<div style="display:flex;gap:8px"><button class="act sm" id="evstart" type="button">Event starten</button><button class="act ghost sm" id="evstop" type="button">Event beenden</button></div><div class="meta" id="evmsg"></div>'
+ +'<div class="meta" style="margin-top:10px"><b>Neues Kosmetik-Teil anlegen</b></div>'
+ +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><label class="meta">Kategorie<select id="xic" style="'+inp+'">'+cs+'</select></label><label class="meta">Name<input id="xin" maxlength="24" style="'+inp+'"></label><label class="meta">Preis in €<input id="xip" type="number" min="0" value="10000000" style="'+inp+'"></label><label class="meta">Farbe<input id="xicol" type="color" value="#ff2d95" style="'+inp+';height:40px;padding:2px"></label></div>'
+ +'<label class="meta">Emoji (für Aufkleber und Fahne)<input id="xie" maxlength="4" placeholder="z. B. 🎃" style="'+inp+'"></label>'
+ +'<button class="act sm" id="xiadd" type="button">Teil anlegen</button><div class="meta" id="ximsg"></div>'}
+(function(){const _ra=renderAdm;renderAdm=function(){const r=_ra.apply(this,arguments);try{admEvUi()}catch(er){}return r}})();
+document.addEventListener('click',async e=>{const t=e.target.closest&&e.target.closest('#evstart,#evstop,#xiadd');if(!t)return;
+ const put=async(key,value)=>{await sbReq('/rest/v1/settings?on_conflict=key',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({key,value,updated_at:new Date().toISOString()})});const r=await sbReq('/rest/v1/settings?key=eq.'+key+'&select=value');if(!r||!r[0]||!r[0].value||r[0].value.id!==value.id)throw new Error('Nicht gespeichert (settings-Tabelle/Admin-Konto prüfen)')};
+ const v=id=>(($('#'+id)||{}).value||'');
+ if(t.id==='xiadd'){const m=$('#ximsg');if(!sbSess){m.textContent='Mit dem Admin-Konto anmelden.';return}const n=v('xin').trim();if(!n){m.textContent='Bitte einen Namen eingeben.';return}if(XIT.length>=60){m.textContent='Maximal 60 eigene Teile.';return}
+  const it={id:Date.now(),c:v('xic'),n,p:Math.max(0,Math.round(+v('xip')||0)),col:v('xicol'),e:v('xie').trim()};
+  try{await put('xitems',{id:Date.now(),list:XIT.concat([it])});XIT=XIT.concat([it]);applyXit();m.textContent='Angelegt. Jetzt unten beim Event auswählen.';admEvUi();setTimeout(cfgLoad,300)}catch(er){m.textContent='Fehler: '+er.message}return}
+ if(t.id==='evstart'){const m=$('#evmsg');if(!sbSess){m.textContent='Mit dem Admin-Konto anmelden.';return}
+  const h=Math.max(.1,+v('evh')||24),now=Date.now(),xi=[...document.querySelectorAll('.evxi:checked')].map(x=>+x.value);
+  const ev={id:now,name:v('evname').trim().slice(0,40)||'Event',start:now,end:now+Math.round(h*36e5),pay:Math.max(0,Math.min(500,Math.round(+v('evpay')||0))),spn:Math.max(0,Math.min(10,Math.round(+v('evspn')||0))),spm:Math.max(1,Math.min(50,+v('evspm')||3)),hal:!!($('#evhal')||{}).checked,xi};
+  try{await put('event',ev);EVT=ev;m.textContent='Event gestartet. Spieler sehen es innerhalb von 15 Sekunden.';evProcess();admEvUi()}catch(er){m.textContent='Fehler: '+er.message}return}
+ if(t.id==='evstop'){const m=$('#evmsg');if(!sbSess){m.textContent='Mit dem Admin-Konto anmelden.';return}if(!EVT){m.textContent='Kein Event aktiv.';return}
+  const ev=Object.assign({},EVT,{id:Date.now(),end:Date.now()});try{await put('event',ev);EVT=ev;m.textContent='Event beendet.';evProcess();admEvUi()}catch(er){m.textContent='Fehler: '+er.message}}});
 /* ---------- Blackjack ---------- */
 const BJB=[100,500,1000,2500,5000,10000],RK=['A','2','3','4','5','6','7','8','9','10','J','Q','K'],SU=['♠','♥','♦','♣'];
 let bjBet=100,bjBusy=false;
