@@ -216,6 +216,52 @@ button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
 .cbar3 .act{width:100%;white-space:nowrap}.cbar2 .act{white-space:nowrap;flex:0 0 auto}
 .gpm{display:flex;justify-content:space-between;align-items:center;gap:8px;color:#cfd3d8;font-size:13px;padding:6px 6px 2px}
 .evb{border-radius:18px;padding:12px 14px;margin-bottom:12px;background:linear-gradient(120deg,#6a2cd8,#d8467a);color:#fff;display:grid;gap:3px}.evb b{font:700 17px var(--f1)}.evb span{font-size:13px;opacity:.92}
+/* Casino: Lounge-Look */
+#slot:not([hidden]){position:relative;border-radius:30px;padding:16px 12px 18px;margin:0 -4px;color:#cfc8d8;background:radial-gradient(90% 40% at 15% 0%,rgba(168,85,247,.32),transparent 70%),radial-gradient(80% 40% at 90% 8%,rgba(236,72,153,.26),transparent 70%),radial-gradient(120% 60% at 50% 100%,rgba(233,184,114,.1),transparent 70%),linear-gradient(#17102a,#0c0a16 55%,#120a1c);box-shadow:0 24px 50px -22px rgba(0,0,0,.7),inset 0 0 0 1px rgba(233,184,114,.28);overflow:hidden}
+#slot .chead{text-align:center;padding:4px 0 14px}
+#slot .csign{display:inline-block;font:700 30px var(--f1);letter-spacing:.34em;padding-left:.34em;color:#ffe6b0;text-shadow:0 0 6px #ffb347,0 0 18px #ff7a1a,0 0 38px rgba(255,90,60,.6);animation:neon 3.2s ease-in-out infinite}
+#slot .csub{margin-top:4px;font:600 11px var(--f2);letter-spacing:.3em;text-transform:uppercase;color:#a99cc4}
+#slot .cdots{height:8px;margin:10px auto 0;max-width:260px;background:radial-gradient(circle,#ffd86b 38%,transparent 44%) 0 0/16px 8px repeat-x;filter:drop-shadow(0 0 5px #ffb300);animation:blink 1.5s steps(2) infinite}
+@keyframes neon{0%,100%{opacity:1}46%{opacity:1}48%{opacity:.78}50%{opacity:1}52%{opacity:.85}54%{opacity:1}}
+@keyframes blink{50%{opacity:.45}}
+#slot .cas-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;background:transparent;padding:0;margin-bottom:14px}
+#slot .cas-tabs button{display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px 9px;border-radius:18px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#cfc8d8;font:700 11px var(--f2);letter-spacing:.1em;text-transform:uppercase;transition:transform .15s,box-shadow .2s}
+#slot .cas-tabs button i{font-style:normal;font-size:22px;line-height:1}
+#slot .cas-tabs button.on{background:linear-gradient(160deg,#ffe08a,#e9a93c 60%,#c47d16);color:#2a1a05;border-color:transparent;box-shadow:0 8px 20px -6px rgba(255,170,40,.65),inset 0 1px 0 rgba(255,255,255,.6);transform:translateY(-1px)}
+#slot .cab{position:relative;background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid rgba(233,184,114,.3);border-top:1px solid rgba(233,184,114,.55);border-radius:26px;padding:18px 14px 16px;box-shadow:0 18px 40px -20px #000,inset 0 1px 0 rgba(255,255,255,.1);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+#slot .cab h2{display:flex;align-items:center;justify-content:center;gap:12px;font:700 14px var(--f1);letter-spacing:.34em;color:#ffd98a;text-shadow:0 0 12px rgba(255,190,90,.5);margin:0 0 14px}
+#slot .cab h2::before,#slot .cab h2::after{content:'';height:1px;flex:1;background:linear-gradient(90deg,transparent,rgba(233,184,114,.7))}#slot .cab h2::after{transform:scaleX(-1)}
+#slot .reels{position:relative;gap:8px;padding:12px;border-radius:22px;background:linear-gradient(145deg,#ffe9a8,#d79a2c 45%,#8a5a10 70%,#f0c968);box-shadow:0 14px 30px -12px rgba(0,0,0,.8),inset 0 2px 3px rgba(255,255,255,.7)}
+#slot .reels::before{content:'';position:absolute;left:18px;right:18px;top:3px;height:6px;background:radial-gradient(circle,#fff 36%,#fff3b0 46%,transparent 52%) 0 0/14px 6px repeat-x;filter:drop-shadow(0 0 4px #fff0a0);animation:blink 1.2s steps(2) infinite}
+#slot .reels::after{content:'';position:absolute;left:14px;right:14px;top:50%;height:2px;margin-top:-1px;background:linear-gradient(90deg,transparent,#ff3b3b 15%,#ff3b3b 85%,transparent);box-shadow:0 0 8px #ff3b3b;opacity:.75;pointer-events:none;z-index:2}
+#slot .reel{border-radius:14px;background:linear-gradient(#fffdf6,#e9e3d2 50%,#fffdf6);box-shadow:inset 0 0 0 2px rgba(0,0,0,.25),inset 0 8px 14px rgba(0,0,0,.18),inset 0 -8px 14px rgba(0,0,0,.18)}
+#slot #msg,#slot #rlmsg,#slot #bjmsg{text-shadow:0 0 14px rgba(255,200,120,.35)}
+#slot .lbl{color:#a99cc4;text-align:center;margin:16px 0 8px}
+#slot .bets{justify-content:center;gap:8px}
+#slot .bets button{min-width:54px;padding:11px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:linear-gradient(#3a2f55,#241a3a);color:#f3e8ff;box-shadow:0 4px 10px -4px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.18);transition:transform .12s}
+#slot .bets button.on{background:linear-gradient(#ffe08a,#e0a030);color:#2a1a05;border-color:transparent;box-shadow:0 0 0 2px #fff4c8,0 8px 18px -4px rgba(255,170,40,.7);transform:translateY(-2px)}
+#slot .bets button:disabled{opacity:.35}
+#slot .bets.bj button{width:50px;height:50px;min-width:0;padding:0;border:3px dashed rgba(255,255,255,.6);background:radial-gradient(circle,#3a2f55 42%,#241a3a)}
+#slot .bets.bj button.on{background:radial-gradient(circle,#ffe08a 42%,#e0a030);border-color:#fff}
+#slot .rchips button{box-shadow:0 5px 10px -3px rgba(0,0,0,.7),inset 0 2px 3px rgba(255,255,255,.3)}
+#slot .cab .act.big{min-height:62px;border-radius:20px;background:linear-gradient(180deg,#ffe58f,#f2b138 55%,#d98a12);color:#2a1a05;letter-spacing:.14em;font-size:22px;box-shadow:0 12px 26px -8px rgba(255,160,30,.7),inset 0 1px 0 rgba(255,255,255,.7),inset 0 -4px 0 rgba(140,80,0,.35);animation:cpulse 2.6s ease-in-out infinite}
+#slot .cab .act.big:disabled{animation:none;filter:grayscale(.6) brightness(.8)}
+@keyframes cpulse{50%{box-shadow:0 12px 34px -6px rgba(255,170,40,.95),inset 0 1px 0 rgba(255,255,255,.7),inset 0 -4px 0 rgba(140,80,0,.35)}}
+#slot .cab .act:not(.big){border-radius:14px}
+#slot .cab .act.ghost{background:rgba(255,255,255,.08);color:#f3e8ff;border:1px solid rgba(255,255,255,.18);box-shadow:none}
+#slot .cab table{width:100%;border-collapse:separate;border-spacing:6px;margin:12px -6px 0;font-size:14px}
+#slot .cab table td{padding:9px 10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07)}
+#slot .cab table td:nth-child(odd){border-radius:12px 0 0 12px;border-right:0}#slot .cab table td:nth-child(even){border-radius:0 12px 12px 0;border-left:0;color:#ffd98a;font-weight:700;font-variant-numeric:tabular-nums}
+#slot .felt{margin:4px 0 14px;box-shadow:inset 0 0 0 4px #3b2414,inset 0 0 0 6px #e0b25c,inset 0 0 60px rgba(0,0,0,.55),0 16px 30px -14px #000}
+#slot .felt .arc{color:rgba(255,226,150,.7)}
+#slot .pc{box-shadow:0 6px 12px -2px rgba(0,0,0,.6)}
+#slot .rwrap{filter:drop-shadow(0 18px 24px rgba(0,0,0,.55))}
+#slot .rtab{box-shadow:inset 0 2px 12px rgba(0,0,0,.5),0 0 0 3px #6a4528,0 0 0 4px rgba(233,184,114,.5)}
+#slot .meta{color:#8f85a8}
+#slot .duel .dz{background:rgba(255,255,255,.05)}
+#slot #casself .reset{opacity:.9}
+@media (prefers-reduced-motion:reduce){#slot .csign,#slot .cdots,#slot .reels::before,#slot .cab .act.big{animation:none}}
+.lowfx #slot .cab,.lowfx #slot .cas-tabs button{-webkit-backdrop-filter:none;backdrop-filter:none}
 /* Roulette */
 .rou{--acc:#e9b872;--accink:#2a1a0c;background:radial-gradient(120% 80% at 50% 0%,#3a2a1f,#1d1510 70%);border-top-color:#e9b872;--surf2:#2d2118;--line:#4a3a2c}
 .rou h2{color:#e9b872}
@@ -362,7 +408,8 @@ body{padding-bottom:0}
 <div id="admwrap" hidden><div class="card2" style="padding:14px;display:grid;gap:10px;margin-top:14px"><div id="adm"></div></div></div>
 <section id="slot" hidden>
  <div id="casban" class="cab" hidden style="text-align:center;padding:28px 18px"><div style="font-size:54px">🚫</div><h2 style="margin:8px 0">Hausverbot</h2><div style="font:700 18px var(--f1)">Du hast Hausverbot im Casino</div><div class="meta" style="margin-top:10px">Die Sperre bleibt bestehen, bis ein Admin sie aufhebt.</div></div>
- <div class="cas-tabs"><button type="button" class="on" data-g="slots">🎰 Spielautomat</button><button type="button" data-g="bj">🃏 Blackjack</button><button type="button" data-g="rl">🎡 Roulette</button></div>
+ <div class="chead"><div class="csign">CASINO</div><div class="csub">Royal Lounge · virtuelles Geld</div><div class="cdots"></div></div>
+ <div class="cas-tabs"><button type="button" class="on" data-g="slots"><i>🎰</i>Automat</button><button type="button" data-g="bj"><i>🃏</i>Blackjack</button><button type="button" data-g="rl"><i>🎡</i>Roulette</button></div>
  <div id="slots">
  <div class="cab">
   <h2>Spielothek</h2>
@@ -408,7 +455,7 @@ body{padding-bottom:0}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 19.10. 12:10 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 19.10. 12:45 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -2720,32 +2767,35 @@ function evProcess(){const e=evAct();renderEv();
  if(typeof renderTop==='function')try{renderTop()}catch(er){}
  if(!$('#pay').hidden&&payTab===0)try{renderGarage()}catch(er){}}
 setInterval(renderEv,30000);
-function admEvUi(){const e=$('#admev');if(!e)return;const a=evAct();
+var admXiSel=new Set();
+function admEvUi(){const e=$('#admev');if(!e)return;const a=evAct();const keep={};['evname','evh','evpay','evspn','evspm','xic','xin','xip','xicol','xie'].forEach(i=>{const el=$('#'+i);if(el)keep[i]=el.value});const hk=($('#evhal')||{}).checked;
  const cs=Object.keys(XCAT).map(k=>'<option value="'+k+'">'+XCAT[k]+'</option>').join('');
  const inp='width:100%;padding:9px 10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit;box-sizing:border-box';
  e.innerHTML='<div class="meta" style="margin-top:10px"><b>Event starten</b>'+(a?' · läuft: '+escH(a.name)+' ('+evLeft()+')':' · aktuell kein Event')+'</div>'
  +'<input id="evname" maxlength="40" placeholder="Name des Events" style="'+inp+'">'
  +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><label class="meta">Dauer in Stunden<input id="evh" type="number" min="1" value="24" style="'+inp+'"></label><label class="meta">Lohn-Bonus in %<input id="evpay" type="number" min="0" max="500" value="0" style="'+inp+'"></label><label class="meta">Sonderaufträge (Anzahl)<input id="evspn" type="number" min="0" max="10" value="0" style="'+inp+'"></label><label class="meta">Sonderauftrag-Faktor<input id="evspm" type="number" min="1" max="50" step="0.5" value="3" style="'+inp+'"></label></div>'
  +'<label class="meta" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="evhal"> Halloween-Teile freischalten</label>'
- +(XIT.length?'<div class="meta">Eigene Kosmetik im Event verfügbar:</div>'+XIT.map(x=>'<label class="meta" style="display:flex;gap:6px;align-items:center"><input type="checkbox" class="evxi" value="'+x.id+'"> '+escH(x.n)+' ('+XCAT[x.c]+', '+F(+x.p||0)+')</label>').join(''):'')
+ +(XIT.length?'<div class="meta"><b>Kosmetik, die im Event kaufbar ist</b> (Häkchen setzen):</div>'+XIT.map(x=>'<label class="meta" style="display:flex;gap:6px;align-items:center"><input type="checkbox" class="evxi" value="'+x.id+'"'+(admXiSel.has(x.id)?' checked':'')+'> '+escH(x.n)+' ('+XCAT[x.c]+', '+F(+x.p||0)+')</label>').join(''):'')
  +'<div style="display:flex;gap:8px"><button class="act sm" id="evstart" type="button">Event starten</button><button class="act ghost sm" id="evstop" type="button">Event beenden</button></div><div class="meta" id="evmsg"></div>'
- +'<div class="meta" style="margin-top:10px"><b>Neues Kosmetik-Teil anlegen</b></div>'
+ +'<div class="meta" style="margin-top:10px"><b>Neues Teil für das Event anlegen</b> (wird automatisch angehakt)</div>'
  +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><label class="meta">Kategorie<select id="xic" style="'+inp+'">'+cs+'</select></label><label class="meta">Name<input id="xin" maxlength="24" style="'+inp+'"></label><label class="meta">Preis in €<input id="xip" type="number" min="0" value="10000000" style="'+inp+'"></label><label class="meta">Farbe<input id="xicol" type="color" value="#ff2d95" style="'+inp+';height:40px;padding:2px"></label></div>'
  +'<label class="meta">Emoji (für Aufkleber und Fahne)<input id="xie" maxlength="4" placeholder="z. B. 🎃" style="'+inp+'"></label>'
- +'<button class="act sm" id="xiadd" type="button">Teil anlegen</button><div class="meta" id="ximsg"></div>'}
+ +'<button class="act sm" id="xiadd" type="button">Teil anlegen und zum Event hinzufügen</button><div class="meta" id="ximsg"></div>';
+ Object.keys(keep).forEach(i=>{const el=$('#'+i);if(el&&i!=='xin'&&i!=='xie'&&i!=='xip')el.value=keep[i]});if(hk&&$('#evhal'))$('#evhal').checked=true}
+document.addEventListener('change',e=>{const t=e.target;if(t&&t.classList&&t.classList.contains('evxi')){if(t.checked)admXiSel.add(+t.value);else admXiSel.delete(+t.value)}});
 (function(){const _ra=renderAdm;renderAdm=function(){const r=_ra.apply(this,arguments);try{admEvUi()}catch(er){}return r}})();
 document.addEventListener('click',async e=>{const t=e.target.closest&&e.target.closest('#evstart,#evstop,#xiadd');if(!t)return;
  const put=async(key,value)=>{await sbReq('/rest/v1/settings?on_conflict=key',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({key,value,updated_at:new Date().toISOString()})});const r=await sbReq('/rest/v1/settings?key=eq.'+key+'&select=value');if(!r||!r[0]||!r[0].value||r[0].value.id!==value.id)throw new Error('Nicht gespeichert (settings-Tabelle/Admin-Konto prüfen)')};
  const v=id=>(($('#'+id)||{}).value||'');
  if(t.id==='xiadd'){const m=$('#ximsg');if(!sbSess){m.textContent='Mit dem Admin-Konto anmelden.';return}const n=v('xin').trim();if(!n){m.textContent='Bitte einen Namen eingeben.';return}if(XIT.length>=60){m.textContent='Maximal 60 eigene Teile.';return}
   const it={id:Date.now(),c:v('xic'),n,p:Math.max(0,Math.round(+v('xip')||0)),col:v('xicol'),e:v('xie').trim()};
-  try{await put('xitems',{id:Date.now(),list:XIT.concat([it])});XIT=XIT.concat([it]);applyXit();m.textContent='Angelegt. Jetzt unten beim Event auswählen.';admEvUi();setTimeout(cfgLoad,300)}catch(er){m.textContent='Fehler: '+er.message}return}
+  try{await put('xitems',{id:Date.now(),list:XIT.concat([it])});XIT=XIT.concat([it]);applyXit();admXiSel.add(it.id);m.textContent='Angelegt und fürs Event vorgemerkt. Jetzt Event starten.';admEvUi();$('#ximsg').textContent='Angelegt und fürs Event vorgemerkt. Jetzt Event starten.';setTimeout(cfgLoad,300)}catch(er){m.textContent='Fehler: '+er.message}return}
  if(t.id==='evstart'){const m=$('#evmsg');if(!sbSess){m.textContent='Mit dem Admin-Konto anmelden.';return}
   const h=Math.max(.1,+v('evh')||24),now=Date.now(),xi=[...document.querySelectorAll('.evxi:checked')].map(x=>+x.value);
   const ev={id:now,name:v('evname').trim().slice(0,40)||'Event',start:now,end:now+Math.round(h*36e5),pay:Math.max(0,Math.min(500,Math.round(+v('evpay')||0))),spn:Math.max(0,Math.min(10,Math.round(+v('evspn')||0))),spm:Math.max(1,Math.min(50,+v('evspm')||3)),hal:!!($('#evhal')||{}).checked,xi};
-  try{await put('event',ev);EVT=ev;m.textContent='Event gestartet. Spieler sehen es innerhalb von 15 Sekunden.';evProcess();admEvUi()}catch(er){m.textContent='Fehler: '+er.message}return}
+  try{await put('event',ev);EVT=ev;evProcess();admEvUi();$('#evmsg').textContent='Event gestartet. Spieler sehen es innerhalb von 15 Sekunden.'}catch(er){m.textContent='Fehler: '+er.message}return}
  if(t.id==='evstop'){const m=$('#evmsg');if(!sbSess){m.textContent='Mit dem Admin-Konto anmelden.';return}if(!EVT){m.textContent='Kein Event aktiv.';return}
-  const ev=Object.assign({},EVT,{id:Date.now(),end:Date.now()});try{await put('event',ev);EVT=ev;m.textContent='Event beendet.';evProcess();admEvUi()}catch(er){m.textContent='Fehler: '+er.message}}});
+  const ev=Object.assign({},EVT,{id:Date.now(),end:Date.now()});try{await put('event',ev);EVT=ev;evProcess();admEvUi();$('#evmsg').textContent='Event beendet.'}catch(er){m.textContent='Fehler: '+er.message}}});
 /* ---------- Blackjack ---------- */
 const BJB=[100,500,1000,2500,5000,10000],RK=['A','2','3','4','5','6','7','8','9','10','J','Q','K'],SU=['♠','♥','♦','♣'];
 let bjBet=100,bjBusy=false;
