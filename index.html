@@ -396,7 +396,7 @@ body{padding-bottom:0}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 19.10. 11:12 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 19.10. 11:30 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -2660,7 +2660,7 @@ async function cfgLoad(){if(!sbOn())return;
    if(an.target==='all'||fresh)ovBox('annov','<div class="offh">📢 Ankündigung</div><div class="meta" style="white-space:pre-wrap;color:var(--ink);font-size:15px">'+escH(an.text)+'</div>','Verstanden',()=>lsSet('baggerAnn',an.id));
    else lsSet('baggerAnn',an.id)}}
  catch(e){}}
-setInterval(cfgLoad,15000);setTimeout(cfgLoad,3000);
+setInterval(cfgLoad,15000);setTimeout(cfgLoad,1200);document.addEventListener('visibilitychange',()=>{if(!document.hidden)cfgLoad()});window.addEventListener('online',cfgLoad);window.addEventListener('focus',cfgLoad);
 document.addEventListener('click',async e=>{const t=e.target.closest&&e.target.closest('#admannsend,#admreset');if(!t)return;
  const put=async(key,value)=>{await sbReq('/rest/v1/settings?on_conflict=key',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({key,value,updated_at:new Date().toISOString()})});const r=await sbReq('/rest/v1/settings?key=eq.'+key+'&select=value');if(!r||!r[0]||!r[0].value||r[0].value.id!==value.id)throw new Error('Nicht gespeichert. Ist supabase-settings.sql ausgeführt und das Konto Admin?')};
  if(t.id==='admannsend'){const m=$('#admannmsg'),tx=(($('#admann')||{}).value||'').trim();if(!tx){m.textContent='Bitte einen Text eingeben.';return}
