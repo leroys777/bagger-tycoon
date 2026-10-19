@@ -517,7 +517,7 @@ html.hw .ldev span{font-size:.82em;color:#d9c4ff}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="hwbtn" type="button" style="display:block;margin:0 auto 4px">Halloween-Design: An</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 19.10. 17:40 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="hwbtn" type="button" style="display:block;margin:0 auto 4px">Halloween-Design: An</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 19.10. 19:50 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -603,7 +603,7 @@ const LLC=[1000000,4000000,7000000,15000000,30000000,100000000,350000000,1000000
 let V=VB,J=JB,X=XB;
 var shopTab=0;function setMode(m){shopTab=m?1:0;V=m?VL:VB;J=m?JL:JB;X=m?XL:XB;if(typeof S!=='undefined'&&S)S.lm=m?1:0}
 
-const ST0=()=>({jobs:0,ex:0,work:0,best:0,passive:0,repairs:0,repCost:0,breaks:0,spins:0,cstake:0,cwin:0,big:0,time:0,sold:0,dig:0});
+const ST0=()=>({jobs:0,ex:0,work:0,best:0,passive:0,repairs:0,repCost:0,breaks:0,spins:0,cstake:0,cwin:0,big:0,time:0,sold:0,dig:0,acs:0,acr:0,acu:0,acd:0});
 let S={m:0,tier:0,job:null,offers:[],nid:1,up:{mot:0,hyd:0,tec:0,auto:0},lic:0,tot:0,life:0,emp:'self',st:ST0(),v:2,rk:0};
 const newState=()=>({autoMig:1,lm:0,m:0,tier:0,job:null,offers:[],nid:1,up:{mot:0,hyd:0,tec:0,auto:0},lic:0,tot:0,life:0,emp:'self',unl:0,st:ST0(),v:2,rk:0,cond:100,top:0,cds:{}});
 try{const d=JSON.parse(localStorage.getItem(KEY));if(d&&d.offers)S=d}catch(e){}
@@ -2069,8 +2069,8 @@ function buyUp(k){const u=UP.find(x=>x.k===k),l=S.up[k]||0;if(!u||l>=u.max)retur
 function startLoaderMode(){S.cds={};S.tot=0;S.broken=false;S.cond=100;S.fix=0;S.job=null;S.offers=[];S.top=0;S.tier=0;setMode(1);refill();if(T3)setExc();const b=$('#rlbox');if(b)delete b.dataset.k;renderShop();renderOffers();renderTop();renderProg();renderBrk();updateFirm();toast('Radlader-Durchgang gestartet: Hoflader');save()}
 function doPrest(b){const g=gain();if(g<1)return;
  if(!b.dataset.arm){b.dataset.arm='1';b.textContent='Nochmal tippen zum Verkaufen';setTimeout(()=>{delete b.dataset.arm},3000);return}
- delete b.dataset.arm;const wasL=S.lm,keep={emp:S.emp,next:S.next,nid:S.nid,boostUntil:S.boostUntil,lic:S.lic+(S.lm?0:g),llic:S.llic+(S.lm?g:0),rl:S.rl,cos:S.cos,ev:S.ev,evj:S.evj,dr:S.dr,ach:S.ach,vc:S.vc,mx:S.mx,wk:S.wk,auto:S.up.auto,life:S.life,unl:S.unl,st:S.st};
- S=Object.assign(newState(),{emp:keep.emp,next:keep.next,nid:keep.nid,boostUntil:keep.boostUntil,lic:keep.lic,llic:keep.llic,rl:keep.rl,cos:keep.cos,dr:keep.dr,ach:keep.ach,vc:keep.vc,mx:keep.mx,wk:keep.wk,life:keep.life,unl:keep.unl,st:keep.st});S.up.auto=keep.auto;S.st.sold++;setMode(0);S.rk=rankIx();
+ delete b.dataset.arm;const wasL=S.lm,keep={emp:S.emp,next:S.next,nid:S.nid,boostUntil:S.boostUntil,lic:S.lic+(S.lm?0:g),llic:S.llic+(S.lm?g:0),rl:S.rl,cos:S.cos,ev:S.ev,evj:S.evj,dr:S.dr,ach:S.ach,vc:S.vc,mx:S.mx,wk:S.wk,auto:S.up.auto,life:S.life,unl:S.unl,st:S.st,dgban:S.dgban};
+ S=Object.assign(newState(),{emp:keep.emp,next:keep.next,nid:keep.nid,boostUntil:keep.boostUntil,lic:keep.lic,llic:keep.llic,rl:keep.rl,cos:keep.cos,dr:keep.dr,ach:keep.ach,vc:keep.vc,mx:keep.mx,wk:keep.wk,life:keep.life,unl:keep.unl,st:keep.st});if(keep.dgban)S.dgban=keep.dgban;S.up.auto=keep.auto;S.st.sold++;setMode(0);S.rk=rankIx();
  refill();newIds.clear();if(T3)setExc();renderOffers();renderShop();renderTop();renderProg();renderFirm();toast('Neue Firma gegründet: '+(wasL?S.llic+' Radlader-':S.lic+' Bau')+'Lizenzen');save()}
 const PK=[{id:'p1',n:'Starterpaket',eur:'0,99',h:.25},{id:'p2',n:'Bauleiter',eur:'4,99',h:1},{id:'p3',n:'Unternehmer',eur:'9,99',h:3},{id:'p4',n:'Magnat',eur:'19,99',h:8},{id:'p5',n:'Tycoon',eur:'49,99',h:24}];
 const rate=()=>{const c=S.offers.filter(o=>o.t<=S.tier);return(c.length?Math.max(...c.map(o=>o.e/o.w)):3)*pw()*payM()*PY};
@@ -2272,6 +2272,18 @@ function renderAdm(){const e=$('#adm');if(!e)return;
  if(!admOpen){admWinClose();e.innerHTML='<b>Admin-Panel</b><div class="meta">Zugang nur mit Code.</div><div style="display:flex;gap:8px"><input id="admpin" type="password" inputmode="numeric" maxlength="8" autocomplete="off" placeholder="Code" style="flex:1;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><button class="act" id="admgo" type="button">Öffnen</button></div><div class="meta" id="admmsg"></div>';return}
  e.innerHTML='<b>Admin-Panel</b><div class="meta">Das Admin-Fenster ist geöffnet.</div><div style="display:flex;gap:8px"><button class="act" id="admwinopen" type="button">Fenster öffnen</button></div>';admWinOpen()}
 function resetArm(b){if(b.dataset.arm){delete b.dataset.arm;b.textContent='Spielstand zurücksetzen';return true}b.dataset.arm='1';b.textContent='Nochmal tippen zum Löschen';setTimeout(()=>{delete b.dataset.arm;b.textContent='Spielstand zurücksetzen'},3000);return false}
+/* ---------- Auto-Clicker-Erkennung ---------- */
+const ACK={t:[],w:[],last:0};
+function acFlag(n){S.st.acs=(S.st.acs||0)+n;S.st.acd=Date.now();if(ADC&&ADC.acb&&S.st.acs>=Math.max(1,+ADC.acn||3)&&!S.dgban){S.dgban=1;toast('Mitschaufeln gesperrt \u2013 Auto-Clicker erkannt')}save()}
+function acChk(e){const n=performance.now();ACK.t=ACK.t.filter(x=>n-x<1000);
+ if(ACK.t.length>=15){S.st.acr=Math.max(S.st.acr||0,16);if(n-ACK.last>3000){ACK.last=n;toast('Zu schnell geklickt \u2013 bitte langsamer');acFlag(1)}return false}
+ ACK.t.push(n);
+ if(e&&e.isTrusted===false){S.st.acu=(S.st.acu||0)+1;if(S.st.acu%20===0)acFlag(1)}
+ if(ACK.w.length&&n-ACK.w[ACK.w.length-1]>2000)ACK.w=[];
+ ACK.w.push(n);
+ if(ACK.w.length>=30){const d=[];for(let i=1;i<ACK.w.length;i++)d.push(ACK.w[i]-ACK.w[i-1]);const m=d.reduce((a,b)=>a+b,0)/d.length,sd=Math.sqrt(d.reduce((a,b)=>a+(b-m)*(b-m),0)/d.length),cps=1000/Math.max(1,m);
+  S.st.acr=Math.max(S.st.acr||0,Math.round(cps*10)/10);if((cps>=7&&sd<8)||cps>=14)acFlag(1);ACK.w=[]}
+ return true}
 document.addEventListener('click',e=>{
  const t=e.target.closest('button');if(!t)return;
  if(t.dataset.t){document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b===t));['jobs','shop','firm','pay','slot','prof','board'].forEach(id=>$('#'+id).hidden=id!==t.dataset.t);if(t.dataset.t==='board'){lbView=null;lbLoad(true);if(lbSub==='global')gcLoad();if(lbSub==='priv')pvLoad()}if(t.dataset.t==='slot')renderCasino();if(t.dataset.t!=='prof')admOpen=false;$('#admwrap').hidden=t.dataset.t!=='prof';$('#cloudwrap').hidden=t.dataset.t!=='prof';$('#inboxwrap').hidden=t.dataset.t!=='prof'||!inbox.length;if(t.dataset.t==='prof')inboxSeen();renderAdm();if(t.dataset.t==='prof'){renderCloud()}if(t.dataset.t==='jobs'&&T3)rs();if(t.dataset.t==='firm')renderFirm();if(t.dataset.t==='pay')renderPay();if(t.dataset.t==='prof')renderProf();$('#rk').classList.toggle('on',t.id==='rk');$('#scr').scrollTo(0,0);return}
@@ -2281,7 +2293,7 @@ document.addEventListener('click',e=>{
  if(t.dataset.job){S.job=+t.dataset.job;renderOffers();renderProg();return}
  if(t.dataset.sel){switchTo(+t.dataset.sel);return}
  if(t.dataset.buy){const i=+t.dataset.buy,v=V[i];if(S.m>=v.c&&i===S.top+1&&(!v.lic||licN()>=v.lic)){S.m-=v.c;S.cds[S.tier]={c:S.cond,b:!!S.broken,f:S.fix||0};S.top=i;S.tier=i;S.cond=100;S.broken=false;S.job=null;S.offers=[];refill();toast(v.n+' gekauft!');if(T3)setExc();renderShop();renderOffers();renderTop();renderProg();save()}return}
- if(t.id==='dig'){const o=cur();if(!o){toast('Erst einen Auftrag annehmen');return}if(S.broken){toast(V[S.tier].loader?'Radlader ist kaputt':'Bagger ist kaputt');return}S.st.dig=(S.st.dig||0)+1;o.prog+=Math.max(1,pw()*.3);boost=1;renderProg();return}
+ if(t.id==='dig'){if(S.dgban){toast('Mitschaufeln ist gesperrt (Auto-Clicker-Verdacht). Melde dich bei einem Admin.');return}const o=cur();if(!o){toast('Erst einen Auftrag annehmen');return}if(S.broken){toast(V[S.tier].loader?'Radlader ist kaputt':'Bagger ist kaputt');return}if(!acChk(e))return;S.st.dig=(S.st.dig||0)+1;o.prog+=Math.max(1,pw()*.3);boost=1;renderProg();return}
  if(t.dataset.bet){bet=t.dataset.bet==='max'?'max':Math.min(10000,+t.dataset.bet||10);renderBets();return}
  if(t.dataset.emp){if(S.life>=EMPMIN&&t.dataset.emp==='wtd'&&S.emp!=='wtd'){S.emp='wtd';S.next=Date.now()+300000;toast('Willkommen bei WTD 91');renderEmp();updateFirm();save()}return}
  if(t.id==='rep'||t.id==='frep'){const c=FULLC();if(S.m>=c&&S.cond<100){S.m-=c;S.cond=100;S.broken=false;S.st.repairs++;S.st.repCost+=c;toast('Komplett repariert: −'+F(c));renderShop();renderBrk();renderTop();save()}return}
@@ -2431,6 +2443,11 @@ async function admLoadPl(){if(!sbOn()||!sbSess){admPlMsg='Bitte oben im Cloud-Ko
   admPl=(a||[]).map(x=>({id:x.user_id,name:x.name||'Spieler',m:parseFloat(x.geld)||0,l:parseInt(x.lz)||0,ban:!!fm[x.user_id],role:rm[x.user_id]||''})).sort((p,q)=>p.name.localeCompare(q.name));admPlMsg=''}
  catch(e){admPlMsg='Fehler: '+e.message}
  admRenderPl()}
+async function acLoad(){if(!sbOn()||!sbSess){acL=[];acMsg='Bitte als Admin in der Cloud anmelden.';if(AWT==='sv')awRender();return}acL=[];acMsg='Lade \u2026';if(AWT==='sv')awRender();
+ try{const r=await sbReq('/rest/v1/saves?select=user_id,name,acs:data->st->>acs,acr:data->st->>acr,acu:data->st->>acu,dig:data->st->>dig,gb:data->>dgban&limit=500');
+  acL=(r||[]).map(x=>({id:x.user_id,name:x.name||'Spieler',acs:+x.acs||0,acr:+x.acr||0,acu:+x.acu||0,dig:+x.dig||0,gb:+x.gb||0})).filter(p=>p.acs>0||p.acu>0||p.gb).sort((a,b)=>b.acs-a.acs||b.acr-a.acr);acMsg=''}
+ catch(e){acMsg='Fehler: '+e.message}
+ if(AWT==='sv')awRender()}
 const aesc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const ROLEN={founder:'Founder',supporter:'Supporter',helper:'Helper'};
 function admRenderPl(){const e=$('#admpl');if(!e)return;
@@ -2439,7 +2456,7 @@ const ADF=[['Geld','m'],['Gesamtverdienst (Lebenszeit)','life'],['Verdienst Firm
  ['Radlader-Lizenzen','llic'],['Vorarbeiter-Stufe','up.auto'],['Upgrade Motor','up.mot'],['Upgrade Hydraulik','up.hyd'],['Upgrade Technik','up.tec'],
  ['Aufträge erledigt','st.jobs'],['Exklusiv-Aufträge','st.ex'],['Arbeit gesamt','st.work'],['Bester Auftrag','st.best'],['Passiv verdient','st.passive'],['Reparaturen','st.repairs'],['Reparaturkosten','st.repCost'],['Pannen','st.breaks'],['Spins / Runden','st.spins'],['Casino Einsatz gesamt','st.cstake'],['Casino Gewinn gesamt','st.cwin'],['Größter Gewinn','st.big'],['Firmen verkauft','st.sold'],['Selbst mitgeschaufelt','st.dig'],['Spielzeit (Sek.)','st.time']];
 const admGet=(o,p)=>p.split('.').reduce((a,k)=>a==null?a:a[k],o);
-let admDet=null,asxUid='',asxD=null;
+let admDet=null,asxUid='',asxD=null,acL=null,acMsg='';
 async function admOpenPl(uid){let ov=$('#admdet');if(!ov){ov=document.createElement('div');ov.id='admdet';document.body.appendChild(ov)}
  ov.innerHTML='<div class="admbox"><div class="meta">Lade …</div></div>';
  try{const r=await sbReq('/rest/v1/saves?user_id=eq.'+uid+'&select=name,data&limit=1'),row=r&&r[0];if(!row)throw new Error('Kein Spielstand gefunden');
@@ -2787,7 +2804,7 @@ function ovBox(id,html,btn,cb){if(document.getElementById(id))return;const el=do
  el.querySelector('[data-ok]').onclick=()=>{el.remove();cb&&cb()}}
 const escH=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function applyGlobalReset(r){
- const ban=S.ban,bp=S.banPend;S=newState();S.ban=ban;if(bp)S.banPend=bp;S.rl=0;S.llic=0;S.lm=0;S.autoMig=1;S.cos={own:{},eq:{b:{},l:{}}};V=VB;J=JB;X=XB;setMode(0);cosPrev={};wkRows=null;wkPrevRows=null;RBW.length=0;
+ const ban=S.ban,bp=S.banPend,dgb=S.dgban;S=newState();S.ban=ban;if(dgb)S.dgban=dgb;if(bp)S.banPend=bp;S.rl=0;S.llic=0;S.lm=0;S.autoMig=1;S.cos={own:{},eq:{b:{},l:{}}};V=VB;J=JB;X=XB;setMode(0);cosPrev={};wkRows=null;wkPrevRows=null;RBW.length=0;
  try{refill();newIds.clear();save();if(T3)setExc();renderOffers();renderShop();renderBets();renderTop();renderProg();renderFirm();renderDaily();renderBrk();if(!$('#prof').hidden)renderProf()}catch(e){}
  if(!r.keep)lsSet('baggerResetId',r.id);achPrev={j:0,b:0};
  if(sbOn()&&sbSess){sbConflict=null;setTimeout(()=>sbPush(true),400)}
@@ -2875,7 +2892,7 @@ function evItems(){const o=XIT.filter(x=>COSC[x.c]).map(x=>({k:x.id,l:x.n+' ('+X
 var admXiSel=new Set();
 const awv=(id,d)=>{const e=$('#'+id);return e?e.value:(d==null?'':d)};
 const awn=t=>{AWMSG=t;awRender()};
-const AWTABS=[['ov','Übersicht'],['ev','Events'],['co','Kosmetik'],['pr','Preise'],['pl','Spieler'],['sx','Statistiken'],['pf','Profil'],['ac','Erfolge'],['sy','System']];
+const AWTABS=[['ov','Übersicht'],['ev','Events'],['co','Kosmetik'],['pr','Preise'],['pl','Spieler'],['sx','Statistiken'],['sv','Auto-Clicker'],['pf','Profil'],['ac','Erfolge'],['sy','System']];
 function xiFormHtml(){const cs=Object.keys(XCAT).map(k=>'<option value="'+k+'">'+XCAT[k]+'</option>').join('');
  return `<div class="aw-card"><h3>Neues Kosmetik-Teil</h3><div class="meta">Wird als normales Teil angelegt. Unter „Kosmetik“ stellst du danach Preis und Sperre ein, oder du hakst es im Event an.</div><div class="aw-grid2"><label class="meta">Kategorie<select id="xic">${cs}</select></label><label class="meta">Name<input id="xin" maxlength="24"></label><label class="meta">Preis in €<input id="xip" type="number" min="0" value="10000000"></label><label class="meta">Farbe<input id="xicol" type="color" value="#ff2d95" style="height:42px;padding:2px"></label></div><label class="meta">Emoji (Aufkleber, Fahne, Dach-Deko)<input id="xie" maxlength="4" placeholder="z. B. 🎃"></label><button class="act sm" id="xiadd" type="button">Teil anlegen</button></div>`}
 function evFormHtml(){const its=evItems(),n=Date.now();
@@ -2898,7 +2915,10 @@ function awPane(){const t=AWT;
   return `<div class="aw-card"><h3>Kosmetik verwalten</h3><div class="meta">Preis ändern, Teile sperren, nur im Event kaufbar machen oder an einen Erfolg koppeln. Gekaufte Teile bleiben bei den Spielern.</div>${tabs}<div>${rows}</div><button class="act sm" id="awcosave" type="button">Änderungen dieser Kategorie speichern</button></div>`+xiFormHtml()}
  if(t==='pr'){const pr=ADC.pr||{};const rowv=(a,p)=>a.map((v,i)=>`<div class="aw-item" style="grid-template-columns:1fr 150px"><b>${escH(v.n)}</b><input type="number" min="0" data-awv="${p}.${i}" value="${Math.round(v.c)}"></div>`).join('');
   return `<div class="aw-card"><h3>Allgemein</h3><label class="meta">Lohn-Faktor in % (100 = normal, gilt für alle Aufträge)<input id="awpay" type="number" min="1" max="1000" value="${pr.pay||100}"></label><label class="meta">Preis der Radlader-Erweiterung in €<input id="awrl" type="number" min="0" value="${Math.round(RLP)}"></label></div><div class="aw-card"><h3>Bagger</h3>${rowv(VB,'b')}</div><div class="aw-card"><h3>Radlader</h3>${rowv(VL,'l')}</div><div style="display:flex;gap:8px"><button class="act" id="awprsave" type="button">Preise speichern</button><button class="act ghost" id="awprreset" type="button">Auf Standard zurücksetzen</button></div>`}
- if(t==='sx'){const sel=(admPl||[]).map(p=>`<option value="${p.id}"${p.id===asxUid?' selected':''}>${escH(p.name)}</option>`).join('');
+ if(t==='sv'){const on=!!ADC.acb,n=Math.max(1,+ADC.acn||3);
+  return `<div class="aw-card"><h3>Auto-Clicker-Schutz</h3><div class="meta">Das Spiel begrenzt \u201eMitschaufeln\u201c auf 15 Klicks pro Sekunde und z\u00e4hlt Verdachtspunkte bei dauerhaft zu schnellem oder zu gleichm\u00e4\u00dfigem Klicken sowie bei k\u00fcnstlich ausgel\u00f6sten Klicks.</div><div class="row"><button class="act ${on?'':'ghost'} sm" id="acbtog" type="button">Automatische Sperre: ${on?'AN':'AUS'}</button><label class="meta">ab <input type="text" inputmode="numeric" id="acn" value="${n}" style="width:46px"> Punkten</label><button class="act sm" id="acbsave" type="button">Speichern</button></div></div>
+  <div class="aw-card" style="margin-top:10px"><h3>Auff\u00e4llige Spieler</h3>${acMsg?`<div class="meta">${escH(acMsg)}</div>`:''}${acL&&!acL.length&&!acMsg?'<div class="meta">Keine Auff\u00e4lligkeiten. \ud83d\udc4d</div>':''}${(acL||[]).map(p=>`<div class="aw-row" style="padding:8px 0;border-top:1px solid var(--line)"><div><b>${escH(p.name)}</b>${p.gb?' <span class="tag">Mitschaufeln gesperrt</span>':''}</div><div class="meta">Punkte: <b>${p.acs}</b> \u00b7 max. ${p.acr} Kl/s \u00b7 k\u00fcnstliche Klicks: ${p.acu} \u00b7 geschaufelt: ${Math.round(p.dig).toLocaleString('de-DE')}</div><div class="row"><button class="act ${p.gb?'':'ghost'} sm" data-acv="${p.id}:${p.gb?'unban':'ban'}" type="button">${p.gb?'Freigeben':'Sperren'}</button><button class="act ghost sm" data-acv="${p.id}:reset" type="button">Verdacht zur\u00fccksetzen</button></div></div>`).join('')}<button class="act ghost sm" id="acload" type="button" style="margin-top:8px">Liste neu laden</button></div>`}
+  if(t==='sx'){const sel=(admPl||[]).map(p=>`<option value="${p.id}"${p.id===asxUid?' selected':''}>${escH(p.name)}</option>`).join('');
   const fl=asxD?ADF.filter(f=>f[1].slice(0,3)==='st.'):[];
   const dg=asxD?'<div class="aw-card" style="margin-top:10px"><h3>\u26cf\ufe0f Selbst mitgeschaufelt</h3><div class="meta">Aktuell: <b>'+Math.round(+admGet(asxD,'st.dig')||0).toLocaleString('de-DE')+' Mal</b></div><div class="row"><input type="text" inputmode="numeric" id="asxdig" data-k="st.dig" data-o="'+Math.round(+admGet(asxD,'st.dig')||0)+'" value="'+Math.round(+admGet(asxD,'st.dig')||0)+'" style="flex:1;min-width:0"><button class="act sm" id="asxsave" type="button">Speichern</button><button class="act ghost sm" id="asx0" type="button">Auf 0</button></div></div>':'';
   return `<div class="aw-card"><h3>Statistiken bearbeiten</h3><div class="meta">Spieler w\u00e4hlen, laden, Werte \u00e4ndern. Wirkt beim Spieler innerhalb von ca. 15 Sek.</div>${admPl?`<div class="row"><select id="asxsel" style="flex:1;min-width:0;padding:9px 10px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><option value="">Spieler w\u00e4hlen \u2026</option>${sel}</select><button class="act sm" id="asxload" type="button">Laden</button></div>`:'<div class="meta">Lade Spielerliste \u2026</div>'}</div>${dg}`+(asxD?`<div class="aw-card" style="margin-top:10px"><h3>Alle Statistiken</h3><div class="adgrid">${fl.filter(f=>f[1]!=='st.dig').map(([l,k])=>{const v=Math.round(+admGet(asxD,k)||0);return `<label><span class="meta">${l}</span><input type="text" inputmode="numeric" data-k="${k}" data-o="${v}" value="${v}"></label>`}).join('')}</div><button class="act" id="asxsave2" type="button" style="margin-top:10px">Alle \u00c4nderungen speichern</button></div>`:'')}
@@ -2916,7 +2936,7 @@ var AWC='paint';
 function awRender(){const w=$('#admwin');if(!w)return;const b=$('#awbody');const sy=b?b.scrollTop:0;
  w.querySelector('.aw-tabs').innerHTML=AWTABS.map(t=>`<button type="button" class="aw-tab ${t[0]===AWT?'on':''}" data-awt="${t[0]}">${t[1]}</button>`).join('');
  b.innerHTML=(AWMSG?`<div class="aw-note">${escH(AWMSG)}</div>`:'')+awPane();
- if(AWT==='ov')admSplSt();if(AWT==='pl'){admLoadPl()}if(AWT==='sx'&&!admPl)admLoadPl().then(()=>{if(AWT==='sx')awRender()});if(AWT==='sy'){admClList();clLoad().then(admClList)}if(AWT==='ac'&&!admPl)admLoadPl().then(()=>{if(AWT==='ac')awRender()});
+ if(AWT==='ov')admSplSt();if(AWT==='pl'){admLoadPl()}if(AWT==='sv'&&acL===null)acLoad();if(AWT==='sx'&&!admPl)admLoadPl().then(()=>{if(AWT==='sx')awRender()});if(AWT==='sy'){admClList();clLoad().then(admClList)}if(AWT==='ac'&&!admPl)admLoadPl().then(()=>{if(AWT==='ac')awRender()});
  b.scrollTop=sy}
 function admWinOpen(){adcSnap();let w=$('#admwin');if(!w){w=document.createElement('div');w.id='admwin';w.className='aw';w.innerHTML='<div class="aw-top"><b>⚙️ Admin</b><span class="meta" style="flex:1">Bagger Tycoon</span><button class="act ghost sm" id="admclose" type="button">Schließen</button></div><div class="aw-tabs"></div><div class="aw-body" id="awbody"></div>';document.body.appendChild(w);document.body.style.overflow='hidden'}awRender()}
 function admWinClose(){const w=$('#admwin');if(w){w.remove();document.body.style.overflow=''}}
@@ -2924,14 +2944,19 @@ const adcSave=async(patch,msg)=>{const v=Object.assign({},ADC,patch,{id:Date.now
 document.addEventListener('change',e=>{const t=e.target;if(!t||!t.classList)return;if(t.classList.contains('evxi')){const k=isNaN(+t.value)?t.value:+t.value;if(t.checked)admXiSel.add(k);else admXiSel.delete(k)}});
 document.addEventListener('click',async e=>{const t=e.target.closest&&e.target.closest('#admwin button,#admwinopen');if(!t)return;
  if(t.id==='admwinopen'){admWinOpen();return}
- if(t.dataset.awt){AWT=t.dataset.awt;AWMSG='';awRender();return}
+ if(t.dataset.awt){AWT=t.dataset.awt;AWMSG='';if(AWT==='sv')acL=null;awRender();return}
  if(t.dataset.awcc){AWC=t.dataset.awcc;awRender();return}
- if(!sbSess&&(t.dataset.evend||t.dataset.evdel||['asxload','asxsave','asxsave2','asx0','xiadd','evsave','awcosave','awprsave','awprreset','awpfsave','awaosave','awacadd','awbdadd','awbdaw','awbdrm'].includes(t.id))){awn('Mit dem Admin-Konto in der Cloud anmelden (Profil, Cloud-Speicher).');return}
+ if(!sbSess&&(t.dataset.evend||t.dataset.evdel||['acbtog','acbsave','asxload','asxsave','asxsave2','asx0','xiadd','evsave','awcosave','awprsave','awprreset','awpfsave','awaosave','awacadd','awbdadd','awbdaw','awbdrm'].includes(t.id))){awn('Mit dem Admin-Konto in der Cloud anmelden (Profil, Cloud-Speicher).');return}
   if(t.id==='asxload'){const u=($('#asxsel')||{}).value;if(!u){awn('Bitte einen Spieler w\u00e4hlen.');return}asxUid=u;asxD=null;try{const r=await sbReq('/rest/v1/saves?user_id=eq.'+u+'&select=data&limit=1');if(!r||!r[0])throw new Error('Kein Spielstand gefunden');asxD=r[0].data||{};AWMSG='';awRender()}catch(er){awn('Fehler: '+er.message)}return}
  if(t.id==='asx0'||t.id==='asxsave'||t.id==='asxsave2'){if(!asxUid||!asxD){awn('Erst einen Spieler laden.');return}
   const patch={};if(t.id==='asx0')patch['st.dig']=0;else document.querySelectorAll('#awbody [data-k]').forEach(i=>{const v=i.value.replace(/[^\d]/g,'');if(v!==''&&v!==i.dataset.o)patch[i.dataset.k]=Math.min(+v,1e15)});
   if(!Object.keys(patch).length){awn('Nichts ge\u00e4ndert.');return}
   try{await await_flag(asxUid,{cmd_patch:patch,cmd_id:Date.now()});Object.keys(patch).forEach(k=>{const p=k.split('.'),l=p.pop(),o=p.reduce((x,y)=>x[y]||(x[y]={}),asxD);o[l]=patch[k]});if(asxUid===(sbSess&&sbSess.uid))flagsSync();AWMSG='Gespeichert \u2713 ('+Object.keys(patch).length+' Wert'+(Object.keys(patch).length===1?'':'e')+'). Wirkt beim Spieler innerhalb von ca. 15 Sek.';awRender()}catch(er){awn('Fehler: '+er.message+(/cmd_patch/.test(er.message)?' \u2013 bitte supabase-alles.sql ausf\u00fchren.':''))}return}
+  if(t.id==='acload'){acL=null;awRender();return}
+ if(t.id==='acbtog'){await adcSave({acb:ADC.acb?0:1},ADC.acb?'Automatische Sperre aus.':'Automatische Sperre an.');return}
+ if(t.id==='acbsave'){await adcSave({acn:Math.max(1,Math.min(50,Math.round(+awv('acn')||3)))},'Gespeichert.');return}
+ if(t.dataset.acv){const[u,a]=t.dataset.acv.split(':'),patch=a==='reset'?{'st.acs':0,'st.acu':0,'st.acr':0}:{dgban:a==='ban'?1:0};
+  try{await await_flag(u,{cmd_patch:patch,cmd_id:Date.now()});const p=(acL||[]).find(x=>x.id===u);if(p){if(a==='reset'){p.acs=p.acu=p.acr=0}else p.gb=a==='ban'?1:0}if(u===(sbSess&&sbSess.uid))flagsSync();AWMSG=a==='ban'?'Mitschaufeln gesperrt.':a==='unban'?'Freigegeben.':'Verdacht zur\u00fcckgesetzt.';awRender()}catch(er){awn('Fehler: '+er.message)}return}
  if(t.id==='awplload'){await admLoadPl();awRender();return}
  if(t.id==='xiadd'){const n=awv('xin').trim();if(!n){awn('Bitte einen Namen eingeben.');return}if(XIT.length>=60){awn('Maximal 60 eigene Teile.');return}
   const it={id:Date.now(),c:awv('xic'),n,p:Math.max(0,Math.round(+awv('xip')||0)),col:awv('xicol'),e:awv('xie').trim()};
