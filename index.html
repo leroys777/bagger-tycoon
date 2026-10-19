@@ -470,7 +470,7 @@ body{padding-bottom:0}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 19.10. 13:30 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 19.10. 14:05 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -567,7 +567,7 @@ if(S.pend){S.m+=S.pend;S.pend=0}
 if(!isFinite(S.m))S.m=0;if(!isFinite(S.tot))S.tot=0;if(!isFinite(S.life))S.life=0;S.rl=S.rl?1:0;S.llic=S.llic||0;S.lm=S.lm&&S.rl?1:0;V=S.lm?VL:VB;J=S.lm?JL:JB;X=S.lm?XL:XB;
 S.up=Object.assign({mot:0,hyd:0,tec:0,auto:0},S.up||{});try{if(localStorage.getItem('baggerBan')==='1')S.ban=true}catch(e){}if(S.ban)try{localStorage.setItem('baggerBan','1')}catch(e){}S.lic=S.lic||0;S.tot=S.tot||0;S.life=Math.max(S.life||0,S.tot);if(!S.emp)S.emp='self';S.st=Object.assign(ST0(),S.st||{});if(typeof S.cond!=='number')S.cond=100;if(typeof S.top!=='number')S.top=S.tier;if(!S.cds)S.cds={};if(!S.v){S.tier=[0,1,2,3,5,8][S.tier]||0;S.v=2;S.offers=[];S.job=null;S.prog=0}if(S.tier>=V.length)S.tier=0;if(S.emp==='wtd'&&S.next>Date.now()+300000)S.next=Date.now()+300000;
 const pw=()=>V[S.tier].p*(1+.2*S.up.mot)/WK;
-const payM=()=>(1+.12*S.up.hyd)*(1+.35*(S.lic+S.llic))*(1+.05*rankIx())*(1+.02*Math.min(25,(S.st&&S.st.sold)||0))*((S.boostUntil||0)>Date.now()?2:1)*(1+((evAct()||{}).pay||0)/100)*adcPay();
+const payM=()=>(1+.12*S.up.hyd)*(1+.35*(S.lic+S.llic))*(1+.05*rankIx())*(1+.02*Math.min(25,(S.st&&S.st.sold)||0))*((S.boostUntil||0)>Date.now()?2:1)*(1+evPay()/100)*adcPay();
 const pay=o=>Math.round(o.e*PY*payM());
 const newIds=new Set();
 const RANKS=[{n:'Praktikant',at:0,u:'Standardaufträge'},{n:'Azubi',at:10000,u:'erste exklusive Aufträge'},{n:'Geselle',at:150000,u:'Staatsaufträge im Tiefbau'},{n:'Alt-Geselle',at:2000000,u:'Flughäfen und Großbaustellen'},{n:'Meister',at:25000000,u:'Abrisse und Bergwerke'},{n:'Bauingenieur',at:250000000,u:'Mega-Projekte im Tagebau'}];
@@ -2738,10 +2738,10 @@ function applyGlobalReset(r){
  if(sbOn()&&sbSess){sbConflict=null;setTimeout(()=>sbPush(true),400)}
  ovBox('rstov','<div class="offh">🔄 Neue Woche gestartet</div><div class="meta">Der Fortschritt und alle Erfolge wurden für alle Spieler zurückgesetzt. Viel Erfolg in der neuen Woche!</div>','Los geht\'s')}
 async function cfgLoad(){if(!sbOn())return;
- try{const rows=await sbReq('/rest/v1/settings?key=in.(announce,globalreset,event,xitems,admcfg)&select=key,value');const m={};(rows||[]).forEach(x=>m[x.key]=x.value);
+ try{const rows=await sbReq('/rest/v1/settings?key=in.(announce,globalreset,event,events,xitems,admcfg)&select=key,value');const m={};(rows||[]).forEach(x=>m[x.key]=x.value);
   if(m.xitems&&Array.isArray(m.xitems.list)){XIT=m.xitems.list;applyXit()}
   if(m.admcfg&&m.admcfg.id&&m.admcfg.id!==ADC.id){ADC=m.admcfg;try{applyAdc()}catch(er){}}
-  if(m.event&&m.event.id){EVT=m.event}else EVT=null;
+  if(m.events&&Array.isArray(m.events.list))EVL=m.events.list;else if(m.event&&m.event.id)EVL=[m.event];else EVL=[];
   try{evProcess()}catch(er){}
   const gr=m.globalreset;
   if(gr&&gr.id){const loc=lsGet('baggerResetId',null);
@@ -2767,23 +2767,30 @@ document.addEventListener('click',async e=>{const t=e.target.closest&&e.target.c
   try{let note='';try{await sbReq('/rest/v1/rpc/admin_reset_all',{method:'POST',body:'{}'})}catch(er){note=' (Cloud-Stände nicht geleert: supabase-reset.sql ausführen)'}
    const id=Date.now();await put('globalreset',{id,at:id});m.textContent='Neue Woche gestartet. Spieler werden beim nächsten Öffnen zurückgesetzt.'+note;setTimeout(cfgLoad,500)}catch(er){m.textContent='Fehler: '+er.message}}});
 /* ---------- Events (Admin): Lohn-Bonus, Sonderaufträge, Event-Kosmetik ---------- */
-var EVT=null,XIT=[];
-function evAct(){return EVT&&EVT.end>Date.now()&&(EVT.start||0)<=Date.now()?EVT:null}
-function evAvail(mt){if(mt.ev==='lock')return false;if(mt.ev==='adm'){const e=evAct();return !!(e&&(e.xi||[]).includes(mt.xid))}const e=evAct();return evOn(mt.ev)||!!(e&&e.hal&&mt.ev==='halloween')}
+var EVL=[],XIT=[];
+function evActs(){const n=Date.now();return (EVL||[]).filter(e=>e&&e.end>n&&(e.start||0)<=n)}
+function evAct(){return evActs()[0]||null}
+function evPay(){return evActs().reduce((m,e)=>Math.max(m,+e.pay||0),0)}
+function evAvail(mt){if(mt.ev==='lock')return false;const a=evActs();if(mt.ev==='adm')return a.some(e=>(e.xi||[]).includes(mt.xid)||(mt.eid&&e.id===mt.eid));return evOn(mt.ev)||(mt.ev==='halloween'&&a.some(e=>e.hal))}
 const XCAT={paint:'Lackierung',decal:'Aufkleber',outfit:'Fahrer-Outfit',flag:'Fahne',deco:'Dach-Deko'};
 const XBASE={};
 function applyXit(){COSK.forEach(c=>{if(XBASE[c]==null)XBASE[c]=COSC[c].it.length;COSC[c].it.length=XBASE[c]});
  XIT.forEach(x=>{const c=COSC[x.c]?x.c:null;if(!c)return;const col=parseInt(String(x.col||'888888').replace('#',''),16)||0x888888,hx='#'+col.toString(16).padStart(6,'0');let v,sw;
   if(c==='paint'){v=col;sw=hx}else if(c==='decal'){v={e:x.e||'⭐'};sw='!'+(x.e||'⭐')}else if(c==='outfit'){v={h:col,v:col};sw=hx}else if(c==='deco'){v='e:'+(x.e||'⭐');sw='!'+(x.e||'⭐')}else{v='c:'+hx+'|'+(x.e||'');sw=x.e?'!'+x.e:hx}
-  COSC[c].it.push([String(x.n||'Teil').slice(0,24),Math.max(0,+x.p||0),v,sw,{ev:'adm',xid:x.id}])})}
-function evLeft(){const e=evAct();if(!e)return '';const l=e.end-Date.now(),d=Math.floor(l/864e5),h=Math.floor(l%864e5/36e5),m=Math.floor(l%36e5/6e4);return (d?d+' Tg. ':'')+h+' Std. '+m+' Min.'}
-function renderEv(){const el=$('#evbar');if(!el)return;const e=evAct();if(!e){el.innerHTML='';return}
- el.innerHTML='<div class="evb"><b>🎉 '+escH(e.name||'Event')+'</b><span>'+(e.pay?'+'+e.pay+' % Lohn auf alle Aufträge · ':'')+(e.spn?'Sonderaufträge ×'+(e.spm||2)+' · ':'')+((e.xi&&e.xi.length)||e.hal?'neue Kosmetik in der Garage · ':'')+'endet in '+evLeft()+'</span></div>'}
-function evProcess(){const e=evAct();renderEv();
- if(e&&e.spn>0&&S.evj!==e.id){S.evj=e.id;const n=Math.min(10,e.spn|0),m=Math.max(1,+e.spm||2);try{for(let k=0;k<n;k++){const o=gen();if(!o)continue;o.sp=1;o.n='🎉 '+o.n;o.e=Math.round(o.e*m);o.prog=0;S.offers.push(o)}S.offers.sort((a,b)=>(b.sp||0)-(a.sp||0)||(b.ex||0)-(a.ex||0)||a.t-b.t||a.e-b.e);renderOffers();save();toast('🎉 Event: '+n+' Sonderaufträge')}catch(er){}}
+  COSC[c].it.push([String(x.n||'Teil').slice(0,24),Math.max(0,+x.p||0),v,sw,{ev:'adm',xid:x.id}]);COSC[c].it[COSC[c].it.length-1].o0={p:Math.max(0,+x.p||0),m:{ev:'adm',xid:x.id}}});adcExtras()}
+function evLeft(e){if(!e)return '';const l=Math.max(0,e.end-Date.now()),d=Math.floor(l/864e5),h=Math.floor(l%864e5/36e5),m=Math.floor(l%36e5/6e4);return (d?d+' Tg. ':'')+h+' Std. '+m+' Min.'}
+const evFmt=t=>{try{return new Date(t).toLocaleString('de-DE',{weekday:'short',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}catch(er){return ''}};
+function renderEv(){const el=$('#evbar');if(!el)return;const n=Date.now();let h='';
+ evActs().forEach(e=>{h+='<div class="evb"><b>🎉 '+escH(e.name||'Event')+'</b><span>'+(e.pay?'+'+e.pay+' % Lohn auf alle Aufträge · ':'')+(e.spn?'Sonderaufträge ×'+(e.spm||2)+' · ':'')+((e.xi&&e.xi.length)||e.hal?'neue Kosmetik in der Garage · ':'')+'endet in '+evLeft(e)+'</span></div>'});
+ (EVL||[]).filter(e=>e&&e.start>n&&e.start-n<48*36e5).forEach(e=>{h+='<div class="evb" style="background:linear-gradient(120deg,#2b3550,#4a3a7a)"><b>⏰ '+escH(e.name||'Event')+'</b><span>startet '+evFmt(e.start)+' Uhr</span></div>'});
+ el.innerHTML=h}
+function evProcess(){renderEv();
+ const done=Array.isArray(S.evj)?S.evj:(S.evj?[S.evj]:[]);S.evj=done;
+ evActs().forEach(e=>{if(e.spn>0&&!done.includes(e.id)){done.push(e.id);if(done.length>40)done.shift();const n=Math.min(10,e.spn|0),m=Math.max(1,+e.spm||2);try{for(let k=0;k<n;k++){const o=gen();if(!o)continue;o.sp=1;o.n='🎉 '+o.n;o.e=Math.round(o.e*m);o.prog=0;S.offers.push(o)}S.offers.sort((a,b)=>(b.sp||0)-(a.sp||0)||(b.ex||0)-(a.ex||0)||a.t-b.t||a.e-b.e);renderOffers();save();toast('🎉 '+(e.name||'Event')+': '+n+' Sonderaufträge')}catch(er){}}});
  if(typeof renderTop==='function')try{renderTop()}catch(er){}
  if(!$('#pay').hidden&&payTab===0)try{renderGarage()}catch(er){}}
 setInterval(renderEv,30000);
+let evSig='';setInterval(()=>{const g=evActs().map(e=>e.id).join(',');if(g!==evSig){evSig=g;evProcess()}},5000);
 /* ---------- Admin-Fenster v2 ---------- */
 var ADC={},AWT='ov',AWMSG='';
 function adcH(l,k){return !!(ADC&&ADC[l]&&ADC[l].includes(k))}
@@ -2792,12 +2799,13 @@ const sbPut=async(key,value)=>{await sbReq('/rest/v1/settings?on_conflict=key',{
 const ASTAT={jobs:['Aufträge erledigt',()=>S.st.jobs],ex:['Exklusiv-Aufträge',()=>S.st.ex],work:['Bewegte Masse',()=>S.st.work],sold:['Firmen verkauft',()=>S.st.sold],life:['Gesamtverdienst',()=>S.life],spins:['Casino-Spiele',()=>S.st.spins],dig:['Selbst mitgeschaufelt',()=>S.st.dig||0],streak:['Aufträge ohne Defekt',()=>S.st.streak||0],lic:['Baulizenzen',()=>S.lic],llic:['Radlader-Lizenzen',()=>S.llic],cosm:['Garage-Teile besessen',()=>cosOwnN()],dr:['Tages-Serie',()=>(S.dr&&S.dr.s)||0],big:['Größte Auszahlung',()=>S.st.big]};
 const ADC0={};let ACHB=0;
 function xbaseInit(){COSK.forEach(c=>{if(XBASE[c]==null)XBASE[c]=COSC[c].it.length})}
+function cmApply(k,it,o){const x=(ADC.cm||{})[k]||{};it[1]=x.p!=null?+x.p:o.p;const m=x.m;if(!m)it[4]=o.m;else if(m==='n')it[4]=undefined;else if(m==='lock')it[4]={ev:'lock'};else if(m==='ev')it[4]={ev:'adm',xid:k};else if(m.slice(0,3)==='ev:')it[4]={ev:'adm',xid:k,eid:+m.slice(3)};else if(m.slice(0,4)==='ach:')it[4]={g:m}}
+function adcExtras(){COSK.forEach(c=>{if(XBASE[c]==null)return;COSC[c].it.forEach((it,i)=>{if(i<XBASE[c]||!it.o0)return;cmApply(c+'.'+i,it,it.o0)})})}
 function adcSnap(){if(!ADC0.vb){ADC0.vb=VB.map(v=>v.c);ADC0.vl=VL.map(v=>v.c);ADC0.rl=RLP;xbaseInit();ADC0.cm={};COSK.forEach(c=>{for(let i=0;i<XBASE[c];i++){const it=COSC[c].it[i];ADC0.cm[c+'.'+i]={p:it[1],m:it[4]}}});ACHB=ACH.length}}
 function applyAdc(){adcSnap();
  const pr=ADC.pr||{};
  VB.forEach((v,i)=>{v.c=(pr.vb&&pr.vb[i]!=null)?+pr.vb[i]:ADC0.vb[i]});VL.forEach((v,i)=>{v.c=(pr.vl&&pr.vl[i]!=null)?+pr.vl[i]:ADC0.vl[i]});RLP=pr.rl!=null?+pr.rl:ADC0.rl;
- Object.keys(ADC0.cm).forEach(k=>{const[c,i]=k.split('.'),it=COSC[c].it[+i],o=ADC0.cm[k],x=(ADC.cm||{})[k]||{};it[1]=x.p!=null?+x.p:o.p;
-  const m=x.m;if(!m)it[4]=o.m;else if(m==='n')it[4]=undefined;else if(m==='lock')it[4]={ev:'lock'};else if(m==='ev')it[4]={ev:'adm',xid:k};else if(m.slice(0,4)==='ach:')it[4]={g:m}});
+ Object.keys(ADC0.cm).forEach(k=>{const[c,i]=k.split('.');cmApply(k,COSC[c].it[+i],ADC0.cm[k])});adcExtras();
  ACH.length=ACHB;(ADC.ach||[]).forEach(a=>{const g=ASTAT[a.s];if(!g)return;ACH.push({id:a.id,ic:a.ic||'🏆',n:a.n,d:a.d||'',v:g[1],g:+a.g||1,x:1})});
  ACH.forEach(a=>{a.off=!!(ADC.ao&&ADC.ao.includes(a.id))});
  try{if(typeof renderShop==='function'){renderShop();updateFirm();renderTop()}if(!$('#pay').hidden&&payTab===0)renderGarage();if(!$('#prof').hidden)renderProf()}catch(er){}}
@@ -2808,8 +2816,11 @@ const awn=t=>{AWMSG=t;awRender()};
 const AWTABS=[['ov','Übersicht'],['ev','Events'],['co','Kosmetik'],['pr','Preise'],['pl','Spieler'],['pf','Profil'],['ac','Erfolge'],['sy','System']];
 function xiFormHtml(){const cs=Object.keys(XCAT).map(k=>'<option value="'+k+'">'+XCAT[k]+'</option>').join('');
  return `<div class="aw-card"><h3>Neues Kosmetik-Teil</h3><div class="meta">Wird als normales Teil angelegt. Unter „Kosmetik“ stellst du danach Preis und Sperre ein, oder du hakst es im Event an.</div><div class="aw-grid2"><label class="meta">Kategorie<select id="xic">${cs}</select></label><label class="meta">Name<input id="xin" maxlength="24"></label><label class="meta">Preis in €<input id="xip" type="number" min="0" value="10000000"></label><label class="meta">Farbe<input id="xicol" type="color" value="#ff2d95" style="height:42px;padding:2px"></label></div><label class="meta">Emoji (Aufkleber, Fahne, Dach-Deko)<input id="xie" maxlength="4" placeholder="z. B. 🎃"></label><button class="act sm" id="xiadd" type="button">Teil anlegen</button></div>`}
-function evFormHtml(){const a=evAct(),its=evItems();
- return `<div class="aw-card"><h3>Event starten</h3><div class="meta">${a?'Läuft: <b>'+escH(a.name)+'</b> · endet in '+evLeft():'Aktuell läuft kein Event.'}</div><label class="meta">Name<input id="evname" maxlength="40" placeholder="Name des Events"></label><div class="aw-grid2"><label class="meta">Dauer in Stunden<input id="evh" type="number" min="0.1" value="24"></label><label class="meta">Lohn-Bonus in %<input id="evpay" type="number" min="0" max="500" value="0"></label><label class="meta">Sonderaufträge (Anzahl)<input id="evspn" type="number" min="0" max="10" value="0"></label><label class="meta">Sonderauftrag-Faktor<input id="evspm" type="number" min="1" max="50" step="0.5" value="3"></label></div><label class="meta" style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="evhal" style="width:auto"> Halloween-Teile freischalten</label>${its.length?'<div class="meta"><b>Teile, die im Event kaufbar sind</b></div>'+its.map(x=>`<label class="meta" style="display:flex;gap:8px;align-items:center"><input type="checkbox" class="evxi" value="${escH(x.k)}" style="width:auto" ${admXiSel.has(x.k)?'checked':''}> ${escH(x.l)}</label>`).join(''):'<div class="meta">Noch keine Event-Teile. Lege unter „Kosmetik“ ein neues Teil an oder stelle ein vorhandenes auf „Nur im Event“.</div>'}<div style="display:flex;gap:8px"><button class="act sm" id="evstart" type="button">Event starten</button><button class="act ghost sm" id="evstop" type="button">Event beenden</button></div></div>`}
+function evFormHtml(){const its=evItems(),n=Date.now();
+ const st=e=>e.end<=n?'beendet':e.start>n?'geplant':'läuft';
+ const list=(EVL||[]).length?(EVL||[]).slice().sort((a,b)=>b.start-a.start).map(e=>`<div class="aw-item" style="grid-template-columns:1fr auto auto"><div><b>${escH(e.name)}</b><div class="meta">${st(e)} · ${evFmt(e.start)} bis ${evFmt(e.end)}${e.pay?' · +'+e.pay+' % Lohn':''}${e.spn?' · '+e.spn+' Sonderaufträge':''}</div></div>${e.end>n?`<button class="act ghost sm" type="button" data-evend="${e.id}">${e.start>n?'Absagen':'Beenden'}</button>`:'<span></span>'}<button class="act ghost sm" type="button" data-evdel="${e.id}">Löschen</button></div>`).join(''):'<div class="meta">Noch keine Events.</div>';
+ const d=new Date(Date.now()+36e5);d.setMinutes(0,0,0);const loc=new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,16);
+ return `<div class="aw-card"><h3>Events</h3>${list}</div><div class="aw-card"><h3>Neues Event</h3><label class="meta">Name<input id="evname" maxlength="40" placeholder="Name des Events"></label><label class="meta">Start (leer = sofort)<input id="evat" type="datetime-local" value=""></label><div class="meta">Tipp: Für heute 20 Uhr einfach Datum und Uhrzeit wählen. Das Event startet dann automatisch bei allen Spielern.</div><div class="aw-grid2"><label class="meta">Dauer in Stunden<input id="evh" type="number" min="0.1" value="24"></label><label class="meta">Lohn-Bonus in %<input id="evpay" type="number" min="0" max="500" value="0"></label><label class="meta">Sonderaufträge (Anzahl)<input id="evspn" type="number" min="0" max="10" value="0"></label><label class="meta">Sonderauftrag-Faktor<input id="evspm" type="number" min="1" max="50" step="0.5" value="3"></label></div><label class="meta" style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="evhal" style="width:auto"> Halloween-Teile freischalten</label>${its.length?'<div class="meta"><b>Teile, die in diesem Event kaufbar sind</b></div>'+its.map(x=>`<label class="meta" style="display:flex;gap:8px;align-items:center"><input type="checkbox" class="evxi" value="${escH(x.k)}" style="width:auto" ${admXiSel.has(x.k)?'checked':''}> ${escH(x.l)}</label>`).join(''):'<div class="meta">Teile bindest du unter „Kosmetik“ direkt an ein Event (Auswahl „Nur im Event“).</div>'}<button class="act sm" id="evsave" type="button">Event anlegen</button></div>`}
 function admEvUi(){}
 function awPane(){const t=AWT;
  if(t==='ov')return `<div class="aw-card"><h3>Ankündigung</h3><textarea id="admann" maxlength="400" rows="3" placeholder="Text des Pop-ups (wird mit Bestätigung geschlossen) …"></textarea><div style="display:flex;gap:16px;flex-wrap:wrap"><label class="meta" style="display:flex;gap:6px;align-items:center"><input type="radio" name="admat" value="online" checked style="width:auto"> Nur Online-Spieler</label><label class="meta" style="display:flex;gap:6px;align-items:center"><input type="radio" name="admat" value="all" style="width:auto"> Alle Spieler</label></div><button class="act sm" id="admannsend" type="button">Ankündigung senden</button><div class="meta" id="admannmsg"></div></div>
@@ -2818,8 +2829,10 @@ function awPane(){const t=AWT;
  if(t==='ev')return evFormHtml()+xiFormHtml();
  if(t==='co'){const c=AWC&&COSC[AWC]?AWC:'paint';const tabs='<div class="cpills">'+COSK.map(k=>`<button type="button" class="cp ${k===c?'on':''}" data-awcc="${k}"><span>${COSI[k]||'•'}</span>${COSC[k].n.split(' (')[0]}</button>`).join('')+'</div>';
   const mo=(k)=>{const x=(ADC.cm||{})[k]||{};return x.m||''};
-  const rows=COSC[c].it.map((it,i)=>{const k=c+'.'+i;if(i===0)return '';const o=ADC0.cm&&ADC0.cm[k],ex=i>=XBASE[c];const cur=mo(k);const orig=o&&o.m?(o.m.g?'Standard: durch Erfolg':o.m.ev?'Standard: Event':''):'';
-   return `<div class="aw-item"><div><b>${escH(it[0])}</b><div class="meta">${ex?'eigenes Teil':orig||'Standard: kaufbar'}</div></div><input type="number" min="0" data-awp="${k}" value="${ex?it[1]:(((ADC.cm||{})[k]||{}).p!=null?ADC.cm[k].p:(o?o.p:it[1]))}" ${ex?'disabled':''}>${ex?'<span class="meta">—</span>':`<select data-awm="${k}"><option value="" ${cur===''?'selected':''}>Standard</option><option value="n" ${cur==='n'?'selected':''}>Immer kaufbar</option><option value="lock" ${cur==='lock'?'selected':''}>Gesperrt</option><option value="ev" ${cur==='ev'?'selected':''}>Nur im Event</option><optgroup label="Durch Erfolg">${ACH.map(a=>`<option value="ach:${a.id}" ${cur==='ach:'+a.id?'selected':''}>${escH(a.n)}</option>`).join('')}</optgroup></select>`}</div>`}).join('');
+  const evOpts=(cur)=>`<optgroup label="Nur im Event">${'<option value="ev"'+(cur==='ev'?' selected':'')+'>Event aus der Event-Auswahl</option>'}${(EVL||[]).map(e=>`<option value="ev:${e.id}" ${cur==='ev:'+e.id?'selected':''}>${escH(e.name)} (${evFmt(e.start)})</option>`).join('')}</optgroup>`;
+  const rows=COSC[c].it.map((it,i)=>{const k=c+'.'+i;if(i===0)return '';const ex=i>=XBASE[c],o=ex?it.o0:(ADC0.cm&&ADC0.cm[k]);const cur=mo(k);const orig=o&&o.m?(o.m.g?'Standard: durch Erfolg':o.m.ev?(ex?'Standard: nur in Events, in denen es angehakt ist':'Standard: Event'):''):'';
+   const pv=((ADC.cm||{})[k]||{}).p!=null?ADC.cm[k].p:(o?o.p:it[1]);
+   return `<div class="aw-item"><div><b>${escH(it[0])}</b><div class="meta">${ex?'eigenes Teil · ':''}${orig||'Standard: kaufbar'}</div></div><input type="number" min="0" data-awp="${k}" value="${pv}"><select data-awm="${k}"><option value="" ${cur===''?'selected':''}>Standard</option><option value="n" ${cur==='n'?'selected':''}>Immer kaufbar</option><option value="lock" ${cur==='lock'?'selected':''}>Gesperrt</option>${evOpts(cur)}<optgroup label="Durch Erfolg">${ACH.map(a=>`<option value="ach:${a.id}" ${cur==='ach:'+a.id?'selected':''}>${escH(a.n)}</option>`).join('')}</optgroup></select></div>`}).join('');
   return `<div class="aw-card"><h3>Kosmetik verwalten</h3><div class="meta">Preis ändern, Teile sperren, nur im Event kaufbar machen oder an einen Erfolg koppeln. Gekaufte Teile bleiben bei den Spielern.</div>${tabs}<div>${rows}</div><button class="act sm" id="awcosave" type="button">Änderungen dieser Kategorie speichern</button></div>`+xiFormHtml()}
  if(t==='pr'){const pr=ADC.pr||{};const rowv=(a,p)=>a.map((v,i)=>`<div class="aw-item" style="grid-template-columns:1fr 150px"><b>${escH(v.n)}</b><input type="number" min="0" data-awv="${p}.${i}" value="${Math.round(v.c)}"></div>`).join('');
   return `<div class="aw-card"><h3>Allgemein</h3><label class="meta">Lohn-Faktor in % (100 = normal, gilt für alle Aufträge)<input id="awpay" type="number" min="1" max="1000" value="${pr.pay||100}"></label><label class="meta">Preis der Radlader-Erweiterung in €<input id="awrl" type="number" min="0" value="${Math.round(RLP)}"></label></div><div class="aw-card"><h3>Bagger</h3>${rowv(VB,'b')}</div><div class="aw-card"><h3>Radlader</h3>${rowv(VL,'l')}</div><div style="display:flex;gap:8px"><button class="act" id="awprsave" type="button">Preise speichern</button><button class="act ghost" id="awprreset" type="button">Auf Standard zurücksetzen</button></div>`}
@@ -2847,17 +2860,21 @@ document.addEventListener('click',async e=>{const t=e.target.closest&&e.target.c
  if(t.id==='admwinopen'){admWinOpen();return}
  if(t.dataset.awt){AWT=t.dataset.awt;AWMSG='';awRender();return}
  if(t.dataset.awcc){AWC=t.dataset.awcc;awRender();return}
- if(!sbSess&&['xiadd','evstart','evstop','awcosave','awprsave','awprreset','awpfsave','awaosave','awacadd','awbdadd','awbdaw','awbdrm'].includes(t.id)){awn('Mit dem Admin-Konto in der Cloud anmelden (Profil, Cloud-Speicher).');return}
+ if(!sbSess&&(t.dataset.evend||t.dataset.evdel||['xiadd','evsave','awcosave','awprsave','awprreset','awpfsave','awaosave','awacadd','awbdadd','awbdaw','awbdrm'].includes(t.id))){awn('Mit dem Admin-Konto in der Cloud anmelden (Profil, Cloud-Speicher).');return}
  if(t.id==='awplload'){await admLoadPl();awRender();return}
  if(t.id==='xiadd'){const n=awv('xin').trim();if(!n){awn('Bitte einen Namen eingeben.');return}if(XIT.length>=60){awn('Maximal 60 eigene Teile.');return}
   const it={id:Date.now(),c:awv('xic'),n,p:Math.max(0,Math.round(+awv('xip')||0)),col:awv('xicol'),e:awv('xie').trim()};
   try{await sbPut('xitems',{id:Date.now(),list:XIT.concat([it])});XIT=XIT.concat([it]);applyXit();applyAdc();admXiSel.add(it.id);awn('Teil „'+n+'“ angelegt und fürs nächste Event vorgemerkt.')}catch(er){awn('Fehler: '+er.message)}return}
- if(t.id==='evstart'){const h=Math.max(.1,+awv('evh',24)||24),now=Date.now(),xi=[...document.querySelectorAll('.evxi:checked')].map(x=>isNaN(+x.value)?x.value:+x.value);
-  const ev={id:now,name:awv('evname').trim().slice(0,40)||'Event',start:now,end:now+Math.round(h*36e5),pay:Math.max(0,Math.min(500,Math.round(+awv('evpay',0)||0))),spn:Math.max(0,Math.min(10,Math.round(+awv('evspn',0)||0))),spm:Math.max(1,Math.min(50,+awv('evspm',3)||3)),hal:!!($('#evhal')||{}).checked,xi};
-  try{await sbPut('event',ev);EVT=ev;evProcess();awn('Event gestartet. Spieler sehen es innerhalb von 15 Sekunden.')}catch(er){awn('Fehler: '+er.message)}return}
- if(t.id==='evstop'){if(!EVT){awn('Kein Event aktiv.');return}const ev=Object.assign({},EVT,{id:Date.now(),end:Date.now()});try{await sbPut('event',ev);EVT=ev;evProcess();awn('Event beendet.')}catch(er){awn('Fehler: '+er.message)}return}
- if(t.id==='awcosave'){const cm=Object.assign({},ADC.cm||{});document.querySelectorAll('[data-awm]').forEach(s=>{const k=s.dataset.awm,p=document.querySelector('[data-awp="'+k+'"]'),o=ADC0.cm[k],pv=p&&p.value!==''?Math.max(0,Math.round(+p.value)):null,x={};
-   if(pv!=null&&o&&pv!==o.p)x.p=pv;if(s.value)x.m=s.value;if(Object.keys(x).length)cm[k]=x;else delete cm[k]});adcSave({cm});return}
+ if(t.id==='evsave'){const h=Math.max(.1,+awv('evh',24)||24),now=Date.now(),at=awv('evat'),st=at?new Date(at).getTime():now,xi=[...document.querySelectorAll('.evxi:checked')].map(x=>isNaN(+x.value)?x.value:+x.value);
+  if(!isFinite(st)){awn('Startzeit ungültig.');return}
+  const ev={id:now,name:awv('evname').trim().slice(0,40)||'Event',start:st,end:0,pay:Math.max(0,Math.min(500,Math.round(+awv('evpay',0)||0))),spn:Math.max(0,Math.min(10,Math.round(+awv('evspn',0)||0))),spm:Math.max(1,Math.min(50,+awv('evspm',3)||3)),hal:!!($('#evhal')||{}).checked,xi};ev.end=ev.start+Math.round(h*36e5);
+  if(EVL.length>=40){awn('Maximal 40 Events, bitte alte löschen.');return}
+  try{const list=(EVL||[]).concat([ev]);await sbPut('events',{id:Date.now(),list});EVL=list;evProcess();awn(ev.start>now+1000?'Event geplant für '+evFmt(ev.start)+' Uhr.':'Event gestartet. Spieler sehen es innerhalb von 15 Sekunden.')}catch(er){awn('Fehler: '+er.message)}return}
+ if(t.dataset.evend||t.dataset.evdel){const id=+(t.dataset.evend||t.dataset.evdel),n=Date.now();let list=(EVL||[]).slice();
+  if(t.dataset.evdel||(list.find(e=>e.id===id)||{}).start>n)list=list.filter(e=>e.id!==id);else list=list.map(e=>e.id===id?Object.assign({},e,{end:n}):e);
+  try{await sbPut('events',{id:Date.now(),list});EVL=list;evProcess();awn(t.dataset.evdel?'Event gelöscht.':'Event beendet.')}catch(er){awn('Fehler: '+er.message)}return}
+ if(t.id==='awcosave'){const cm=Object.assign({},ADC.cm||{});document.querySelectorAll('[data-awm]').forEach(sel=>{const k=sel.dataset.awm,p=document.querySelector('[data-awp="'+k+'"]'),[c,i]=k.split('.'),it=COSC[c].it[+i],o=(+i>=XBASE[c])?it.o0:ADC0.cm[k],pv=p&&p.value!==''?Math.max(0,Math.round(+p.value)):null,x={};
+   if(pv!=null&&o&&pv!==o.p)x.p=pv;if(sel.value)x.m=sel.value;if(Object.keys(x).length)cm[k]=x;else delete cm[k]});adcSave({cm});return}
  if(t.id==='awprsave'){const vb={},vl={};document.querySelectorAll('[data-awv]').forEach(i=>{const[a,n]=i.dataset.awv.split('.'),v=Math.max(0,Math.round(+i.value||0)),o=(a==='b'?ADC0.vb:ADC0.vl)[+n];if(v!==Math.round(o))(a==='b'?vb:vl)[n]=v});
   const rl=Math.max(0,Math.round(+awv('awrl')||0)),pay=Math.max(1,Math.min(1000,Math.round(+awv('awpay',100)||100)));const pr={};if(Object.keys(vb).length)pr.vb=vb;if(Object.keys(vl).length)pr.vl=vl;if(rl!==Math.round(ADC0.rl))pr.rl=rl;if(pay!==100)pr.pay=pay;adcSave({pr});return}
  if(t.id==='awprreset'){adcSave({pr:{}},'Preise auf Standard zurückgesetzt.');return}
