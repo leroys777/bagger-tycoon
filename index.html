@@ -199,6 +199,8 @@ button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
 .bets button{padding:8px 14px;border:1px solid var(--line);background:var(--surf2);color:var(--ink);border-radius:999px;font:600 14px var(--f2);cursor:pointer;font-variant-numeric:tabular-nums}
 .bets button.on{background:var(--acc);color:var(--accink);border-color:var(--acc)}
 .cab .act.big{margin-top:14px}
+.gprev{background:linear-gradient(#2d3138,#15171b);border-radius:20px;padding:6px;margin-bottom:10px;text-align:center}.gprev img{width:100%;border-radius:14px;display:block}
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.cc{background:var(--surf);border:1px solid var(--line);border-radius:16px;padding:10px;display:grid;gap:6px;cursor:pointer;align-content:start}.cc.pv{outline:2px solid var(--acc)}.cc.eq{border-color:var(--ok)}.cc b{font:700 15px var(--f1);letter-spacing:.02em}.sw{width:100%;height:26px;border-radius:8px;display:block;border:1px solid rgba(0,0,0,.18)}
 /* Roulette */
 .rou{--acc:#e9b872;--accink:#2a1a0c;background:radial-gradient(120% 80% at 50% 0%,#3a2a1f,#1d1510 70%);border-top-color:#e9b872;--surf2:#2d2118;--line:#4a3a2c}
 .rou h2{color:#e9b872}
@@ -389,7 +391,7 @@ body{padding-bottom:0}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 16.10. 21:26 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 19.10. 07:31 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -518,7 +520,7 @@ const COL=[0xf2b705,0xf08a1c,0xd8452b,0x2f78c4,0x2e9b57,0x7a4fc2];
 let T3=typeof THREE!=='undefined';
 const M=(c,r=.55,m=.15)=>new THREE.MeshStandardMaterial({color:c,roughness:r,metalness:m});
 const RBG={};
-function rgeo(w,h,d){const mn=Math.min(w,h,d);if(!(mn>=.035))return new THREE.BoxGeometry(w,h,d);const key=w.toFixed(3)+'_'+h.toFixed(3)+'_'+d.toFixed(3);if(RBG[key])return RBG[key];
+function rgeo(w,h,d){const mn=Math.min(w,h,d);if(!(mn>=.035))return new THREE.BoxGeometry(w,h,d);const key=w.toFixed(3)+'_'+h.toFixed(3)+'_'+d.toFixed(3);if(CRBW[key])return CRBW[key];
  const big=mn>=.2,n=big?6:4,r=Math.min(mn*.22,.14),g=new THREE.BoxGeometry(w,h,d,n,n,n),ps=g.attributes.position,ns=g.attributes.normal,hw=[w/2,h/2,d/2];
  const mp=(v,a)=>{const k=Math.round(Math.abs(v)/a*(n/2)),mg=big?[0,a-r,a-.35*r,a][k]:[0,a-r,a][k];return v<0?-mg:mg};
  for(let i=0;i<ps.count;i++){const p=[ps.getX(i),ps.getY(i),ps.getZ(i)].map((v,j)=>mp(v,hw[j])),q=p.map((v,j)=>Math.max(-(hw[j]-r),Math.min(hw[j]-r,v))),nn=p.map((v,j)=>v-q[j]),l=Math.hypot(nn[0],nn[1],nn[2]);
@@ -551,14 +553,14 @@ function track(g,L,tw,hh,x,z,K){
  const n=Math.max(6,Math.round((L-2*r)/.16));
  for(let i=0;i<n;i++){const px=-L/2+r+(i+.5)*(L-2*r)/n;[2*r+.02,.02].forEach(y=>{const m=new THREE.Mesh(new THREE.BoxGeometry(.08,.05,tw+.06),K.rub2);m.position.set(x+px,y,z);g.add(m)})}
  const disc=(px,rad,w,mat)=>{const c=new THREE.Mesh(new THREE.CylinderGeometry(rad,rad,w,18),mat);c.rotation.x=Math.PI/2;c.position.set(x+px,r,z);c.castShadow=true;g.add(c)};
- disc(L/2-r,r*.7,tw*1.12,K.gy);disc(-L/2+r,r*.7,tw*1.12,K.gy);
+ disc(L/2-r,r*.7,tw*1.12,K.rim||K.gy);disc(-L/2+r,r*.7,tw*1.12,K.rim||K.gy);
  const nr=Math.max(2,Math.round(L/.7));for(let i=0;i<nr;i++)disc(-L/2+r*2+(i+.5)*(L-4*r)/nr,r*.34,tw*1.14,K.dg)}
 function lattice(par,len,h,w,n,m){
  [-h,h].forEach(y=>[-w,w].forEach(z=>par.add(beam([0,y,z],[len,y,z],.05,m))));
  for(let i=0;i<n;i++){const a=len*i/n,b=len*(i+1)/n,u=i%2?h:-h,v=i%2?-h:h;
   [-w,w].forEach(z=>par.add(beam([a,u,z],[b,v,z],.035,m)));
   par.add(beam([a,h,-w],[a,h,w],.035,m));par.add(beam([a,-h,-w],[a,-h,w],.035,m))}}
-function makeExc(ti){
+function makeExc0(ti){
  if(V[ti].giant)return makeGiant(ti);
  if(V[ti].loader)return makeLoader(ti);
  const sp=V[ti],t=sp.m;
@@ -566,7 +568,7 @@ function makeExc(ti){
  const c=paint(sp.col),dk=M(0x1b1d20,.85,.1),dg=M(0x3a3e44,.65,.4),gy=M(0x9aa0a6,.35,.7),rub=M(0x141516,.95,0),rub2=M(0x0d0e0f,1,0),steel=M(0x2a2c30,.5,.55),chrome=M(0xd5d9dd,.2,.9);
  const gl=new THREE.MeshPhysicalMaterial({color:0x7fb4cf,roughness:.05,metalness:.2,transparent:true,opacity:.5,clearcoat:1});
  const lamp=new THREE.MeshStandardMaterial({color:0xffe9a8,emissive:0xffd36a,emissiveIntensity:.8}),amber=new THREE.MeshStandardMaterial({color:0xffa000,emissive:0xff8a00,emissiveIntensity:.9});
- const K={rub,rub2,gy,dg};
+ const rimX=M(0x9aa0a6,.35,.7);rimX.userData.rim=1;const K={rub,rub2,gy,dg,rim:rimX};
  const up=new THREE.Group(),boom=new THREE.Group(),stick=new THREE.Group(),bucket=new THREE.Group();
  const bw=[1.5,1.7,1.9,2.2,2.6,2.6][t],bl=[1.4,1.6,2,2.2,2.8,3][t]*(sp.lx||1),sl=[1.1,1.2,1.5,1.7,2.1,2.4][t]*(sp.lx||1);
  const k=.7+.12*t,kk=.8+.1*t,ud=t===5?2.2:[1,1.1,1.2,1.3,1.4][t],bwid=[.2,.24,.28,.34,.42,.4][t],sb=[.7,.8,1,1.2,1.5][t]||1;
@@ -681,7 +683,7 @@ function makeGiant(ti){
  const c=paint(sp.col),c2=paint(0x2f3d4a),dk=M(0x1b1d20,.85,.1),dg=M(0x3a3e44,.65,.4),gy=M(0x9aa0a6,.35,.7),rub=M(0x141516,.95,0),rub2=M(0x0d0e0f,1,0),steel=M(0x4d535a,.5,.6),chrome=M(0xd5d9dd,.2,.9),wh=M(0xeceeef,.45,.2);
  const gl=new THREE.MeshPhysicalMaterial({color:0x7fb4cf,roughness:.05,metalness:.2,transparent:true,opacity:.55,clearcoat:1});
  const lamp=new THREE.MeshStandardMaterial({color:0xffe9a8,emissive:0xffd36a,emissiveIntensity:.9}),amber=new THREE.MeshStandardMaterial({color:0xffa000,emissive:0xff8a00,emissiveIntensity:.9});
- const K={rub,rub2,gy,dg};
+ const rimX=M(0x9aa0a6,.35,.7);rimX.userData.rim=1;const K={rub,rub2,gy,dg,rim:rimX};
  if(!makeGiant._belt){const cv=document.createElement('canvas');cv.width=128;cv.height=16;const x=cv.getContext('2d');x.fillStyle='#17191b';x.fillRect(0,0,128,16);
   for(let i=0;i<9;i++){x.fillStyle='#3a3d41';x.fillRect(i*15,0,3,16)}
   for(let i=0;i<70;i++){x.globalAlpha=.55;x.fillStyle=['#3b2a18','#2a1d10','#4a3722'][i%3];x.beginPath();x.arc(Math.random()*128,2+Math.random()*12,1+Math.random()*2.2,0,7);x.fill()}
@@ -773,7 +775,7 @@ function makeLoader(ti){
  const gl=new THREE.MeshPhysicalMaterial({color:0x7fb4cf,roughness:.05,metalness:.2,transparent:true,opacity:.45,clearcoat:1});
  const lamp=new THREE.MeshStandardMaterial({color:0xffe9a8,emissive:0xffd36a,emissiveIntensity:.8}),amber=new THREE.MeshStandardMaterial({color:0xffa000,emissive:0xff8a00,emissiveIntensity:.9}),tail=new THREE.MeshStandardMaterial({color:0xaa0d0d,emissive:0xff1a1a,emissiveIntensity:.5});
  const up=new THREE.Group();g.add(up);
- const wh=M(0xf2f4f6,.5,.2),acc=[body,M(0x555a60,.5,.5),body,wh,M(0x23262a,.5,.5),body,M(0xf2c200,.5,.3),M(0xe6761a,.5,.3),M(0x23262a,.5,.5),M(0xc62828,.5,.3)][ti],rimM=ti%2===0?M(sp.col,.5,.3):gy;
+ const wh=M(0xf2f4f6,.5,.2),acc=[body,M(0x555a60,.5,.5),body,wh,M(0x23262a,.5,.5),body,M(0xf2c200,.5,.3),M(0xe6761a,.5,.3),M(0x23262a,.5,.5),M(0xc62828,.5,.3)][ti],rimM=M(ti%2===0?sp.col:0x9aa0a6,.5,ti%2===0?.3:.7);rimM.userData.rim=1;
  if(ti<=1){gl.opacity=0}else if(ti%2)gl.color.set(0x6fae9c);
  /* Hinterwagen */
  g.add(bx(3.3,.62,1.5,dk,-1.65,1.15,0));
@@ -930,7 +932,8 @@ function loaderStep(p,work,dt,now,f){
  e.wheels.forEach(w=>{w.rotation.z-=ds/e.R});
  e.ldM.color.setHex(c.col);e.ld.visible=J.ls>.02;e.ld.scale.set(.85*J.ls,.55*J.ls,1.3*J.ls)}
 
-function makeExcB(ti){const sv=V;V=VB;try{return makeExc(ti)}finally{V=sv}}
+function makeExcB(ti){const sv=V;V=VB;noCos=true;try{return makeExc(ti)}finally{V=sv;noCos=false}}
+function makeExc(ti){const r=makeExc0(ti);if(!noCos&&typeof applyCos==='function'){try{applyCos(r,ti)}catch(e){}}return r}
 function makeEnv(rd){try{const es=new THREE.Scene(),geo=new THREE.SphereGeometry(50,32,16),pos=geo.attributes.position,cols=[];
  for(let i=0;i<pos.count;i++){const y=pos.getY(i)/50,c=new THREE.Color();if(y>0)c.setRGB(.42+.3*(1-y),.62+.22*(1-y),.9);else c.setRGB(.36,.29,.2);cols.push(c.r,c.g,c.b)}
  geo.setAttribute('color',new THREE.Float32BufferAttribute(cols,3));es.add(new THREE.Mesh(geo,new THREE.MeshBasicMaterial({vertexColors:true,side:THREE.BackSide})));
@@ -1831,15 +1834,15 @@ function loop(now){
  else{try{stepCam(now,dt,work)}catch(e){fxOff=true;console.warn('cam',e)}}
  R.render(scene,cam);requestAnimationFrame(loop)}
 let TH=[],THL=[];
-function thumbs(){const sv=V;V=VB;try{thumbsB()}finally{V=sv}}
-function thumbsL(){const sv=V;V=VL;
+function thumbs(){const sv=V;V=VB;noCos=true;try{thumbsB()}finally{V=sv;noCos=false}}
+function thumbsL(){const sv=V;V=VL;noCos=true;
  try{const r=new THREE.WebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:true});r.setSize(330,210);r.toneMapping=THREE.ACESFilmicToneMapping;r.toneMappingExposure=1.05;const ev=makeEnv(r);
   for(let t=0;t<VL.length;t++){const sc=new THREE.Scene();sc.environment=ev;sc.add(new THREE.AmbientLight(0xffffff,.25));
    const l=new THREE.DirectionalLight(0xffffff,.9);l.position.set(4,6,5);sc.add(l);
    const e=makeLoader(t),k=VL[t].sc;e.boom.rotation.z=.12;e.bucket.rotation.z=.15;e.up.rotation.y=-.12;e.g.rotation.y=0;e.rig();sc.add(e.g);
    const c=new THREE.PerspectiveCamera(40,330/210,.1,200),d=k*9.2+1;c.position.set(d*.42,d*.3,d*.98);c.lookAt(k*.95,k*1.5,0);
    r.render(sc,c);THL[t]=r.domElement.toDataURL()}
-  r.dispose()}catch(e){THL=[]}finally{V=sv}}
+  r.dispose()}catch(e){THL=[]}finally{V=sv;noCos=false}}
 function thumbsB(){
  try{const r=new THREE.WebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:true});r.setSize(330,210);r.toneMapping=THREE.ACESFilmicToneMapping;r.toneMappingExposure=1.05;const ev=makeEnv(r);
   for(let t=0;t<V.length;t++){const sc=new THREE.Scene();sc.environment=ev;sc.add(new THREE.AmbientLight(0xffffff,.25));
@@ -1940,15 +1943,16 @@ function buyUp(k){const u=UP.find(x=>x.k===k),l=S.up[k]||0;if(!u||l>=u.max)retur
 function startLoaderMode(){S.cds={};S.tot=0;S.broken=false;S.cond=100;S.fix=0;S.job=null;S.offers=[];S.top=0;S.tier=0;setMode(1);refill();if(T3)setExc();const b=$('#rlbox');if(b)delete b.dataset.k;renderShop();renderOffers();renderTop();renderProg();renderBrk();updateFirm();toast('Radlader-Durchgang gestartet: Hoflader');save()}
 function doPrest(b){const g=gain();if(g<1)return;
  if(!b.dataset.arm){b.dataset.arm='1';b.textContent='Nochmal tippen zum Verkaufen';setTimeout(()=>{delete b.dataset.arm},3000);return}
- delete b.dataset.arm;const wasL=S.lm,keep={emp:S.emp,next:S.next,nid:S.nid,boostUntil:S.boostUntil,lic:S.lic+(S.lm?0:g),llic:S.llic+(S.lm?g:0),rl:S.rl,auto:S.up.auto,life:S.life,unl:S.unl,st:S.st};
- S=Object.assign(newState(),{emp:keep.emp,next:keep.next,nid:keep.nid,boostUntil:keep.boostUntil,lic:keep.lic,llic:keep.llic,rl:keep.rl,life:keep.life,unl:keep.unl,st:keep.st});S.up.auto=keep.auto;S.st.sold++;setMode(0);S.rk=rankIx();
+ delete b.dataset.arm;const wasL=S.lm,keep={emp:S.emp,next:S.next,nid:S.nid,boostUntil:S.boostUntil,lic:S.lic+(S.lm?0:g),llic:S.llic+(S.lm?g:0),rl:S.rl,cos:S.cos,auto:S.up.auto,life:S.life,unl:S.unl,st:S.st};
+ S=Object.assign(newState(),{emp:keep.emp,next:keep.next,nid:keep.nid,boostUntil:keep.boostUntil,lic:keep.lic,llic:keep.llic,rl:keep.rl,cos:keep.cos,life:keep.life,unl:keep.unl,st:keep.st});S.up.auto=keep.auto;S.st.sold++;setMode(0);S.rk=rankIx();
  refill();newIds.clear();if(T3)setExc();renderOffers();renderShop();renderTop();renderProg();renderFirm();toast('Neue Firma gegründet: '+(wasL?S.llic+' Radlader-':S.lic+' Bau')+'Lizenzen');save()}
 const PK=[{id:'p1',n:'Starterpaket',eur:'0,99',h:.25},{id:'p2',n:'Bauleiter',eur:'4,99',h:1},{id:'p3',n:'Unternehmer',eur:'9,99',h:3},{id:'p4',n:'Magnat',eur:'19,99',h:8},{id:'p5',n:'Tycoon',eur:'49,99',h:24}];
 const rate=()=>{const c=S.offers.filter(o=>o.t<=S.tier);return(c.length?Math.max(...c.map(o=>o.e/o.w)):3)*pw()*payM()*PY};
 const packAmt=p=>Math.max(1000,Math.round(rate()*3600*p.h/100)*100);
 const hl=h=>h<1?Math.round(h*60)+' Min.':h+' Std.';
 const SHOP_OPEN=false;
-function renderPay(){
+function renderPay(){if(payTab===0)return renderGarage();renderPayP();$('#pay').insertAdjacentHTML('afterbegin','<div class="stabs" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px"><button class="act ghost" type="button" data-ptab="0">Garage</button><button class="act" type="button" data-ptab="1">Geldpakete</button></div>')}
+function renderPayP(){
  $('#pay').innerHTML=`<div class="demo"><b>Bald verfügbar.</b> Der Shop ist im Moment gesperrt. Alle Käufe sind deaktiviert, die Angebote bleiben zur Ansicht stehen.</div><h2 class="sec" style="margin-top:4px">Geldpakete</h2>`
  +PK.map(p=>`<div class="job"><div class="jt">€</div><div class="jmain"><b>${p.n}</b><span class="meta" id="pa-${p.id}"></span></div><div class="jside"><span class="pay">${p.eur} €</span><button class="act sm" data-pk="${p.id}" type="button" ${SHOP_OPEN?'':'disabled'}>Kaufen</button></div></div>`).join('')
  +`<h2 class="sec">Extras</h2><div class="job"><div class="jt">2×</div><div class="jmain"><b>Doppelter Lohn</b><span class="meta" id="pa-b2">60 Minuten lang</span></div><div class="jside"><span class="pay">2,99 €</span><button class="act sm" data-pk="b2" type="button" ${SHOP_OPEN?'':'disabled'}>Kaufen</button></div></div><div class="job"><div class="jt">A</div><div class="jmain"><b>Vorarbeiter sofort</b><span class="meta">Nimmt automatisch Aufträge an</span></div><div class="jside"><span class="pay">4,99 €</span><button class="act sm" data-pk="va" type="button" id="pk-va" ${SHOP_OPEN?'':'disabled'}>Kaufen</button></div></div>`;
@@ -2401,6 +2405,68 @@ document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest
  if(t.id==='rlundo'){rlBets.pop();rlRender()}else if(t.id==='rlclear'){rlBets=[];rlRender()}
  else if(t.id==='rlrep'){const a=rlLast.slice();let s=0;rlBets=[];for(const b of a){if(s+b[1]>Math.min(S.m,RLMAX))break;s+=b[1];rlBets.push(b)}rlRender()}
  else if(t.id==='rlspin')rlSpin()});
+/* ---------- Garage: Kosmetik ---------- */
+let noCos=false,cosUsePrev=false,RBW=[],cosPrev={},cosTy='b',payTab=0;const cosImgC={};
+const CRBW='linear-gradient(90deg,#f33,#fb3,#3d6,#3bf,#93f)';
+const H6=h=>'#'+('000000'+h.toString(16)).slice(-6);
+const COSC={
+ paint:{n:'Lackierung',it:[['Werkslack',0,null,'linear-gradient(135deg,#ddd,#999)'],['Signalrot',4e6,0xd32f2f],['Tiefblau',4e6,0x1a4aa8],['Waldgrün',4e6,0x1f6b3a],['Schwarz',12e6,0x15171a],['Weiß',12e6,0xf2f4f6],['Violett',25e6,0x6a2fb5],['Türkis',40e6,0x12b5b0],['Neon-Pink',40e6,0xff3d9a],['Neon-Orange',40e6,0xff6a00],['Roségold',150e6,0xe0a090],['Gold',400e6,0xd4a017],['Platin',800e6,0xbfc7d0],['Regenbogen',2e9,'rb',CRBW]]},
+ finish:{n:'Lack-Finish',it:[['Glanz',0,{r:.3,m:.5,c:1,k:.05},'linear-gradient(135deg,#fff,#888)'],['Matt',10e6,{r:.85,m:.12,c:0,k:.5},'#8a8a8a'],['Satin',20e6,{r:.55,m:.3,c:.4,k:.3},'linear-gradient(135deg,#ccc,#777)'],['Metallic',35e6,{r:.2,m:.95,c:1,k:.03},'linear-gradient(135deg,#fff,#555 60%,#ddd)'],['Candy-Klarlack',120e6,{r:.08,m:.8,c:1,k:0},'linear-gradient(135deg,#fff,#c33 55%,#fff)']]},
+ glass:{n:'Scheibenfolierung',it:[['Klar',0,null,'linear-gradient(135deg,#cfe8f3,#7fb4cf)'],['Getönt',3e6,[0x1d2a33,.78,.2],'#1d2a33'],['Blau verspiegelt',15e6,[0x2a5ad8,.7,.7],'linear-gradient(135deg,#6fa0ff,#1a3a98)'],['Grün verspiegelt',15e6,[0x1f9d55,.7,.7],'linear-gradient(135deg,#6fe09a,#157a3f)'],['Rote Folie',25e6,[0xb02828,.65,.3],'#b02828'],['Schwarz-Folie',40e6,[0x050607,.92,.1],'#050607'],['Gold verspiegelt',120e6,[0xd4a017,.75,.85],'linear-gradient(135deg,#ffe08a,#b8860b)']]},
+ beacon:{n:'Warnleuchte',it:[['Orange',0,null,'#ff8a00'],['Blau',5e6,0x2a7bff,'#2a7bff'],['Grün',5e6,0x2fd36b,'#2fd36b'],['Rot',8e6,0xff2a2a,'#ff2a2a'],['Weiß',8e6,0xfff4e0,'#fff4e0'],['Violett',20e6,0xb04bff,'#b04bff'],['Regenbogen',150e6,'rb',CRBW]]},
+ rim:{n:'Felgen und Laufrollen',it:[['Standard',0,null,'linear-gradient(135deg,#ccc,#777)'],['Chrom',6e6,[0xe8ecf0,.95,.12],'linear-gradient(135deg,#fff,#9aa,#fff)'],['Schwarz',8e6,[0x15171a,.5,.4],'#15171a'],['Rot',12e6,[0xd32f2f,.7,.3],'#d32f2f'],['Blau',12e6,[0x1a6bff,.7,.3],'#1a6bff'],['Neon-Grün',25e6,[0x39ff14,.6,.2],'#39ff14'],['Gold',90e6,[0xd4a017,.95,.15],'linear-gradient(135deg,#ffe08a,#b8860b)']]},
+ glow:{n:'Unterbodenbeleuchtung',it:[['Aus',0,null,'#222'],['Blau',20e6,0x2a7bff,'#2a7bff'],['Grün',20e6,0x2fff7a,'#2fff7a'],['Rot',25e6,0xff2a2a,'#ff2a2a'],['Weiß',25e6,0xfff4e0,'#fff4e0'],['Violett',40e6,0xb04bff,'#b04bff'],['Regenbogen',300e6,'rb',CRBW]]}};
+const COSK=Object.keys(COSC);
+const cosS=()=>S.cos||(S.cos={own:{},eq:{b:{},l:{}}});
+const cosOwn=(ty,c,i)=>i===0||!!cosS().own[ty+'.'+c+'.'+i];
+const cosEq=(ty,c)=>(cosUsePrev&&cosPrev[c]!=null)?cosPrev[c]:((cosS().eq[ty]||{})[c]||0);
+let glowTex=null;const glowT=()=>{if(glowTex)return glowTex;const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d'),g=x.createRadialGradient(64,64,6,64,64,62);g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(.55,'rgba(255,255,255,.55)');g.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=g;x.fillRect(0,0,128,128);return glowTex=new THREE.CanvasTexture(c)};
+function applyCos(r,ti){const ty=V[ti].loader?'l':'b',e=c=>COSC[c].it[cosEq(ty,c)];
+ const pi=e('paint'),fi=e('finish'),gi=e('glass'),bi=e('beacon'),ri=e('rim'),ui=e('glow');RBW=[];const seen=new Set();
+ r.g.traverse(o=>{if(!o.isMesh||!o.material)return;const m=o.material;if(seen.has(m))return;seen.add(m);
+  if(PMAP&&m.map===PMAP){if(pi[2]==='rb')RBW.push(m);else if(pi[2]!=null)m.color.setHex(pi[2]);const f=fi[2];m.roughness=f.r;m.metalness=f.m;m.clearcoat=f.c;m.clearcoatRoughness=f.k}
+  else if(m.isMeshPhysicalMaterial&&m.transparent&&m.opacity>.05){if(gi[2]){m.color.setHex(gi[2][0]);m.opacity=gi[2][1];m.metalness=gi[2][2]}}
+  else if(m.emissive&&m.emissive.getHex()===0xff8a00){if(bi[2]==='rb')RBW.push(m);else if(bi[2]!=null){m.color.setHex(bi[2]);m.emissive.setHex(bi[2])}}
+  else if(m.userData&&m.userData.rim&&ri[2]){m.color.setHex(ri[2][0]);m.roughness=ri[2][1];m.metalness=ri[2][2]}});
+ if(ui[2]!=null){let box;const bp=r.boom&&r.boom.parent;if(bp)bp.remove(r.boom);box=new THREE.Box3().setFromObject(r.g);if(bp)bp.add(r.boom);
+  const w=Math.max(2,box.max.x-box.min.x),d=Math.max(2,box.max.z-box.min.z),cx=(box.max.x+box.min.x)/2,cz=(box.max.z+box.min.z)/2;
+  const mk=(k,op)=>{const mt=new THREE.MeshBasicMaterial({map:glowT(),color:ui[2]==='rb'?0xffffff:ui[2],transparent:true,opacity:op,blending:THREE.AdditiveBlending,depthWrite:false,fog:false});if(ui[2]==='rb')RBW.push(mt);
+   const mm=new THREE.Mesh(new THREE.PlaneGeometry(1,1),mt);mm.rotation.x=-Math.PI/2;mm.scale.set(w*k,d*k*1.15,1);mm.position.set(cx,.05,cz);mm.renderOrder=2;r.g.add(mm)};mk(1.25,.85);mk(1.8,.45)}}
+setInterval(()=>{if(!RBW.length)return;const h=(Date.now()/2500)%1;RBW.forEach(m=>{m.color.setHSL(h,1,.55);if(m.emissive)m.emissive.setHSL(h,1,.5)})},90);
+function cosShot(ty){const ti=ty==='b'?(S.lm?0:S.tier):(S.lm?S.tier:0);
+ const key=ty+ti+COSK.map(c=>cosEq(ty,c)).join(',');cosUsePrev=true;const k2=ty+ti+COSK.map(c=>cosEq(ty,c)).join(',');cosUsePrev=false;
+ if(cosImgC[k2])return cosImgC[k2];
+ const sv=V;V=ty==='l'?VL:VB;cosUsePrev=true;noCos=false;let url='';
+ try{const r=new THREE.WebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:true});r.setSize(480,300);r.toneMapping=THREE.ACESFilmicToneMapping;r.toneMappingExposure=1.05;const ev=makeEnv(r);
+  const sc=new THREE.Scene();sc.environment=ev;sc.add(new THREE.AmbientLight(0xffffff,.25));const l=new THREE.DirectionalLight(0xffffff,.9);l.position.set(4,6,5);sc.add(l);
+  const e=makeExc(ti);let c,fl=1;
+  if(ty==='l'){const k=VL[ti].sc;e.boom.rotation.z=.12;e.bucket.rotation.z=.15;e.up.rotation.y=-.12;e.rig();c=new THREE.PerspectiveCamera(40,480/300,.1,200);const d=k*9.2+1;c.position.set(d*.42,d*.3,d*.98);c.lookAt(k*.95,k*1.5,0);fl=k*7}
+  else{e.boom.rotation.z=.5;e.stick.rotation.z=-1.1;e.bucket.rotation.z=-.4;e.up.rotation.y=-.35;e.rig&&e.rig();c=new THREE.PerspectiveCamera(40,480/300,.1,80);const d=3.4+reachOf(ti)*1.25;c.position.set(d*.8,d*.5,d*.9);c.lookAt(.5,.9,0);fl=d*2}
+  const fm=new THREE.Mesh(new THREE.CircleGeometry(fl,48),new THREE.MeshStandardMaterial({color:0x22252a,roughness:.9,metalness:0}));fm.rotation.x=-Math.PI/2;sc.add(fm);sc.add(e.g);
+  r.render(sc,c);url=r.domElement.toDataURL();r.dispose()}catch(er){url=''}finally{V=sv;cosUsePrev=false}
+ return cosImgC[k2]=url}
+function renderGarage(){
+ const own=cosS();if(cosTy==='l'&&!S.rl)cosTy='b';
+ const ty=cosTy,ti=ty==='b'?(S.lm?0:S.tier):(S.lm?S.tier:0),vn=(ty==='l'?VL:VB)[ti].n;
+ const tabs=`<div class="stabs" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px"><button class="act ${payTab?'ghost':''}" type="button" data-ptab="0">Garage</button><button class="act ${payTab?'':'ghost'}" type="button" data-ptab="1">Geldpakete</button></div>`;
+ const img=T3?cosShot(ty):'';
+ let pvTot=0;COSK.forEach(c=>{const i=cosPrev[c];if(i!=null&&!cosOwn(ty,c,i))pvTot+=COSC[c].it[i][1]});
+ let h=tabs+`<div class="stabs" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px"><button class="act sm ${ty==='b'?'':'ghost'}" type="button" data-cty="b">Bagger</button><button class="act sm ${ty==='l'?'':'ghost'}" type="button" data-cty="l">Radlader ${S.rl?'':'🔒'}</button></div>`
+  +`<div class="gprev">${img?`<img src="${img}" alt="Vorschau">`:'<div class="meta" style="padding:30px">Keine Vorschau verfügbar</div>'}<div class="meta" style="color:#cfd3d8;padding:6px 4px 2px">${vn}${Object.keys(cosPrev).length?' · Vorschau':''}${pvTot?' · Vorschau-Teile zusammen '+F(pvTot):''}</div>${Object.keys(cosPrev).length?'<button class="act ghost sm" type="button" data-cpx="1" style="margin:6px 0 2px">Vorschau zurücksetzen</button>':''}</div><div class="meta" style="margin:0 2px 8px">Tippe auf ein Teil für die Vorschau. Kosmetik gilt für alle ${ty==='l'?'Radlader':'Bagger'}, bleibt über Firmenverkäufe erhalten und ist nur Optik.</div>`;
+ COSK.forEach(c=>{const eq=cosEq(ty,c);h+=`<h2 class="sec">${COSC[c].n}</h2><div class="cgrid">`+COSC[c].it.map((it,i)=>{const o=cosOwn(ty,c,i),isEq=eq===i&&!cosPrev[c]&&true,real=(own.eq[ty]||{})[c]||0;const eqd=real===i,pv=cosPrev[c]===i;
+  const sw=it[3]||(typeof it[2]==='number'?H6(it[2]):Array.isArray(it[2])?H6(it[2][0]):'#888');
+  return `<div class="cc ${eqd?'eq':''} ${pv?'pv':''}" data-cv="${c}|${i}"><i class="sw" style="background:${sw}"></i><b>${it[0]}</b><span class="meta">${o?(eqd?'Angelegt':'Im Besitz'):F(it[1])}</span>${eqd?'<span class="tag">Angelegt</span>':o?`<button class="act sm ghost" type="button" data-ce="${c}|${i}">Anlegen</button>`:`<button class="act sm" type="button" data-cb="${c}|${i}" ${S.m<it[1]?'disabled':''}>Kaufen</button>`}</div>`}).join('')+'</div>'});
+ $('#pay').innerHTML=h}
+function cosAct(t){const sp=s=>{const a=s.split('|');return[a[0],+a[1]]};
+ if(t.dataset.ptab!=null){payTab=+t.dataset.ptab;cosPrev={};renderPay();return true}
+ if(t.dataset.cty){if(t.dataset.cty==='l'&&!S.rl){toast('Radlader-Erweiterung nötig');return true}cosTy=t.dataset.cty;cosPrev={};renderGarage();return true}
+ if(t.dataset.cpx){cosPrev={};renderGarage();return true}
+ if(t.dataset.cb){const[c,i]=sp(t.dataset.cb),it=COSC[c].it[i],ty=cosTy;if(cosOwn(ty,c,i)||S.m<it[1])return true;S.m-=it[1];const o=cosS();o.own[ty+'.'+c+'.'+i]=1;(o.eq[ty]||(o.eq[ty]={}))[c]=i;delete cosPrev[c];S.st.cosm=(S.st.cosm||0)+it[1];toast(COSC[c].n+': '+it[0]+' gekauft');if(T3)setExc();renderTop();save();renderGarage();return true}
+ if(t.dataset.ce){const[c,i]=sp(t.dataset.ce),ty=cosTy;if(!cosOwn(ty,c,i))return true;const o=cosS();(o.eq[ty]||(o.eq[ty]={}))[c]=i;delete cosPrev[c];if(T3)setExc();save();renderGarage();return true}
+ if(t.dataset.cv){const[c,i]=sp(t.dataset.cv);if(cosPrev[c]===i)delete cosPrev[c];else cosPrev[c]=i;renderGarage();return true}
+ return false}
+document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('#pay [data-ptab],#pay [data-cty],#pay [data-cpx],#pay [data-cb],#pay [data-ce],#pay [data-cv]');if(!t||t.closest('#pay')==null)return;
+ const b=e.target.closest('#pay [data-ptab],#pay [data-cty],#pay [data-cpx],#pay [data-cb],#pay [data-ce]');cosAct(b||t)});
 /* ---------- Blackjack ---------- */
 const BJB=[100,500,1000,2500,5000,10000],RK=['A','2','3','4','5','6','7','8','9','10','J','Q','K'],SU=['♠','♥','♦','♣'];
 let bjBet=100,bjBusy=false;
@@ -2529,7 +2595,7 @@ function clOpen(){if($('#clov'))return;const o=document.createElement('div');o.i
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#clbtn'))clOpen()});
 setTimeout(clLoad,3500);setInterval(clLoad,60000);
 /* Auto-Update: neue Version erkennen und neu laden */
-const BUILD='20261016-2126';
+const BUILD='20261019-0731';
 setTimeout(async()=>{try{if(!/^https?:/.test(location.protocol))return;
  const t=await (await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'})).text(),m=t.match(/const BUILD='([^']+)'/);
  if(m&&m[1]!==BUILD){const k='baggerUpd';if(sessionStorage.getItem(k)===m[1])return;sessionStorage.setItem(k,m[1]);location.replace(location.pathname+'?v='+m[1])}}catch(e){}},3500);
