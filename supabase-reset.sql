@@ -15,3 +15,19 @@ end
 $$;
 revoke all on function public.admin_reset_all() from public, anon;
 grant execute on function public.admin_reset_all() to authenticated;
+
+-- Einzelnen Spieler zuruecksetzen (Admin-Fenster, "Ganzen Spielstand loeschen")
+create or replace function public.admin_reset_player(uid uuid) returns void
+language plpgsql security definer set search_path=public as
+$$
+begin
+  if not public.is_admin() then raise exception 'nur Admin'; end if;
+  update public.saves set life=0, rank=0, updated_at=now(),
+    data=jsonb_build_object('m',0,'lic',0,'llic',0,'life',0,'tier',0,'top',0,'lm',0,
+      'st',jsonb_build_object('jobs',0,'sold',0,'spins',0))
+    where user_id=uid;
+  delete from public.weekly where user_id=uid;
+end
+$$;
+revoke all on function public.admin_reset_player(uuid) from public, anon;
+grant execute on function public.admin_reset_player(uuid) to authenticated;
