@@ -396,7 +396,7 @@ body{padding-bottom:0}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 19.10. 10:58 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 19.10. 11:12 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -490,7 +490,7 @@ const LOADSEEN=S.seen||0;
 if(S.up&&S.up.auto===1&&!S.autoMig){S.up.auto=2}S.autoMig=1;
 const save=()=>{if(window.__ns)return;S.seen=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 if(S.pend){S.m+=S.pend;S.pend=0}
-S.rl=S.rl?1:0;S.llic=S.llic||0;S.lm=S.lm&&S.rl?1:0;V=S.lm?VL:VB;J=S.lm?JL:JB;X=S.lm?XL:XB;
+if(!isFinite(S.m))S.m=0;if(!isFinite(S.tot))S.tot=0;if(!isFinite(S.life))S.life=0;S.rl=S.rl?1:0;S.llic=S.llic||0;S.lm=S.lm&&S.rl?1:0;V=S.lm?VL:VB;J=S.lm?JL:JB;X=S.lm?XL:XB;
 S.up=Object.assign({mot:0,hyd:0,tec:0,auto:0},S.up||{});try{if(localStorage.getItem('baggerBan')==='1')S.ban=true}catch(e){}if(S.ban)try{localStorage.setItem('baggerBan','1')}catch(e){}S.lic=S.lic||0;S.tot=S.tot||0;S.life=Math.max(S.life||0,S.tot);if(!S.emp)S.emp='self';S.st=Object.assign(ST0(),S.st||{});if(typeof S.cond!=='number')S.cond=100;if(typeof S.top!=='number')S.top=S.tier;if(!S.cds)S.cds={};if(!S.v){S.tier=[0,1,2,3,5,8][S.tier]||0;S.v=2;S.offers=[];S.job=null;S.prog=0}if(S.tier>=V.length)S.tier=0;if(S.emp==='wtd'&&S.next>Date.now()+300000)S.next=Date.now()+300000;
 const pw=()=>V[S.tier].p*(1+.2*S.up.mot)/WK;
 const payM=()=>(1+.12*S.up.hyd)*(1+.35*(S.lic+S.llic))*(1+.05*rankIx())*(1+.02*Math.min(25,(S.st&&S.st.sold)||0))*((S.boostUntil||0)>Date.now()?2:1);
@@ -2642,7 +2642,7 @@ function ovBox(id,html,btn,cb){if(document.getElementById(id))return;const el=do
  el.querySelector('[data-ok]').onclick=()=>{el.remove();cb&&cb()}}
 const escH=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function applyGlobalReset(r){
- const ban=S.ban,bp=S.banPend;S=newState();S.ban=ban;if(bp)S.banPend=bp;setMode(0);cosPrev={};wkRows=null;wkPrevRows=null;RBW.length=0;
+ const ban=S.ban,bp=S.banPend;S=newState();S.ban=ban;if(bp)S.banPend=bp;S.rl=0;S.llic=0;S.lm=0;S.autoMig=1;S.cos={own:{},eq:{b:{},l:{}}};V=VB;J=JB;X=XB;setMode(0);cosPrev={};wkRows=null;wkPrevRows=null;RBW.length=0;
  try{refill();newIds.clear();save();if(T3)setExc();renderOffers();renderShop();renderBets();renderTop();renderProg();renderFirm();renderDaily();renderBrk();if(!$('#prof').hidden)renderProf()}catch(e){}
  lsSet('baggerResetId',r.id);achPrev={j:0,b:0};
  if(sbOn()&&sbSess){sbConflict=null;setTimeout(()=>sbPush(true),400)}
@@ -2662,7 +2662,7 @@ async function cfgLoad(){if(!sbOn())return;
  catch(e){}}
 setInterval(cfgLoad,15000);setTimeout(cfgLoad,3000);
 document.addEventListener('click',async e=>{const t=e.target.closest&&e.target.closest('#admannsend,#admreset');if(!t)return;
- const put=(key,value)=>sbReq('/rest/v1/settings?on_conflict=key',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({key,value,updated_at:new Date().toISOString()})});
+ const put=async(key,value)=>{await sbReq('/rest/v1/settings?on_conflict=key',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({key,value,updated_at:new Date().toISOString()})});const r=await sbReq('/rest/v1/settings?key=eq.'+key+'&select=value');if(!r||!r[0]||!r[0].value||r[0].value.id!==value.id)throw new Error('Nicht gespeichert. Ist supabase-settings.sql ausgeführt und das Konto Admin?')};
  if(t.id==='admannsend'){const m=$('#admannmsg'),tx=(($('#admann')||{}).value||'').trim();if(!tx){m.textContent='Bitte einen Text eingeben.';return}
   if(!sbSess){m.textContent='Dafür musst du mit dem Admin-Konto angemeldet sein.';return}
   const tg=(document.querySelector('input[name=admat]:checked')||{}).value||'online';
