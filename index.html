@@ -391,7 +391,7 @@ body{padding-bottom:0}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 19.10. 07:40 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 19.10. 09:43 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -2433,7 +2433,7 @@ function applyCos(r,ti){const ty=V[ti].loader?'l':'b',e=c=>COSC[c].it[cosEq(ty,c
   if(box.isEmpty())box.setFromObject(r.g);
   const w=Math.max(2,box.max.x-box.min.x),d=Math.max(2,box.max.z-box.min.z),cx=(box.max.x+box.min.x)/2,cz=(box.max.z+box.min.z)/2;
   const mk=(k,op)=>{const mt=new THREE.MeshBasicMaterial({map:glowT(),color:ui[2]==='rb'?0xffffff:ui[2],transparent:true,opacity:op,blending:THREE.AdditiveBlending,depthWrite:false,fog:false});if(ui[2]==='rb')RBW.push(mt);
-   const mm=new THREE.Mesh(new THREE.PlaneGeometry(1,1),mt);mm.rotation.x=-Math.PI/2;mm.scale.set(w*k,d*k,1);mm.position.set(cx,.05,cz);mm.renderOrder=2;r.g.add(mm)};mk(2.0,.95);mk(2.4,.3)}}
+   const mm=new THREE.Mesh(new THREE.PlaneGeometry(1,1),mt);mm.rotation.x=-Math.PI/2;const kk=r.loader?.66:1;mm.scale.set(w*k*kk,d*k*kk,1);mm.position.set(cx,.05,cz);mm.renderOrder=2;r.g.add(mm)};mk(2.0,.95);mk(2.4,.3)}}
 setInterval(()=>{const t=Date.now();if(RBW.length){const h=(t/2500)%1;RBW.forEach(m=>{m.color.setHSL(h,1,.55);if(m.userData.rbe)m.emissive.setHSL(h,1,.5)})}
  if(PRL.length){const w=Math.sin(t/1400)*.5+.5;PRL.forEach(([m,f])=>{const h=f.f?(t/6000)%1:f.h+(w-.5)*.12;m.sheen.setHSL(h,.9,.62);m.emissive.setHSL(h,.8,.4)})}},90);
 function cosShot(ty){const ti=ty==='b'?(S.lm?0:S.tier):(S.lm?S.tier:0);
@@ -2598,7 +2598,7 @@ function clOpen(){if($('#clov'))return;const o=document.createElement('div');o.i
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#clbtn'))clOpen()});
 setTimeout(clLoad,3500);setInterval(clLoad,60000);
 /* Auto-Update: neue Version erkennen und neu laden */
-const BUILD='20261019-0740';
+const BUILD='20261019-0943';
 setTimeout(async()=>{try{if(!/^https?:/.test(location.protocol))return;
  const t=await (await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'})).text(),m=t.match(/const BUILD='([^']+)'/);
  if(m&&m[1]!==BUILD){const k='baggerUpd';if(sessionStorage.getItem(k)===m[1])return;sessionStorage.setItem(k,m[1]);location.replace(location.pathname+'?v='+m[1])}}catch(e){}},3500);
