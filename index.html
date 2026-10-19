@@ -470,7 +470,7 @@ body{padding-bottom:0}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 19.10. 14:20 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 19.10. 14:40 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -2403,6 +2403,7 @@ function admDetRender(msg){const ov=$('#admdet');if(!ov||!admDet)return;const D=
  +(msg?'<div class="meta" style="color:var(--ink)">'+aesc(msg)+'</div>':'')
  +'<div class="meta"><b>Casino &amp; Rolle</b></div><div class="row"><span class="meta">Casino: <b>'+(D.ban?'Hausverbot':'zugelassen')+'</b></span><button class="act ghost sm" data-ad="ban" type="button">'+(D.ban?'Casino freischalten':'Hausverbot erteilen')+'</button></div>'
  +'<div class="row"><select id="adrole" class="rsel" style="flex:1;min-width:0;padding:9px 10px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit">'+[['','Keine Rolle'],['founder','Founder'],['supporter','Supporter'],['helper','Helper']].map(r=>'<option value="'+r[0]+'"'+(D.role===r[0]?' selected':'')+'>'+r[1]+'</option>').join('')+'</select><button class="act sm" data-ad="role" type="button">Rolle setzen</button></div>'
+ +'<div class="meta" style="margin-top:6px"><b>Lizenzen</b> (Bagger: '+(+admGet(D.d,'lic')||0)+' · Radlader: '+(+admGet(D.d,'llic')||0)+')</div><div class="row"><button class="act ghost sm" data-ad="lic:b" type="button">'+(D.arm==='lic:b'?'Nochmal tippen':'Bagger-Lizenzen auf 0')+'</button><button class="act ghost sm" data-ad="lic:l" type="button">'+(D.arm==='lic:l'?'Nochmal tippen':'Radlader-Lizenzen auf 0')+'</button><button class="act ghost sm" data-ad="lic:bl" type="button">'+(D.arm==='lic:bl'?'Nochmal tippen':'Beide auf 0')+'</button></div>'
  +'<div class="meta" style="margin-top:6px"><b>Statistiken &amp; Geld</b> (nur geänderte Felder werden gesendet)</div><div class="adgrid">'+ADF.map(([l,k])=>{const v=admGet(D.d,k);return '<label><span class="meta">'+l+'</span><input type="text" inputmode="numeric" data-k="'+k+'" data-o="'+(v==null?'':Math.round(+v||0))+'" value="'+(v==null?'':Math.round(+v||0))+'"></label>'}).join('')+'</div>'
  +'<button class="act" data-ad="save" type="button">Änderungen speichern</button><div class="meta">Wirkt beim Spieler innerhalb von ca. 15 Sek. (sobald er online ist, sonst beim nächsten Öffnen).</div></div>'}
 async function admDetAct(a){const D=admDet;if(!D)return;
@@ -2410,6 +2411,8 @@ async function admDetAct(a){const D=admDet;if(!D)return;
   if(a==='close'){const ov=$('#admdet');if(ov)ov.remove();admDet=null;admLoadPl();return}
   if(a==='ban'){await await_flag(D.uid,{banned:!D.ban});D.ban=!D.ban;if(D.uid===(sbSess&&sbSess.uid)){setBan(D.ban,true);renderCasino()}admDetRender(D.ban?'Hausverbot erteilt.':'Casino freigeschaltet.');return}
   if(a==='role'){const rv=($('#adrole')||{}).value||'';await(rv?sbReq('/rest/v1/roles?on_conflict=user_id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({user_id:D.uid,role:rv,updated_at:new Date().toISOString()})}):sbReq('/rest/v1/roles?user_id=eq.'+D.uid,{method:'DELETE'}));delete pfRole[D.uid];D.role=rv;admDetRender('Rolle gespeichert ✓');return}
+  if(a.slice(0,4)==='lic:'){if(D.arm!==a){D.arm=a;admDetRender('Zum Bestätigen nochmal tippen.');return}D.arm=null;const w=a.slice(4),patch={};if(w.includes('b'))patch.lic=0;if(w.includes('l'))patch.llic=0;
+   await await_flag(D.uid,{cmd_patch:patch,cmd_id:Date.now()});Object.keys(patch).forEach(k=>{D.d[k]=0});if(D.uid===(sbSess&&sbSess.uid))flagsSync();admDetRender('Lizenzen zurückgesetzt ✓');return}
   if(a==='save'){const patch={};document.querySelectorAll('#admdet [data-k]').forEach(i=>{const v=i.value.replace(/[^\d]/g,'');if(v!==''&&v!==i.dataset.o)patch[i.dataset.k]=Math.min(+v,1e15)});
    if(!Object.keys(patch).length){admDetRender('Nichts geändert.');return}
    await await_flag(D.uid,{cmd_patch:patch,cmd_id:Date.now()});
