@@ -262,6 +262,21 @@ button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
 #slot #casself .reset{opacity:.9}
 @media (prefers-reduced-motion:reduce){#slot .csign,#slot .cdots,#slot .reels::before,#slot .cab .act.big{animation:none}}
 .lowfx #slot .cab,.lowfx #slot .cas-tabs button{-webkit-backdrop-filter:none;backdrop-filter:none}
+
+.aw{--surf:#151920;--surf2:#1a1e25;--line:#2a303a;--ink:#e8eaee;--mut:#8e97a6;--bg:#0e1116;position:fixed;inset:0;z-index:9990;background:#0e1014;color:#e8eaee;display:flex;flex-direction:column}
+.aw-top{display:flex;align-items:center;gap:10px;padding:max(12px,env(safe-area-inset-top)) 16px 10px;border-bottom:1px solid #232830}.aw-top b{font:700 18px var(--f1);letter-spacing:.08em}
+.aw-tabs{display:flex;gap:6px;overflow-x:auto;padding:10px 12px;border-bottom:1px solid #232830;scrollbar-width:none;flex:0 0 auto}.aw-tabs::-webkit-scrollbar{display:none}
+.aw-tab{flex:0 0 auto;padding:9px 15px;border-radius:999px;background:#1a1e25;border:1px solid #2a303a;color:#cbd0d8;font:700 12px var(--f2);letter-spacing:.07em;text-transform:uppercase;cursor:pointer}.aw-tab.on{background:var(--acc,#ffc400);color:#1a1400;border-color:transparent}
+.aw-body{flex:1;overflow:auto;padding:14px 14px 70px;max-width:780px;width:100%;margin:0 auto;box-sizing:border-box;display:grid;gap:12px;align-content:start}
+.aw-card{background:#151920;border:1px solid #242a33;border-radius:18px;padding:14px;display:grid;gap:10px}
+.aw-card h3{margin:0;font:700 13px var(--f1);letter-spacing:.16em;text-transform:uppercase;color:var(--acc,#ffc400)}
+.aw .meta{color:#8e97a6}
+.aw input:not([type=checkbox]):not([type=radio]),.aw select,.aw textarea{padding:10px 12px;border-radius:12px;border:1px solid #2c3340;background:#0e1116;color:#e8eaee;font:inherit;width:100%;box-sizing:border-box;margin-top:4px}
+.aw-grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.aw-item{display:grid;grid-template-columns:1fr 110px 140px;gap:8px;align-items:center;padding:9px 0;border-top:1px solid #20262f}.aw-item:first-child{border-top:0}
+.aw-note{background:#1d2a1f;border:1px solid #2f5a3a;color:#bff0c8;border-radius:14px;padding:10px 12px;font-size:14px}
+.aw .cpills{display:flex;gap:8px;overflow-x:auto;padding:2px 0 8px}
+@media (max-width:520px){.aw-item{grid-template-columns:1fr 1fr}.aw-item>div:first-child{grid-column:1/-1}}
 /* Roulette */
 .rou{--acc:#e9b872;--accink:#2a1a0c;background:radial-gradient(120% 80% at 50% 0%,#3a2a1f,#1d1510 70%);border-top-color:#e9b872;--surf2:#2d2118;--line:#4a3a2c}
 .rou h2{color:#e9b872}
@@ -455,7 +470,7 @@ body{padding-bottom:0}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 19.10. 12:45 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 19.10. 13:30 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -471,15 +486,15 @@ body{padding-bottom:0}
 const $=s=>document.querySelector(s),KEY='baggerTycoon2',EMPMIN=500000;
 const F=n=>Math.round(n).toLocaleString('de-DE')+' €';
 const VB=[
-{n:'Minibagger',tn:'1,8 t',p:1,c:0,m:0,col:0xf2b705,z:0},
-{n:'Kompaktbagger',tn:'5 t',p:4,c:900,m:1,col:0xf08a1c,z:1},
-{n:'Mobilbagger',tn:'14 t',p:15,c:9000,m:2,col:0xd8452b,z:2},
-{n:'Kettenbagger',tn:'25 t',p:45,c:60000,m:3,col:0x2f78c4,z:3},
-{n:'Raupenbagger',tn:'45 t',p:110,c:250000,m:3,col:0x1f9d8a,z:3.6,sc:1.18,lx:1.12},
-{n:'Großbagger',tn:'90 t',p:250,c:1000000,m:4,col:0x2e9b57,z:4},
-{n:'Abbruchbagger',tn:'200 t',p:550,c:3000000,m:4,col:0xc62828,z:5,sc:1.15,lx:1.25,fx:'hammer'},
-{n:'Bergbaubagger',tn:'400 t',p:1100,c:10000000,m:4,col:0xe6e9ec,z:5.5,sc:1.55,lx:1.1},
-{n:'Monster-Bagger',tn:'13.000 t',p:4000,c:50000000,m:5,col:0xe4741a,z:6.5,lic:1,giant:1,spd:.42,rch:22,dig:20}];
+{n:'Bobcat E17',tn:'1,8 t',p:1,c:0,m:0,col:0xf2b705,z:0},
+{n:'Kubota KX057',tn:'5 t',p:4,c:900,m:1,col:0xf08a1c,z:1},
+{n:'Liebherr A 914',tn:'14 t',p:15,c:9000,m:2,col:0xd8452b,z:2},
+{n:'Hitachi ZX250',tn:'25 t',p:45,c:60000,m:3,col:0x2f78c4,z:3},
+{n:'Komatsu PC450',tn:'45 t',p:110,c:250000,m:3,col:0x1f9d8a,z:3.6,sc:1.18,lx:1.12},
+{n:'Cat 390F',tn:'90 t',p:250,c:1000000,m:4,col:0x2e9b57,z:4},
+{n:'Liebherr R 9200',tn:'200 t',p:550,c:3000000,m:4,col:0xc62828,z:5,sc:1.15,lx:1.25,fx:'hammer'},
+{n:'Hitachi EX3600',tn:'400 t',p:1100,c:10000000,m:4,col:0xe6e9ec,z:5.5,sc:1.55,lx:1.1},
+{n:'Krupp Bagger 288',tn:'13.000 t',p:4000,c:50000000,m:5,col:0xe4741a,z:6.5,lic:1,giant:1,spd:.42,rch:22,dig:20}];
 const JB=[
 ['Gartenteich ausheben',30,100,0],['Zaunpfosten-Löcher',20,65,0],['Zisterne im Garten',55,190,0],['Pool im Vorgarten',45,150,0],
 ['Schwimmteich für Familie Becker',38,125,0],['Zaunpfosten für Pferdekoppel',26,85,0],['Regenwasser-Zisterne Schrebergarten',50,170,0],['Pool für das Gartenfest',42,140,0],
@@ -512,16 +527,16 @@ const XB=[
 const WK=1.1,PY=.3125,CK=3;VB.forEach(v=>{v.c*=CK});
 /* ---------- Radlader (Erweiterung) ---------- */
 const VL=[
-{n:'Hoflader',tn:'2,5 t',p:1.5,c:0,col:0xf2b705,z:0,sc:.5,lic:0},
-{n:'Kompaktlader',tn:'4,5 t',p:5,c:1500,col:0xf08a1c,z:1,sc:.72,lic:0},
-{n:'Radlader S',tn:'8 t',p:18,c:12000,col:0xd8452b,z:2,sc:.92,lic:0},
-{n:'Radlader M',tn:'14 t',p:55,c:80000,col:0x2f78c4,z:3,sc:1.15,lic:0},
-{n:'Radlader L',tn:'20 t',p:140,c:350000,col:0x1f9d8a,z:3.6,sc:1.42,lic:0},
-{n:'Großradlader',tn:'30 t',p:320,c:1400000,col:0x2e9b57,z:4,sc:1.75,lic:0},
-{n:'Schwerlast-Radlader',tn:'48 t',p:700,c:4000000,col:0xc62828,z:5,sc:2.1,lic:0},
-{n:'Steinbruch-Radlader',tn:'75 t',p:1500,c:12000000,col:0xe6e9ec,z:5.5,sc:2.45,lic:1},
-{n:'Bergbau-Radlader',tn:'130 t',p:3200,c:40000000,col:0xe4741a,z:6,sc:2.8,lic:2},
-{n:'Giga-Radlader',tn:'260 t',p:7000,c:120000000,col:0xf2d21c,z:6.5,sc:3.2,lic:3}];
+{n:'Weidemann Hoflader',tn:'2,5 t',p:1.5,c:0,col:0xf2b705,z:0,sc:.5,lic:0},
+{n:'Bobcat Kompaktlader',tn:'4,5 t',p:5,c:1500,col:0xf08a1c,z:1,sc:.72,lic:0},
+{n:'Volvo L50',tn:'8 t',p:18,c:12000,col:0xd8452b,z:2,sc:.92,lic:0},
+{n:'Cat 938',tn:'14 t',p:55,c:80000,col:0x2f78c4,z:3,sc:1.15,lic:0},
+{n:'Komatsu WA380',tn:'20 t',p:140,c:350000,col:0x1f9d8a,z:3.6,sc:1.42,lic:0},
+{n:'Cat 980',tn:'30 t',p:320,c:1400000,col:0x2e9b57,z:4,sc:1.75,lic:0},
+{n:'Cat 988',tn:'48 t',p:700,c:4000000,col:0xc62828,z:5,sc:2.1,lic:0},
+{n:'Cat 990',tn:'75 t',p:1500,c:12000000,col:0xe6e9ec,z:5.5,sc:2.45,lic:1},
+{n:'Cat 993K',tn:'130 t',p:3200,c:40000000,col:0xe4741a,z:6,sc:2.8,lic:2},
+{n:'LeTourneau L-2350',tn:'260 t',p:7000,c:120000000,col:0xf2d21c,z:6.5,sc:3.2,lic:3}];
 VL.forEach((v,i)=>{v.loader=1;v.c*=CK;v.dig=+(7*v.sc).toFixed(2);v.rch=+(5.5*v.sc).toFixed(2);v.spd=1/((5+.5*i)*(.3+v.z*.05))});
 const RTL=[3.4,4.2,4.8,5.6,6.6,7.6,8.6,9.6,10.8,12];
 const JLN=[
@@ -552,7 +567,7 @@ if(S.pend){S.m+=S.pend;S.pend=0}
 if(!isFinite(S.m))S.m=0;if(!isFinite(S.tot))S.tot=0;if(!isFinite(S.life))S.life=0;S.rl=S.rl?1:0;S.llic=S.llic||0;S.lm=S.lm&&S.rl?1:0;V=S.lm?VL:VB;J=S.lm?JL:JB;X=S.lm?XL:XB;
 S.up=Object.assign({mot:0,hyd:0,tec:0,auto:0},S.up||{});try{if(localStorage.getItem('baggerBan')==='1')S.ban=true}catch(e){}if(S.ban)try{localStorage.setItem('baggerBan','1')}catch(e){}S.lic=S.lic||0;S.tot=S.tot||0;S.life=Math.max(S.life||0,S.tot);if(!S.emp)S.emp='self';S.st=Object.assign(ST0(),S.st||{});if(typeof S.cond!=='number')S.cond=100;if(typeof S.top!=='number')S.top=S.tier;if(!S.cds)S.cds={};if(!S.v){S.tier=[0,1,2,3,5,8][S.tier]||0;S.v=2;S.offers=[];S.job=null;S.prog=0}if(S.tier>=V.length)S.tier=0;if(S.emp==='wtd'&&S.next>Date.now()+300000)S.next=Date.now()+300000;
 const pw=()=>V[S.tier].p*(1+.2*S.up.mot)/WK;
-const payM=()=>(1+.12*S.up.hyd)*(1+.35*(S.lic+S.llic))*(1+.05*rankIx())*(1+.02*Math.min(25,(S.st&&S.st.sold)||0))*((S.boostUntil||0)>Date.now()?2:1)*(1+((evAct()||{}).pay||0)/100);
+const payM=()=>(1+.12*S.up.hyd)*(1+.35*(S.lic+S.llic))*(1+.05*rankIx())*(1+.02*Math.min(25,(S.st&&S.st.sold)||0))*((S.boostUntil||0)>Date.now()?2:1)*(1+((evAct()||{}).pay||0)/100)*adcPay();
 const pay=o=>Math.round(o.e*PY*payM());
 const newIds=new Set();
 const RANKS=[{n:'Praktikant',at:0,u:'Standardaufträge'},{n:'Azubi',at:10000,u:'erste exklusive Aufträge'},{n:'Geselle',at:150000,u:'Staatsaufträge im Tiefbau'},{n:'Alt-Geselle',at:2000000,u:'Flughäfen und Großbaustellen'},{n:'Meister',at:25000000,u:'Abrisse und Bergwerke'},{n:'Bauingenieur',at:250000000,u:'Mega-Projekte im Tagebau'}];
@@ -1948,10 +1963,10 @@ const MAINTC=()=>Math.max(1,Math.round(RC()*.12*(.5+dmg())));
 const condCol=()=>S.cond>60?'#2e9e5b':S.cond>30?'#e0a100':'#d63a24';
 const RC=()=>Math.round(2*(S.lm?[100,250,1400,6500,20000,60000,180000,550000,1700000,4500000]:[60,150,900,5000,16000,50000,160000,500000,2000000])[S.tier]*Math.max(.4,1-.06*S.up.tec));
 function renderBrk(){const b=$('#brk');b.hidden=!S.broken;if(!S.broken)return;$('#brkn').textContent=V[S.tier].loader?'Radlader kaputt':'Bagger kaputt';const c=FULLC(),w=MAINTC();$('#brkt').textContent='Steht still · Zustand '+Math.round(S.cond)+' %';$('#rep').disabled=S.m<c;$('#rep').textContent='Voll '+F(c);$('#mnt').disabled=S.m<w;$('#mnt').textContent='Warten '+F(w);$('#fix').textContent='Flicken '+(S.fix||0)+'/25'}
-function renderEmp(){const c=$('#empcard');
+function renderEmp(){const c=$('#empcard');if(c){c.innerHTML='';return}
  if(S.emp==='wtd'){const r=Math.max(0,S.next-Date.now()),m=Math.floor(r/60000),sc=String(Math.floor(r/1000)%60).padStart(2,'0');c.innerHTML=`<div class="emp-row"><div><b>WTD 91</b><span class="meta">Passives Einkommen</span></div><div style="text-align:right"><span class="pay">+2.100 €</span><br><span class="meta">in ${m}:${sc}</span></div></div><div class="bar"><i style="width:${100-r/3000}%"></i></div>`}
  else{const rest=Math.max(0,EMPMIN-S.life);c.innerHTML=`<div class="emp-row"><div><b>Selbstständig</b><span class="meta">${rest>0?'Arbeitgeber ab '+F(EMPMIN)+' Gesamtverdienst (noch '+F(rest)+')':'Arbeitgeber im Tab Firma wählbar'}</span></div></div>`}}
-function payTick(){if(S.emp!=='wtd')return;const n=Date.now();let c=0;while(S.next<=n&&c<144){S.m+=350;S.tot+=350;S.life+=350;S.st.passive+=350;S.next+=300000;c++}if(S.next<=n)S.next=n+300000;if(c){toast('WTD 91: +'+F(350*c));save()}}
+function payTick(){return;const n=Date.now();let c=0;while(S.next<=n&&c<144){S.m+=350;S.tot+=350;S.life+=350;S.st.passive+=350;S.next+=300000;c++}if(S.next<=n)S.next=n+300000;if(c){toast('WTD 91: +'+F(350*c));save()}}
 /* ---------- AFK-Check ---------- */
 const AFK_MS=150000;let afk=false,lastAct=Date.now();
 function afkAct(){if(!afk)lastAct=Date.now()}
@@ -1969,7 +1984,6 @@ setInterval(()=>{const n=performance.now(),dt=Math.min(3600,(n-last)/1000);last=
  if(!S.job&&S.up.auto&&!S.broken&&!afk){const el=S.offers.filter(x=>x.t<=S.tier),c=S.up.auto>=2?el.sort((a,b)=>b.e/b.w-a.e/a.w)[0]:el[0];if(c){S.job=c.id;renderOffers()}}
  if(S.offers.some(x=>x.rush&&x.rush<now&&x.id!==S.job)){S.offers=S.offers.filter(x=>!(x.rush&&x.rush<now&&x.id!==S.job));refill();renderOffers()}
  document.querySelectorAll('.rush').forEach(e=>{const q=Math.max(0,Math.ceil((e.dataset.r-now)/1000));e.textContent='EILIG ×3 · '+Math.floor(q/60)+':'+String(q%60).padStart(2,'0')});
- if(S.life>=EMPMIN&&!S.unl){S.unl=1;toast('Arbeitgeber freigeschaltet: siehe Tab Firma');save()}
  {const ri=rankIx();if(ri>S.rk){S.rk=ri;toast('Beförderung zum '+RANKS[ri].n+'!');save()}}
  if(!$('#prof').hidden&&++pfT%10===0)renderProf();
  payTick();renderProg();renderTop();renderEmp();renderBrk();updateFirm();updatePay();
@@ -1984,15 +1998,15 @@ const LC=[1000000,2500000,10000000,50000000,200000000];
 const LCm=()=>S.lm?LLC:LC,licN=()=>S.lm?S.llic:S.lic;
 const gain=()=>licN()<LCm().length&&(S.tot||0)>=LCm()[licN()]?1:0;
 function renderFirm(){
- $('#firm').innerHTML=`<h2 class="sec" style="margin-top:4px">Arbeitgeber</h2><div class="card2" id="empbox"></div><h2 class="sec">Radlader</h2><div class="card2" id="rlbox"></div><h2 class="sec">Konzern</h2><div class="card2"><div class="emp-row"><div><b class="vn" id="fln">Baulizenzen</b><span class="meta">Jede Lizenz erhöht deinen Lohn dauerhaft um 35 %</span></div><span class="pay" id="fl"></span></div><div class="emp-row"><span class="meta">Verdient in diesem Durchgang</span><b id="ft"></b></div><button class="act big" id="prest" type="button" style="margin-top:2px"></button><div class="meta" id="pn"></div><div class="meta" id="fbn" style="margin-top:6px"></div></div><h2 class="sec">Werkstatt</h2>`+UP.map(u=>`<div class="job"><div class="jt" id="ul-${u.k}"></div><div class="jmain"><b>${u.n}</b><span class="meta" id="ud-${u.k}"></span></div><div class="jside"><span class="pay" id="up-${u.k}"></span><button class="act sm" data-up="${u.k}" type="button">Verbessern</button></div></div>`).join('');
+ $('#firm').innerHTML=`<h2 class="sec" style="margin-top:4px">Radlader</h2><div class="card2" id="rlbox"></div><h2 class="sec">Konzern</h2><div class="card2"><div class="emp-row"><div><b class="vn" id="fln">Baulizenzen</b><span class="meta">Jede Lizenz erhöht deinen Lohn dauerhaft um 35 %</span></div><span class="pay" id="fl"></span></div><div class="emp-row"><span class="meta">Verdient in diesem Durchgang</span><b id="ft"></b></div><button class="act big" id="prest" type="button" style="margin-top:2px"></button><div class="meta" id="pn"></div><div class="meta" id="fbn" style="margin-top:6px"></div></div><h2 class="sec">Werkstatt</h2>`+UP.map(u=>`<div class="job"><div class="jt" id="ul-${u.k}"></div><div class="jmain"><b>${u.n}</b><span class="meta" id="ud-${u.k}"></span></div><div class="jside"><span class="pay" id="up-${u.k}"></span><button class="act sm" data-up="${u.k}" type="button">Verbessern</button></div></div>`).join('');
  updateFirm()}
-function empBox(){const b=$('#empbox');if(!b)return;const k=S.life>=EMPMIN?'u'+S.emp:'l';
+function empBox(){return;const b=$('#empbox');if(!b)return;const k=S.life>=EMPMIN?'u'+S.emp:'l';
  if(b.dataset.k!==k){b.dataset.k=k;
   if(k==='l')b.innerHTML=`<div class="emp-row"><div><b class="vn">Noch gesperrt</b><span class="meta">Ab ${F(EMPMIN)} Gesamtverdienst kannst du dir einen Arbeitgeber suchen. Es zählt alles, was du mit Aufträgen und Gehalt verdienst, auch über Firmenverkäufe hinweg. Casino und Shop zählen nicht.</span></div></div><div class="bar"><i id="ebar"></i></div><div class="emp-row"><span class="meta">Bisher verdient</span><b id="etxt"></b></div>`;
   else if(S.emp==='wtd')b.innerHTML=`<div class="emp-row"><div><b class="vn">WTD 91</b><span class="meta">Du bist angestellt</span></div><span class="pay">+350 € / 5 Min.</span></div>`;
   else b.innerHTML=`<div class="meta">Du bist selbstständig. Jetzt kannst du dir einen Arbeitgeber suchen:</div><div class="opt hot"><b>WTD 91</b><span class="pay">350 € <span class="meta">alle 5 Minuten</span></span><span class="meta">Läuft auch, wenn du nichts tust.</span><button class="act" data-emp="wtd" type="button">Bei WTD 91 anfangen</button></div>`}
  if(k==='l'){$('#ebar').style.width=Math.min(100,S.life/EMPMIN*100)+'%';$('#etxt').textContent=F(S.life)+' / '+F(EMPMIN)}}
-const RLP=250e6;
+let RLP=250e6;
 function rlBox(){const b=$('#rlbox');if(!b)return;const k=S.rl?'o'+S.lm:S.lic<5?'l'+S.lic:'b'+(S.m>=RLP?1:0);
  if(b.dataset.k===k)return;b.dataset.k=k;
  if(S.rl)b.innerHTML=`<div class="emp-row"><div><b class="vn">Radlader-Erweiterung</b><span class="meta">${S.lm?'Du fährst in diesem Durchgang Radlader. Bagger sind bis zum Firmenverkauf gesperrt.':'Freigeschaltet. Wähle im Fuhrpark den Radlader, um zu starten.'}</span></div><span class="tag">Gekauft</span></div>`;
@@ -2039,7 +2053,7 @@ function renderProf(){
  $('#prof').innerHTML=`<div class="card2"><div class="meta">Dein Rang · ${sbName0().replace(/[&<>"]/g,'')}</div><div class="rankname">${R.n}</div><div class="meta">Rang ${ri+1} von ${RANKS.length} · Rangbonus +${ri*5} % Lohn</div><div class="bar"><i style="width:${N?Math.min(100,(S.life-R.at)/(N.at-R.at)*100):100}%"></i></div><div class="meta">${N?'Noch '+F(N.at-S.life)+' Gesamtverdienst bis '+N.n:'Höchster Rang erreicht'}</div></div>
  <h2 class="sec">Karriere</h2><div class="card2">${RANKS.map((k,i)=>`<div class="rk ${i<ri?'done':i===ri?'now':''}"><div class="rkd">${i<ri?'✓':i+1}</div><div class="rkm"><b>${k.n}</b><span class="meta">${i?'ab '+F(k.at)+' Gesamtverdienst':'Startrang'} · ${k.u}</span></div></div>`).join('')}</div>
  <h2 class="sec">Arbeit</h2><div class="card2">${row('Aufträge absolviert',num(q.jobs))}${row('davon exklusiv',num(q.ex))}${row('Bestes Honorar',F(q.best))}${row('Bewegte Masse',num(q.work)+' Einheiten')}${row('Selbst mitgeschaufelt',num(q.dig||0)+' Mal')}${row('Spielzeit',fmtT(q.time))}</div>
- <h2 class="sec">Finanzen</h2><div class="card2">${row('Gesamtverdienst',F(S.life))}${row('davon Gehalt',F(q.passive))}${row('Arbeitgeber',S.emp==='wtd'?'WTD 91':'selbstständig')}${row('Defekte',num(q.breaks))}${row('Reparaturen',num(q.repairs)+' · '+F(q.repCost))}</div>
+ <h2 class="sec">Finanzen</h2><div class="card2">${row('Gesamtverdienst',F(S.life))}${row('Defekte',num(q.breaks))}${row('Reparaturen',num(q.repairs)+' · '+F(q.repCost))}</div>
  <h2 class="sec">Fuhrpark</h2><div class="card2">${row(S.lm?'Aktueller Radlader':'Aktueller Bagger',V[S.tier].n+' ('+V[S.tier].tn+')')}${row('Fuhrpark',(S.top+1)+' von '+V.length)}${row('Baulizenzen',num(S.lic))}${row('Firmen verkauft',num(q.sold))}</div>
  <h2 class="sec">Casino</h2><div class="card2">${row('Drehs',num(q.spins))}${row('Einsätze gesamt',F(q.cstake))}${row('Auszahlungen gesamt',F(q.cwin))}${row('Bilanz',(bil>=0?'+':'−')+F(Math.abs(bil)),bil>=0?'win':'lose')}${row('Größte Auszahlung',F(q.big))}</div>
  <h2 class="sec">Titel</h2><div class="card2">${row('Titel',titleOf(q.sold)||'noch keiner')}${row('Firmen verkauft',num(q.sold))}${row('Firmenerbe',`+${Math.min(25,q.sold||0)*2} % Lohn`)}${row('Tages-Serie',((S.dr&&S.dr.s)||0)+' Tage')}</div>
@@ -2175,7 +2189,8 @@ function pfHtml(esc,me){
  const pp=pres[lbView]||{},on=isOn(lbView),lic=+d.lic||0,llic=+d.llic||0,PV=d.lm?VL:VB,jobs=+st.jobs||0,top=Math.min(+d.top||0,PV.length-1),veh=PV[top];
  const bad=[],TRL={founder:['🛠','Founder'],supporter:['🛡','Supporter'],helper:['🤝','Helper']},trl=TRL[pfRole[lbView]];if(pos&&pos<=3)bad.push(['👑','Platz '+pos]);if(lic+llic)bad.push(['🏅',(lic+llic)+(lic+llic===1?' Lizenz':' Lizenzen')]);if(rk>=3)bad.push(['⭐',(RANKS[rk]||RANKS[0]).n]);
  if(jobs>=500)bad.push(['🛠','500+ Aufträge']);else if(jobs>=100)bad.push(['🛠','100+ Aufträge']);if(d.up&&d.up.auto>=3)bad.push(['👷','Vorarbeiter Stufe 3']);{const sp=+st.spins||0,T=[[20000,'rubin','Rubin'],[10000,'smaragd','Smaragd'],[2500,'gold','Gold'],[500,'silber','Silber'],[150,'bronze','Bronze'],[50,'norm','']].find(t=>sp>=t[0]);if(T)bad.push(['🎰','Stammgast'+(T[2]?' '+T[2]:''),'sg '+T[1]])}if(top>=PV.length-1)bad.push(d.lm?['🏗','Giga-Radlader']:['🚜','Monster-Bagger']);
- const tile=(i,k,v)=>'<div class="pft"><span>'+i+'</span><b>'+v+'</b><small>'+k+'</small></div>';
+ ((ADC&&ADC.aw&&ADC.aw[lbView])||[]).forEach(id=>{const b=((ADC&&ADC.bd)||[]).find(x=>x.id===id);if(b)bad.push([b.ic,b.n,'cb'])});bad.splice(0,bad.length,...bad.filter(x=>x[2]==='cb'||!adcH('bh',x[0])));
+ const tile=(i,k,v)=>adcH('pfh',k)?'':'<div class="pft"><span>'+i+'</span><b>'+v+'</b><small>'+k+'</small></div>';
  const ready=!!pfData,ban=own?isBan():!!pfBan[lbView];
  const TT=d.lm?(typeof THL!=='undefined'?THL:[]):(typeof TH!=='undefined'?TH:[]),img=(TT&&TT[top])?'<img src="'+TT[top]+'" alt="" class="pfimg">':'<div class="pfimg pfno">🚜</div>';
  const stat=on?'<span style="color:#2ecc71;font-weight:700">● Online</span>':'<span class="meta">Zuletzt online '+agoT(pp.last_seen)+'</span>';
@@ -2185,8 +2200,8 @@ function pfHtml(esc,me){
  +'<div class="pfname">'+(trl?'<span class="pfrole r-'+pfRole[lbView]+'">'+trl[0]+' '+trl[1]+'</span>':'')+esc(nm)+(own?' <small>(du)</small>':'')+'</div>'
  +'<div class="pfsub"><span class="pfrank" style="background:'+col+'">'+esc((RANKS[rk]||RANKS[0]).n)+'</span>'+stat+'</div>'
  +(ban?'<div class="pfban">🚫 Hausverbot im Casino</div>':'')+(bad.length?'<div class="pfbad">'+bad.map(x=>'<span'+(x[2]?' class="'+x[2]+'"':'')+'>'+x[0]+' '+esc(x[1])+'</span>').join('')+'</div>':'')
- +(ready?'<div class="pfgrid">'+tile('💶','Geld',F(+d.m||0))+tile('🏅','Bagger-Lizenzen',lic)+tile('🏗','Radlader-Lizenzen',llic)+tile('🏆','Erfolge',Object.keys(d.ach||{}).length+' / '+ACH.length)+tile('🏢','Titel',titleOf(+st.sold||0)||'–')+tile('🔥','Tages-Serie',(d.dr&&d.dr.s)||0)+tile('📋','Aufträge',jobs)+tile('📈','Gesamtverdienst',F(+d.life||(pfData&&+pfData.life)||0))+'</div>'+(Object.keys(d.ach||{}).length?'<div class="meta" style="padding:8px 14px 0;font-size:20px;letter-spacing:2px">'+ACH.filter(a=>d.ach[a.id]).map(a=>'<span title="'+a.n+'">'+a.ic+'</span>').join('')+'</div>':'')
-  +'<div class="pfbag">'+img+'<div><small>Bestes Fahrzeug</small><b>'+esc(veh.n)+'</b><span class="meta">'+esc(veh.tn)+'</span></div></div>':'<div class="meta" style="padding:16px">Lade Profil …</div>')
+ +(ready?'<div class="pfgrid">'+tile('💶','Geld',F(+d.m||0))+tile('🏅','Bagger-Lizenzen',lic)+tile('🏗','Radlader-Lizenzen',llic)+tile('🏆','Erfolge',Object.keys(d.ach||{}).length+' / '+ACH.filter(a=>!a.off).length)+tile('🏢','Titel',titleOf(+st.sold||0)||'–')+tile('🔥','Tages-Serie',(d.dr&&d.dr.s)||0)+tile('📋','Aufträge',jobs)+tile('📈','Gesamtverdienst',F(+d.life||(pfData&&+pfData.life)||0))+'</div>'+(Object.keys(d.ach||{}).length?'<div class="meta" style="padding:8px 14px 0;font-size:20px;letter-spacing:2px">'+ACH.filter(a=>d.ach[a.id]).map(a=>'<span title="'+a.n+'">'+a.ic+'</span>').join('')+'</div>':'')
+  +(adcH('pfh','Bestes Fahrzeug')?'':'<div class="pfbag">'+img+'<div><small>Bestes Fahrzeug</small><b>'+esc(veh.n)+'</b><span class="meta">'+esc(veh.tn)+'</span></div></div>'):'<div class="meta" style="padding:16px">Lade Profil …</div>')
  +'<div class="pfmeta"><span>Letzter Login</span><b>'+(pp.last_login?fdate(pp.last_login)+' · '+agoT(pp.last_login):'unbekannt')+'</b></div></div>'
  +(own?'':'<div class="card2" style="padding:14px;display:grid;gap:8px;margin-top:10px"><b>Nachricht an '+esc(nm)+'</b><textarea id="msgtxt" maxlength="200" rows="2" placeholder="Schreib etwas …" style="width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit;resize:none"></textarea><button class="act" id="msgsend" type="button">Senden</button>'+(pfMsg?'<div class="meta">'+esc(pfMsg)+'</div>':'')+'</div>')}
 async function msgSend(){const t=$('#msgtxt'),v=((t&&t.value)||'').trim();if(!v||!lbView||!sbSess)return;
@@ -2207,8 +2222,8 @@ setInterval(inboxLoad,15000);setTimeout(inboxLoad,5000);
 let admOpen=false;
 const ADM_PIN='1925';
 function renderAdm(){const e=$('#adm');if(!e)return;
- if(!admOpen){e.innerHTML='<b>Admin-Panel</b><div class="meta">Zugang nur mit Code.</div><div style="display:flex;gap:8px"><input id="admpin" type="password" inputmode="numeric" maxlength="8" autocomplete="off" placeholder="Code" style="flex:1;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><button class="act" id="admgo" type="button">Öffnen</button></div><div class="meta" id="admmsg"></div>';return}
- e.innerHTML='<b>Admin-Panel</b><div class="meta">Spielerliste (nur Ansicht). Spieler antippen zum Bearbeiten.</div><div id="admpl"></div><button class="act ghost sm" id="admpl-load" type="button">Liste neu laden</button><div class="meta" style="margin-top:10px"><b>Spin-Limit (für alle Spieler)</b></div><div class="meta" id="admsplst"></div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><input id="admspn" type="text" inputmode="numeric" placeholder="Spins" value="'+(SPL.spins||'')+'" style="width:84px;padding:10px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><span class="meta">in</span><input id="admspm" type="text" inputmode="numeric" placeholder="Minuten" value="'+(SPL.minutes||'')+'" style="width:90px;padding:10px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><span class="meta">Min.</span></div><label class="meta" style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="admspb" '+(SPL.bj?'checked':'')+'> Blackjack-Runden zählen auch</label><div style="display:flex;gap:8px"><button class="act sm" id="admspon" type="button">Limit aktivieren</button><button class="act ghost sm" id="admspoff" type="button">Ausschalten</button></div><div class="meta" id="admspmsg"></div><div class="meta" style="margin-top:10px"><b>Ankündigung an Spieler</b></div><textarea id="admann" maxlength="400" rows="3" placeholder="Text des Pop-ups (wird mit Bestätigung geschlossen) …" style="width:100%;padding:10px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit;box-sizing:border-box"></textarea><div style="display:flex;gap:14px;flex-wrap:wrap"><label class="meta" style="display:flex;gap:6px;align-items:center"><input type="radio" name="admat" value="online" checked> Nur Online-Spieler</label><label class="meta" style="display:flex;gap:6px;align-items:center"><input type="radio" name="admat" value="all"> Alle Spieler</label></div><button class="act sm" id="admannsend" type="button">Ankündigung senden</button><div class="meta" id="admannmsg"></div><div id="admev"></div><div class="meta" style="margin-top:10px"><b>Neue Woche starten</b></div><div class="meta">Setzt Fortschritt und alle Erfolge aller Spieler zurück (auch deinen). Sperren bleiben bestehen.</div><button class="act ghost sm" id="admreset" type="button">Alle Spieler zurücksetzen</button><div class="meta" id="admresetmsg"></div><div class="meta" style="margin-top:10px"><b>Changelog verfassen</b></div><textarea id="admcl" maxlength="800" rows="3" placeholder="Neue Changelog-Nachricht …" style="width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit;resize:none"></textarea><button class="act sm" id="admclpost" type="button">Changelog veröffentlichen</button><div class="meta" id="admclmsg"></div><div id="admcllist"></div><div class="meta" style="margin-top:6px">Supabase (Cloud-Speicher)</div><input id="sburl" type="text" autocomplete="off" placeholder="Projekt-URL https://xxxx.supabase.co" value="'+(sbCfg().url||'')+'" style="min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><input id="sbkey" type="text" autocomplete="off" placeholder="anon public key" value="'+(sbCfg().key||'')+'" style="min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><button class="act" id="sbsave" type="button">Supabase-Zugang speichern</button><button class="act ghost" id="admclose" type="button">Admin schließen</button>';admLoadPl();admClList();admSplSt();clLoad().then(admClList)}
+ if(!admOpen){admWinClose();e.innerHTML='<b>Admin-Panel</b><div class="meta">Zugang nur mit Code.</div><div style="display:flex;gap:8px"><input id="admpin" type="password" inputmode="numeric" maxlength="8" autocomplete="off" placeholder="Code" style="flex:1;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit"><button class="act" id="admgo" type="button">Öffnen</button></div><div class="meta" id="admmsg"></div>';return}
+ e.innerHTML='<b>Admin-Panel</b><div class="meta">Das Admin-Fenster ist geöffnet.</div><div style="display:flex;gap:8px"><button class="act" id="admwinopen" type="button">Fenster öffnen</button></div>';admWinOpen()}
 function resetArm(b){if(b.dataset.arm){delete b.dataset.arm;b.textContent='Spielstand zurücksetzen';return true}b.dataset.arm='1';b.textContent='Nochmal tippen zum Löschen';setTimeout(()=>{delete b.dataset.arm;b.textContent='Spielstand zurücksetzen'},3000);return false}
 document.addEventListener('click',e=>{
  const t=e.target.closest('button');if(!t)return;
@@ -2556,7 +2571,7 @@ function renderGarage(){
   +`<div class="meta" style="margin:0 2px 10px">${S.vc?'<b>Gutschein-Guthaben: '+F(S.vc)+'</b> (wird beim Kauf angerechnet) · ':''}Tippe ein Teil an für die Vorschau. Kosmetik gilt für alle ${ty==='l'?'Radlader':'Bagger'}, bleibt über Firmenverkäufe erhalten und ist nur Optik.</div>`
   +`<div class="cpills">${pills}</div><h2 class="sec" style="margin-top:4px">${COSC[c].n}</h2><div class="cgrid2">${grid}</div>${bar}`}
 const evOn=k=>{const d=new Date(),m=d.getMonth(),t=d.getDate();return k==='halloween'?((m===9&&t>=24)||(m===10&&t<=2)):false};
-const EVN={halloween:'Halloween-Event (24. Okt. bis 2. Nov.)'};
+const EVN={halloween:'Halloween-Event (24. Okt. bis 2. Nov.)',lock:'Gesperrt'};
 const grantOk=g=>g==='wk'?!!(S.ev&&S.ev.win):(g&&g.slice(0,4)==='ach:')?!!(S.ach&&S.ach[g.slice(4)]):false;
 const grantTxt=g=>g==='wk'?'Wochen-Podium (Top 3 der Wochenwertung)':'Erfolg: '+((ACH.find(a=>a.id===g.slice(4))||{}).n||'?');
 const TXC={};
@@ -2578,7 +2593,8 @@ function flagTex(kind){const k='f'+kind;if(TXC[k])return TXC[k];const c=document
  const t=new THREE.CanvasTexture(c);return TXC[k]=t}
 function decoMesh(kind){const g=new THREE.Group(),sph=(r,m,x,y,z,sx,sy,sz)=>{const o=new THREE.Mesh(new THREE.SphereGeometry(r,16,12),m);o.position.set(x,y,z);o.scale.set(sx||1,sy||1,sz||1);o.castShadow=true;g.add(o);return o},cyl=(r1,r2,h,m,x,y,z)=>{const o=new THREE.Mesh(new THREE.CylinderGeometry(r1,r2,h,14),m);o.position.set(x,y,z);o.castShadow=true;g.add(o);return o};
  const gold=new THREE.MeshStandardMaterial({color:0xd4a017,metalness:.9,roughness:.25});
- if(kind==='kuerbis'){sph(.2,M(0xe8691a,.6,0),0,.17,0,1.2,.85,1.2);cyl(.03,.04,.1,M(0x3a5a1a,.8,0),0,.36,0)}
+ if(kind.slice(0,2)==='e:'){const mt=new THREE.MeshBasicMaterial({map:decalTex({e:kind.slice(2)}),transparent:true,alphaTest:.05,side:THREE.DoubleSide,depthWrite:false});[0,Math.PI/2].forEach(r=>{const p=new THREE.Mesh(new THREE.PlaneGeometry(.55,.55),mt);p.position.y=.3;p.rotation.y=r;g.add(p)})}
+ else if(kind==='kuerbis'){sph(.2,M(0xe8691a,.6,0),0,.17,0,1.2,.85,1.2);cyl(.03,.04,.1,M(0x3a5a1a,.8,0),0,.36,0)}
  else if(kind==='zwerg'){sph(.15,M(0x2a5db0,.7,0),0,.15,0,1,1.1,1);sph(.1,M(0xf1c9a5,.7,0),0,.36,0);sph(.07,M(0xffffff,.8,0),0,.28,.07,1.4,1,.8);const h=new THREE.Mesh(new THREE.ConeGeometry(.11,.3,14),M(0xd32f2f,.6,0));h.position.set(0,.55,0);h.castShadow=true;g.add(h)}
  else if(kind==='lichter'){g.userData.ring=1}
  else if(kind==='disco'){cyl(.015,.015,.2,M(0x333333,.5,.5),0,.1,0);const o=new THREE.Mesh(new THREE.IcosahedronGeometry(.22,1),new THREE.MeshStandardMaterial({color:0xe8ecf0,metalness:1,roughness:.08,flatShading:true}));o.position.set(0,.4,0);g.add(o)}
@@ -2662,11 +2678,11 @@ function achTick(){const st=S.st;if(!st)return;
  achPrev={j:st.jobs,b:st.breaks};
  S.mx=S.mx||{b:0,l:0};const ty=S.lm?'l':'b';S.mx[ty]=Math.max(S.mx[ty]||0,(S.top||0)+1);
  const first=!S.ach;S.ach=S.ach||{};let n=0;
- ACH.forEach(a=>{if(S.ach[a.id])return;let ok=false;try{ok=a.v()>=a.g}catch(e){}if(ok){S.ach[a.id]=Date.now();n++;if(!first)toast('🏆 Erfolg: '+a.n)}});
+ ACH.forEach(a=>{if(a.off||S.ach[a.id])return;let ok=false;try{ok=a.v()>=a.g}catch(e){}if(ok){S.ach[a.id]=Date.now();n++;if(!first)toast('🏆 Erfolg: '+a.n)}});
  if(n){save()}}
 setInterval(achTick,2000);
 function achHtml(ach){const n=Object.keys(ach||{}).length;
- return '<div class="meta" style="margin:0 2px 8px">'+n+' von '+ACH.length+' Erfolgen freigeschaltet</div><div class="achg">'+ACH.map(a=>{const on=!!(ach&&ach[a.id]);let v=0;try{v=a.v()}catch(e){}const p=on?100:Math.min(100,Math.round(v/a.g*100));
+ return '<div class="meta" style="margin:0 2px 8px">'+n+' von '+ACH.filter(a=>!a.off).length+' Erfolgen freigeschaltet</div><div class="achg">'+ACH.filter(a=>!a.off).map(a=>{const on=!!(ach&&ach[a.id]);let v=0;try{v=a.v()}catch(e){}const p=on?100:Math.min(100,Math.round(v/a.g*100));
   return '<div class="ach '+(on?'on':'off')+'"><span class="aci">'+a.ic+'</span><b>'+a.n+'</b><span class="meta">'+a.d+'</span><div class="bar"><i style="width:'+p+'%"></i></div></div>'}).join('')+'</div>'}
 /* Tagesbelohnung */
 const dayN=()=>{const d=new Date();return Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/864e5)};
@@ -2708,7 +2724,7 @@ function weekView(esc,h){const e=$('#board');e.dataset.k='week';const me=sbSess.
  e.innerHTML=h+'<div class="card2" style="padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:10px"><div class="meta">'+(wkErr?esc(wkErr):(pos?'Deine Platzierung: <b>'+pos+'</b> von '+rows.length:'Diese Woche noch keine Wertung'))+'<br>Endet in '+dd+' Tg. '+hh+' Std. '+mm+' Min.</div><button class="act ghost sm" id="wkref" type="button">Aktualisieren</button></div>'+prev
   +(wkRows?'<div class="card2" style="padding:6px 0">'+(rows.length?rows.slice(0,100).map((r,i)=>{const top=i<3,bg=r.user_id===me?'background:color-mix(in srgb,var(--acc) 22%,transparent);':(top?'background:linear-gradient(90deg,color-mix(in srgb,'+med[i]+' 22%,transparent),transparent 85%);':'');
    return '<div data-pf="'+r.user_id+'" style="cursor:pointer;display:flex;align-items:center;gap:10px;padding:10px 14px;'+bg+(i?'border-top:1px solid var(--line)':'')+'"><b style="width:30px;text-align:center;font:700 18px var(--f1);color:'+(top?med[i]:'var(--mut)')+'">'+(i+1)+'</b><div style="flex:1;min-width:0;font-weight:'+(top?700:600)+';overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(r.name||'Spieler')+(r.user_id===me?' <span class="meta">(du)</span>':'')+'</div><b style="font:700 17px var(--f1);font-variant-numeric:tabular-nums">'+F(r.gain)+'</b></div>'}).join(''):'<div class="meta" style="padding:14px">Noch keine Einträge diese Woche.</div>')+'</div>':(wkErr?'':'<div class="card2" style="padding:16px"><div class="meta">Lade Wochenwertung …</div></div>'))
-  +'<div class="meta" style="padding:0 4px">Gewertet wird dein Verdienst aus Aufträgen und Gehalt in dieser Woche. Reset jeden Montag um 0 Uhr, damit auch neue Spieler eine Chance haben.</div>'}
+  +'<div class="meta" style="padding:0 4px">Gewertet wird dein Verdienst aus Aufträgen in dieser Woche. Reset jeden Montag um 0 Uhr, damit auch neue Spieler eine Chance haben.</div>'}
 /* ---------- Ankündigungen und globaler Reset (Admin) ---------- */
 const lsGet=(k,d)=>{try{const v=localStorage.getItem(k);return v==null?d:v}catch(e){return d}},lsSet=(k,v)=>{try{localStorage.setItem(k,String(v))}catch(e){}};
 function ovBox(id,html,btn,cb){if(document.getElementById(id))return;const el=document.createElement('div');el.id=id;el.style.cssText='position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;padding:18px';
@@ -2722,8 +2738,9 @@ function applyGlobalReset(r){
  if(sbOn()&&sbSess){sbConflict=null;setTimeout(()=>sbPush(true),400)}
  ovBox('rstov','<div class="offh">🔄 Neue Woche gestartet</div><div class="meta">Der Fortschritt und alle Erfolge wurden für alle Spieler zurückgesetzt. Viel Erfolg in der neuen Woche!</div>','Los geht\'s')}
 async function cfgLoad(){if(!sbOn())return;
- try{const rows=await sbReq('/rest/v1/settings?key=in.(announce,globalreset,event,xitems)&select=key,value');const m={};(rows||[]).forEach(x=>m[x.key]=x.value);
+ try{const rows=await sbReq('/rest/v1/settings?key=in.(announce,globalreset,event,xitems,admcfg)&select=key,value');const m={};(rows||[]).forEach(x=>m[x.key]=x.value);
   if(m.xitems&&Array.isArray(m.xitems.list)){XIT=m.xitems.list;applyXit()}
+  if(m.admcfg&&m.admcfg.id&&m.admcfg.id!==ADC.id){ADC=m.admcfg;try{applyAdc()}catch(er){}}
   if(m.event&&m.event.id){EVT=m.event}else EVT=null;
   try{evProcess()}catch(er){}
   const gr=m.globalreset;
@@ -2752,12 +2769,12 @@ document.addEventListener('click',async e=>{const t=e.target.closest&&e.target.c
 /* ---------- Events (Admin): Lohn-Bonus, Sonderaufträge, Event-Kosmetik ---------- */
 var EVT=null,XIT=[];
 function evAct(){return EVT&&EVT.end>Date.now()&&(EVT.start||0)<=Date.now()?EVT:null}
-function evAvail(mt){if(mt.ev==='adm'){const e=evAct();return !!(e&&(e.xi||[]).includes(mt.xid))}const e=evAct();return evOn(mt.ev)||!!(e&&e.hal&&mt.ev==='halloween')}
-const XCAT={paint:'Lackierung',decal:'Aufkleber',outfit:'Fahrer-Outfit',flag:'Fahne'};
+function evAvail(mt){if(mt.ev==='lock')return false;if(mt.ev==='adm'){const e=evAct();return !!(e&&(e.xi||[]).includes(mt.xid))}const e=evAct();return evOn(mt.ev)||!!(e&&e.hal&&mt.ev==='halloween')}
+const XCAT={paint:'Lackierung',decal:'Aufkleber',outfit:'Fahrer-Outfit',flag:'Fahne',deco:'Dach-Deko'};
 const XBASE={};
 function applyXit(){COSK.forEach(c=>{if(XBASE[c]==null)XBASE[c]=COSC[c].it.length;COSC[c].it.length=XBASE[c]});
  XIT.forEach(x=>{const c=COSC[x.c]?x.c:null;if(!c)return;const col=parseInt(String(x.col||'888888').replace('#',''),16)||0x888888,hx='#'+col.toString(16).padStart(6,'0');let v,sw;
-  if(c==='paint'){v=col;sw=hx}else if(c==='decal'){v={e:x.e||'⭐'};sw='!'+(x.e||'⭐')}else if(c==='outfit'){v={h:col,v:col};sw=hx}else{v='c:'+hx+'|'+(x.e||'');sw=x.e?'!'+x.e:hx}
+  if(c==='paint'){v=col;sw=hx}else if(c==='decal'){v={e:x.e||'⭐'};sw='!'+(x.e||'⭐')}else if(c==='outfit'){v={h:col,v:col};sw=hx}else if(c==='deco'){v='e:'+(x.e||'⭐');sw='!'+(x.e||'⭐')}else{v='c:'+hx+'|'+(x.e||'');sw=x.e?'!'+x.e:hx}
   COSC[c].it.push([String(x.n||'Teil').slice(0,24),Math.max(0,+x.p||0),v,sw,{ev:'adm',xid:x.id}])})}
 function evLeft(){const e=evAct();if(!e)return '';const l=e.end-Date.now(),d=Math.floor(l/864e5),h=Math.floor(l%864e5/36e5),m=Math.floor(l%36e5/6e4);return (d?d+' Tg. ':'')+h+' Std. '+m+' Min.'}
 function renderEv(){const el=$('#evbar');if(!el)return;const e=evAct();if(!e){el.innerHTML='';return}
@@ -2767,35 +2784,90 @@ function evProcess(){const e=evAct();renderEv();
  if(typeof renderTop==='function')try{renderTop()}catch(er){}
  if(!$('#pay').hidden&&payTab===0)try{renderGarage()}catch(er){}}
 setInterval(renderEv,30000);
+/* ---------- Admin-Fenster v2 ---------- */
+var ADC={},AWT='ov',AWMSG='';
+function adcH(l,k){return !!(ADC&&ADC[l]&&ADC[l].includes(k))}
+function adcPay(){return (typeof ADC==='object'&&ADC&&ADC.pr&&+ADC.pr.pay>0)?ADC.pr.pay/100:1}
+const sbPut=async(key,value)=>{await sbReq('/rest/v1/settings?on_conflict=key',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({key,value,updated_at:new Date().toISOString()})});const r=await sbReq('/rest/v1/settings?key=eq.'+key+'&select=value');if(!r||!r[0]||!r[0].value||r[0].value.id!==value.id)throw new Error('Nicht gespeichert (settings-Tabelle und Admin-Konto prüfen)')};
+const ASTAT={jobs:['Aufträge erledigt',()=>S.st.jobs],ex:['Exklusiv-Aufträge',()=>S.st.ex],work:['Bewegte Masse',()=>S.st.work],sold:['Firmen verkauft',()=>S.st.sold],life:['Gesamtverdienst',()=>S.life],spins:['Casino-Spiele',()=>S.st.spins],dig:['Selbst mitgeschaufelt',()=>S.st.dig||0],streak:['Aufträge ohne Defekt',()=>S.st.streak||0],lic:['Baulizenzen',()=>S.lic],llic:['Radlader-Lizenzen',()=>S.llic],cosm:['Garage-Teile besessen',()=>cosOwnN()],dr:['Tages-Serie',()=>(S.dr&&S.dr.s)||0],big:['Größte Auszahlung',()=>S.st.big]};
+const ADC0={};let ACHB=0;
+function xbaseInit(){COSK.forEach(c=>{if(XBASE[c]==null)XBASE[c]=COSC[c].it.length})}
+function adcSnap(){if(!ADC0.vb){ADC0.vb=VB.map(v=>v.c);ADC0.vl=VL.map(v=>v.c);ADC0.rl=RLP;xbaseInit();ADC0.cm={};COSK.forEach(c=>{for(let i=0;i<XBASE[c];i++){const it=COSC[c].it[i];ADC0.cm[c+'.'+i]={p:it[1],m:it[4]}}});ACHB=ACH.length}}
+function applyAdc(){adcSnap();
+ const pr=ADC.pr||{};
+ VB.forEach((v,i)=>{v.c=(pr.vb&&pr.vb[i]!=null)?+pr.vb[i]:ADC0.vb[i]});VL.forEach((v,i)=>{v.c=(pr.vl&&pr.vl[i]!=null)?+pr.vl[i]:ADC0.vl[i]});RLP=pr.rl!=null?+pr.rl:ADC0.rl;
+ Object.keys(ADC0.cm).forEach(k=>{const[c,i]=k.split('.'),it=COSC[c].it[+i],o=ADC0.cm[k],x=(ADC.cm||{})[k]||{};it[1]=x.p!=null?+x.p:o.p;
+  const m=x.m;if(!m)it[4]=o.m;else if(m==='n')it[4]=undefined;else if(m==='lock')it[4]={ev:'lock'};else if(m==='ev')it[4]={ev:'adm',xid:k};else if(m.slice(0,4)==='ach:')it[4]={g:m}});
+ ACH.length=ACHB;(ADC.ach||[]).forEach(a=>{const g=ASTAT[a.s];if(!g)return;ACH.push({id:a.id,ic:a.ic||'🏆',n:a.n,d:a.d||'',v:g[1],g:+a.g||1,x:1})});
+ ACH.forEach(a=>{a.off=!!(ADC.ao&&ADC.ao.includes(a.id))});
+ try{if(typeof renderShop==='function'){renderShop();updateFirm();renderTop()}if(!$('#pay').hidden&&payTab===0)renderGarage();if(!$('#prof').hidden)renderProf()}catch(er){}}
+function evItems(){const o=XIT.filter(x=>COSC[x.c]).map(x=>({k:x.id,l:x.n+' ('+XCAT[x.c]+')'}));Object.keys(ADC.cm||{}).forEach(k=>{if(ADC.cm[k].m==='ev'){const[c,i]=k.split('.'),it=(COSC[c]||{it:[]}).it[+i];if(it)o.push({k,l:it[0]+' ('+COSC[c].n.split(' (')[0]+')'})}});return o}
 var admXiSel=new Set();
-function admEvUi(){const e=$('#admev');if(!e)return;const a=evAct();const keep={};['evname','evh','evpay','evspn','evspm','xic','xin','xip','xicol','xie'].forEach(i=>{const el=$('#'+i);if(el)keep[i]=el.value});const hk=($('#evhal')||{}).checked;
- const cs=Object.keys(XCAT).map(k=>'<option value="'+k+'">'+XCAT[k]+'</option>').join('');
- const inp='width:100%;padding:9px 10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit;box-sizing:border-box';
- e.innerHTML='<div class="meta" style="margin-top:10px"><b>Event starten</b>'+(a?' · läuft: '+escH(a.name)+' ('+evLeft()+')':' · aktuell kein Event')+'</div>'
- +'<input id="evname" maxlength="40" placeholder="Name des Events" style="'+inp+'">'
- +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><label class="meta">Dauer in Stunden<input id="evh" type="number" min="1" value="24" style="'+inp+'"></label><label class="meta">Lohn-Bonus in %<input id="evpay" type="number" min="0" max="500" value="0" style="'+inp+'"></label><label class="meta">Sonderaufträge (Anzahl)<input id="evspn" type="number" min="0" max="10" value="0" style="'+inp+'"></label><label class="meta">Sonderauftrag-Faktor<input id="evspm" type="number" min="1" max="50" step="0.5" value="3" style="'+inp+'"></label></div>'
- +'<label class="meta" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="evhal"> Halloween-Teile freischalten</label>'
- +(XIT.length?'<div class="meta"><b>Kosmetik, die im Event kaufbar ist</b> (Häkchen setzen):</div>'+XIT.map(x=>'<label class="meta" style="display:flex;gap:6px;align-items:center"><input type="checkbox" class="evxi" value="'+x.id+'"'+(admXiSel.has(x.id)?' checked':'')+'> '+escH(x.n)+' ('+XCAT[x.c]+', '+F(+x.p||0)+')</label>').join(''):'')
- +'<div style="display:flex;gap:8px"><button class="act sm" id="evstart" type="button">Event starten</button><button class="act ghost sm" id="evstop" type="button">Event beenden</button></div><div class="meta" id="evmsg"></div>'
- +'<div class="meta" style="margin-top:10px"><b>Neues Teil für das Event anlegen</b> (wird automatisch angehakt)</div>'
- +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><label class="meta">Kategorie<select id="xic" style="'+inp+'">'+cs+'</select></label><label class="meta">Name<input id="xin" maxlength="24" style="'+inp+'"></label><label class="meta">Preis in €<input id="xip" type="number" min="0" value="10000000" style="'+inp+'"></label><label class="meta">Farbe<input id="xicol" type="color" value="#ff2d95" style="'+inp+';height:40px;padding:2px"></label></div>'
- +'<label class="meta">Emoji (für Aufkleber und Fahne)<input id="xie" maxlength="4" placeholder="z. B. 🎃" style="'+inp+'"></label>'
- +'<button class="act sm" id="xiadd" type="button">Teil anlegen und zum Event hinzufügen</button><div class="meta" id="ximsg"></div>';
- Object.keys(keep).forEach(i=>{const el=$('#'+i);if(el&&i!=='xin'&&i!=='xie'&&i!=='xip')el.value=keep[i]});if(hk&&$('#evhal'))$('#evhal').checked=true}
-document.addEventListener('change',e=>{const t=e.target;if(t&&t.classList&&t.classList.contains('evxi')){if(t.checked)admXiSel.add(+t.value);else admXiSel.delete(+t.value)}});
-(function(){const _ra=renderAdm;renderAdm=function(){const r=_ra.apply(this,arguments);try{admEvUi()}catch(er){}return r}})();
-document.addEventListener('click',async e=>{const t=e.target.closest&&e.target.closest('#evstart,#evstop,#xiadd');if(!t)return;
- const put=async(key,value)=>{await sbReq('/rest/v1/settings?on_conflict=key',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({key,value,updated_at:new Date().toISOString()})});const r=await sbReq('/rest/v1/settings?key=eq.'+key+'&select=value');if(!r||!r[0]||!r[0].value||r[0].value.id!==value.id)throw new Error('Nicht gespeichert (settings-Tabelle/Admin-Konto prüfen)')};
- const v=id=>(($('#'+id)||{}).value||'');
- if(t.id==='xiadd'){const m=$('#ximsg');if(!sbSess){m.textContent='Mit dem Admin-Konto anmelden.';return}const n=v('xin').trim();if(!n){m.textContent='Bitte einen Namen eingeben.';return}if(XIT.length>=60){m.textContent='Maximal 60 eigene Teile.';return}
-  const it={id:Date.now(),c:v('xic'),n,p:Math.max(0,Math.round(+v('xip')||0)),col:v('xicol'),e:v('xie').trim()};
-  try{await put('xitems',{id:Date.now(),list:XIT.concat([it])});XIT=XIT.concat([it]);applyXit();admXiSel.add(it.id);m.textContent='Angelegt und fürs Event vorgemerkt. Jetzt Event starten.';admEvUi();$('#ximsg').textContent='Angelegt und fürs Event vorgemerkt. Jetzt Event starten.';setTimeout(cfgLoad,300)}catch(er){m.textContent='Fehler: '+er.message}return}
- if(t.id==='evstart'){const m=$('#evmsg');if(!sbSess){m.textContent='Mit dem Admin-Konto anmelden.';return}
-  const h=Math.max(.1,+v('evh')||24),now=Date.now(),xi=[...document.querySelectorAll('.evxi:checked')].map(x=>+x.value);
-  const ev={id:now,name:v('evname').trim().slice(0,40)||'Event',start:now,end:now+Math.round(h*36e5),pay:Math.max(0,Math.min(500,Math.round(+v('evpay')||0))),spn:Math.max(0,Math.min(10,Math.round(+v('evspn')||0))),spm:Math.max(1,Math.min(50,+v('evspm')||3)),hal:!!($('#evhal')||{}).checked,xi};
-  try{await put('event',ev);EVT=ev;evProcess();admEvUi();$('#evmsg').textContent='Event gestartet. Spieler sehen es innerhalb von 15 Sekunden.'}catch(er){m.textContent='Fehler: '+er.message}return}
- if(t.id==='evstop'){const m=$('#evmsg');if(!sbSess){m.textContent='Mit dem Admin-Konto anmelden.';return}if(!EVT){m.textContent='Kein Event aktiv.';return}
-  const ev=Object.assign({},EVT,{id:Date.now(),end:Date.now()});try{await put('event',ev);EVT=ev;evProcess();admEvUi();$('#evmsg').textContent='Event beendet.'}catch(er){m.textContent='Fehler: '+er.message}}});
+const awv=(id,d)=>{const e=$('#'+id);return e?e.value:(d==null?'':d)};
+const awn=t=>{AWMSG=t;awRender()};
+const AWTABS=[['ov','Übersicht'],['ev','Events'],['co','Kosmetik'],['pr','Preise'],['pl','Spieler'],['pf','Profil'],['ac','Erfolge'],['sy','System']];
+function xiFormHtml(){const cs=Object.keys(XCAT).map(k=>'<option value="'+k+'">'+XCAT[k]+'</option>').join('');
+ return `<div class="aw-card"><h3>Neues Kosmetik-Teil</h3><div class="meta">Wird als normales Teil angelegt. Unter „Kosmetik“ stellst du danach Preis und Sperre ein, oder du hakst es im Event an.</div><div class="aw-grid2"><label class="meta">Kategorie<select id="xic">${cs}</select></label><label class="meta">Name<input id="xin" maxlength="24"></label><label class="meta">Preis in €<input id="xip" type="number" min="0" value="10000000"></label><label class="meta">Farbe<input id="xicol" type="color" value="#ff2d95" style="height:42px;padding:2px"></label></div><label class="meta">Emoji (Aufkleber, Fahne, Dach-Deko)<input id="xie" maxlength="4" placeholder="z. B. 🎃"></label><button class="act sm" id="xiadd" type="button">Teil anlegen</button></div>`}
+function evFormHtml(){const a=evAct(),its=evItems();
+ return `<div class="aw-card"><h3>Event starten</h3><div class="meta">${a?'Läuft: <b>'+escH(a.name)+'</b> · endet in '+evLeft():'Aktuell läuft kein Event.'}</div><label class="meta">Name<input id="evname" maxlength="40" placeholder="Name des Events"></label><div class="aw-grid2"><label class="meta">Dauer in Stunden<input id="evh" type="number" min="0.1" value="24"></label><label class="meta">Lohn-Bonus in %<input id="evpay" type="number" min="0" max="500" value="0"></label><label class="meta">Sonderaufträge (Anzahl)<input id="evspn" type="number" min="0" max="10" value="0"></label><label class="meta">Sonderauftrag-Faktor<input id="evspm" type="number" min="1" max="50" step="0.5" value="3"></label></div><label class="meta" style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="evhal" style="width:auto"> Halloween-Teile freischalten</label>${its.length?'<div class="meta"><b>Teile, die im Event kaufbar sind</b></div>'+its.map(x=>`<label class="meta" style="display:flex;gap:8px;align-items:center"><input type="checkbox" class="evxi" value="${escH(x.k)}" style="width:auto" ${admXiSel.has(x.k)?'checked':''}> ${escH(x.l)}</label>`).join(''):'<div class="meta">Noch keine Event-Teile. Lege unter „Kosmetik“ ein neues Teil an oder stelle ein vorhandenes auf „Nur im Event“.</div>'}<div style="display:flex;gap:8px"><button class="act sm" id="evstart" type="button">Event starten</button><button class="act ghost sm" id="evstop" type="button">Event beenden</button></div></div>`}
+function admEvUi(){}
+function awPane(){const t=AWT;
+ if(t==='ov')return `<div class="aw-card"><h3>Ankündigung</h3><textarea id="admann" maxlength="400" rows="3" placeholder="Text des Pop-ups (wird mit Bestätigung geschlossen) …"></textarea><div style="display:flex;gap:16px;flex-wrap:wrap"><label class="meta" style="display:flex;gap:6px;align-items:center"><input type="radio" name="admat" value="online" checked style="width:auto"> Nur Online-Spieler</label><label class="meta" style="display:flex;gap:6px;align-items:center"><input type="radio" name="admat" value="all" style="width:auto"> Alle Spieler</label></div><button class="act sm" id="admannsend" type="button">Ankündigung senden</button><div class="meta" id="admannmsg"></div></div>
+ <div class="aw-card"><h3>Neue Woche starten</h3><div class="meta">Setzt Fortschritt und alle Erfolge aller Spieler zurück (auch deinen). Sperren bleiben bestehen.</div><button class="act ghost sm" id="admreset" type="button">Alle Spieler zurücksetzen</button><div class="meta" id="admresetmsg"></div></div>
+ <div class="aw-card"><h3>Spin-Limit</h3><div class="meta" id="admsplst"></div><div class="aw-grid2"><label class="meta">Spins<input id="admspn" type="text" inputmode="numeric" value="${SPL.spins||''}"></label><label class="meta">Minuten<input id="admspm" type="text" inputmode="numeric" value="${SPL.minutes||''}"></label></div><label class="meta" style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="admspb" style="width:auto" ${SPL.bj?'checked':''}> Blackjack und Roulette zählen auch</label><div style="display:flex;gap:8px"><button class="act sm" id="admspon" type="button">Limit aktivieren</button><button class="act ghost sm" id="admspoff" type="button">Ausschalten</button></div><div class="meta" id="admspmsg"></div></div>`;
+ if(t==='ev')return evFormHtml()+xiFormHtml();
+ if(t==='co'){const c=AWC&&COSC[AWC]?AWC:'paint';const tabs='<div class="cpills">'+COSK.map(k=>`<button type="button" class="cp ${k===c?'on':''}" data-awcc="${k}"><span>${COSI[k]||'•'}</span>${COSC[k].n.split(' (')[0]}</button>`).join('')+'</div>';
+  const mo=(k)=>{const x=(ADC.cm||{})[k]||{};return x.m||''};
+  const rows=COSC[c].it.map((it,i)=>{const k=c+'.'+i;if(i===0)return '';const o=ADC0.cm&&ADC0.cm[k],ex=i>=XBASE[c];const cur=mo(k);const orig=o&&o.m?(o.m.g?'Standard: durch Erfolg':o.m.ev?'Standard: Event':''):'';
+   return `<div class="aw-item"><div><b>${escH(it[0])}</b><div class="meta">${ex?'eigenes Teil':orig||'Standard: kaufbar'}</div></div><input type="number" min="0" data-awp="${k}" value="${ex?it[1]:(((ADC.cm||{})[k]||{}).p!=null?ADC.cm[k].p:(o?o.p:it[1]))}" ${ex?'disabled':''}>${ex?'<span class="meta">—</span>':`<select data-awm="${k}"><option value="" ${cur===''?'selected':''}>Standard</option><option value="n" ${cur==='n'?'selected':''}>Immer kaufbar</option><option value="lock" ${cur==='lock'?'selected':''}>Gesperrt</option><option value="ev" ${cur==='ev'?'selected':''}>Nur im Event</option><optgroup label="Durch Erfolg">${ACH.map(a=>`<option value="ach:${a.id}" ${cur==='ach:'+a.id?'selected':''}>${escH(a.n)}</option>`).join('')}</optgroup></select>`}</div>`}).join('');
+  return `<div class="aw-card"><h3>Kosmetik verwalten</h3><div class="meta">Preis ändern, Teile sperren, nur im Event kaufbar machen oder an einen Erfolg koppeln. Gekaufte Teile bleiben bei den Spielern.</div>${tabs}<div>${rows}</div><button class="act sm" id="awcosave" type="button">Änderungen dieser Kategorie speichern</button></div>`+xiFormHtml()}
+ if(t==='pr'){const pr=ADC.pr||{};const rowv=(a,p)=>a.map((v,i)=>`<div class="aw-item" style="grid-template-columns:1fr 150px"><b>${escH(v.n)}</b><input type="number" min="0" data-awv="${p}.${i}" value="${Math.round(v.c)}"></div>`).join('');
+  return `<div class="aw-card"><h3>Allgemein</h3><label class="meta">Lohn-Faktor in % (100 = normal, gilt für alle Aufträge)<input id="awpay" type="number" min="1" max="1000" value="${pr.pay||100}"></label><label class="meta">Preis der Radlader-Erweiterung in €<input id="awrl" type="number" min="0" value="${Math.round(RLP)}"></label></div><div class="aw-card"><h3>Bagger</h3>${rowv(VB,'b')}</div><div class="aw-card"><h3>Radlader</h3>${rowv(VL,'l')}</div><div style="display:flex;gap:8px"><button class="act" id="awprsave" type="button">Preise speichern</button><button class="act ghost" id="awprreset" type="button">Auf Standard zurücksetzen</button></div>`}
+ if(t==='pl')return `<div class="aw-card"><h3>Spieler verwalten</h3><div class="meta">Spieler antippen zum Bearbeiten (Geld, Rolle, Sperre …).</div><div id="admpl"></div><button class="act ghost sm" id="admpl-load" type="button">Liste neu laden</button></div>`;
+ if(t==='pf'){const T=['Geld','Bagger-Lizenzen','Radlader-Lizenzen','Erfolge','Titel','Tages-Serie','Aufträge','Gesamtverdienst','Bestes Fahrzeug'],B=[['👑','Platz 1 bis 3'],['🏅','Lizenzen'],['⭐','Rang ab Bauingenieur'],['🛠','Aufträge (100+ / 500+)'],['👷','Vorarbeiter Stufe 3'],['🎰','Stammgast'],['🚜','Monster-Bagger'],['🏗','Giga-Radlader']];
+  return `<div class="aw-card"><h3>Profil in der Rangliste</h3><div class="meta">Häkchen = wird im Spielerprofil angezeigt.</div><div class="meta"><b>Angaben</b></div>${T.map(k=>`<label class="meta" style="display:flex;gap:8px;align-items:center"><input type="checkbox" class="awpf" data-l="pfh" value="${k}" style="width:auto" ${adcH('pfh',k)?'':'checked'}> ${k}</label>`).join('')}<div class="meta"><b>Abzeichen</b></div>${B.map(b=>`<label class="meta" style="display:flex;gap:8px;align-items:center"><input type="checkbox" class="awpf" data-l="bh" value="${b[0]}" style="width:auto" ${adcH('bh',b[0])?'':'checked'}> ${b[0]} ${b[1]}</label>`).join('')}<button class="act" id="awpfsave" type="button">Speichern</button></div>`}
+ if(t==='ac'){const bd=ADC.bd||[],pl=admPl||[];
+  return `<div class="aw-card"><h3>Erfolge</h3><div class="meta">Häkchen = Erfolg ist aktiv. Eigene Erfolge lassen sich löschen.</div>${ACH.map(a=>`<div class="aw-item" style="grid-template-columns:auto 1fr auto"><input type="checkbox" class="awao" value="${a.id}" style="width:auto" ${a.off?'':'checked'}><div><b>${a.ic} ${escH(a.n)}</b><div class="meta">${escH(a.d)}</div></div>${a.x?`<button class="act ghost sm" type="button" data-awacdel="${a.id}">Löschen</button>`:''}</div>`).join('')}<button class="act sm" id="awaosave" type="button">Aktiv-Status speichern</button></div>
+  <div class="aw-card"><h3>Neuer Erfolg</h3><div class="aw-grid2"><label class="meta">Symbol<input id="awaci" maxlength="4" value="🏆"></label><label class="meta">Name<input id="awacn" maxlength="30"></label></div><label class="meta">Beschreibung<input id="awacd" maxlength="80" placeholder="z. B. 50 Firmen verkaufen"></label><div class="aw-grid2"><label class="meta">Zählt<select id="awacs">${Object.keys(ASTAT).map(k=>`<option value="${k}">${ASTAT[k][0]}</option>`).join('')}</select></label><label class="meta">Ziel (Zahl)<input id="awacg" type="number" min="1" value="10"></label></div><button class="act sm" id="awacadd" type="button">Erfolg anlegen</button></div>
+  <div class="aw-card"><h3>Abzeichen</h3><div class="meta">Abzeichen werden im Spielerprofil angezeigt und von dir vergeben.</div>${bd.length?bd.map(b=>`<div class="aw-item" style="grid-template-columns:1fr auto"><b>${escH(b.ic)} ${escH(b.n)}</b><button class="act ghost sm" type="button" data-awbddel="${b.id}">Löschen</button></div>`).join(''):'<div class="meta">Noch keine eigenen Abzeichen.</div>'}<div class="aw-grid2"><label class="meta">Symbol<input id="awbdi" maxlength="4" value="🎖"></label><label class="meta">Name<input id="awbdn" maxlength="24"></label></div><button class="act sm" id="awbdadd" type="button">Abzeichen anlegen</button></div>
+  <div class="aw-card"><h3>Abzeichen vergeben</h3>${pl.length?`<label class="meta">Spieler<select id="awbdp">${pl.map(p=>`<option value="${p.id}">${escH(p.name)}</option>`).join('')}</select></label><label class="meta">Abzeichen<select id="awbds">${bd.map(b=>`<option value="${b.id}">${escH(b.ic+' '+b.n)}</option>`).join('')}</select></label><div style="display:flex;gap:8px"><button class="act sm" id="awbdaw" type="button">Vergeben</button><button class="act ghost sm" id="awbdrm" type="button">Entziehen</button></div>`:'<div class="meta">Spielerliste noch nicht geladen.</div><button class="act ghost sm" id="awplload" type="button">Spielerliste laden</button>'}</div>`}
+ if(t==='sy')return `<div class="aw-card"><h3>Changelog</h3><textarea id="admcl" maxlength="800" rows="3" placeholder="Neue Changelog-Nachricht …"></textarea><button class="act sm" id="admclpost" type="button">Changelog veröffentlichen</button><div class="meta" id="admclmsg"></div><div id="admcllist"></div></div><div class="aw-card"><h3>Supabase</h3><input id="sburl" type="text" autocomplete="off" placeholder="Projekt-URL" value="${sbCfg().url||''}"><input id="sbkey" type="text" autocomplete="off" placeholder="anon public key" value="${sbCfg().key||''}"><button class="act" id="sbsave" type="button">Zugang speichern</button></div>`;
+ return ''}
+var AWC='paint';
+function awRender(){const w=$('#admwin');if(!w)return;const b=$('#awbody');const sy=b?b.scrollTop:0;
+ w.querySelector('.aw-tabs').innerHTML=AWTABS.map(t=>`<button type="button" class="aw-tab ${t[0]===AWT?'on':''}" data-awt="${t[0]}">${t[1]}</button>`).join('');
+ b.innerHTML=(AWMSG?`<div class="aw-note">${escH(AWMSG)}</div>`:'')+awPane();
+ if(AWT==='ov')admSplSt();if(AWT==='pl'){admLoadPl()}if(AWT==='sy'){admClList();clLoad().then(admClList)}if(AWT==='ac'&&!admPl)admLoadPl().then(()=>{if(AWT==='ac')awRender()});
+ b.scrollTop=sy}
+function admWinOpen(){adcSnap();let w=$('#admwin');if(!w){w=document.createElement('div');w.id='admwin';w.className='aw';w.innerHTML='<div class="aw-top"><b>⚙️ Admin</b><span class="meta" style="flex:1">Bagger Tycoon</span><button class="act ghost sm" id="admclose" type="button">Schließen</button></div><div class="aw-tabs"></div><div class="aw-body" id="awbody"></div>';document.body.appendChild(w);document.body.style.overflow='hidden'}awRender()}
+function admWinClose(){const w=$('#admwin');if(w){w.remove();document.body.style.overflow=''}}
+const adcSave=async(patch,msg)=>{const v=Object.assign({},ADC,patch,{id:Date.now()});try{await sbPut('admcfg',v);ADC=v;applyAdc();AWMSG=msg||'Gespeichert. Spieler bekommen es innerhalb von 15 Sekunden.';awRender()}catch(er){AWMSG='Fehler: '+er.message;awRender()}};
+document.addEventListener('change',e=>{const t=e.target;if(!t||!t.classList)return;if(t.classList.contains('evxi')){const k=isNaN(+t.value)?t.value:+t.value;if(t.checked)admXiSel.add(k);else admXiSel.delete(k)}});
+document.addEventListener('click',async e=>{const t=e.target.closest&&e.target.closest('#admwin button,#admwinopen');if(!t)return;
+ if(t.id==='admwinopen'){admWinOpen();return}
+ if(t.dataset.awt){AWT=t.dataset.awt;AWMSG='';awRender();return}
+ if(t.dataset.awcc){AWC=t.dataset.awcc;awRender();return}
+ if(!sbSess&&['xiadd','evstart','evstop','awcosave','awprsave','awprreset','awpfsave','awaosave','awacadd','awbdadd','awbdaw','awbdrm'].includes(t.id)){awn('Mit dem Admin-Konto in der Cloud anmelden (Profil, Cloud-Speicher).');return}
+ if(t.id==='awplload'){await admLoadPl();awRender();return}
+ if(t.id==='xiadd'){const n=awv('xin').trim();if(!n){awn('Bitte einen Namen eingeben.');return}if(XIT.length>=60){awn('Maximal 60 eigene Teile.');return}
+  const it={id:Date.now(),c:awv('xic'),n,p:Math.max(0,Math.round(+awv('xip')||0)),col:awv('xicol'),e:awv('xie').trim()};
+  try{await sbPut('xitems',{id:Date.now(),list:XIT.concat([it])});XIT=XIT.concat([it]);applyXit();applyAdc();admXiSel.add(it.id);awn('Teil „'+n+'“ angelegt und fürs nächste Event vorgemerkt.')}catch(er){awn('Fehler: '+er.message)}return}
+ if(t.id==='evstart'){const h=Math.max(.1,+awv('evh',24)||24),now=Date.now(),xi=[...document.querySelectorAll('.evxi:checked')].map(x=>isNaN(+x.value)?x.value:+x.value);
+  const ev={id:now,name:awv('evname').trim().slice(0,40)||'Event',start:now,end:now+Math.round(h*36e5),pay:Math.max(0,Math.min(500,Math.round(+awv('evpay',0)||0))),spn:Math.max(0,Math.min(10,Math.round(+awv('evspn',0)||0))),spm:Math.max(1,Math.min(50,+awv('evspm',3)||3)),hal:!!($('#evhal')||{}).checked,xi};
+  try{await sbPut('event',ev);EVT=ev;evProcess();awn('Event gestartet. Spieler sehen es innerhalb von 15 Sekunden.')}catch(er){awn('Fehler: '+er.message)}return}
+ if(t.id==='evstop'){if(!EVT){awn('Kein Event aktiv.');return}const ev=Object.assign({},EVT,{id:Date.now(),end:Date.now()});try{await sbPut('event',ev);EVT=ev;evProcess();awn('Event beendet.')}catch(er){awn('Fehler: '+er.message)}return}
+ if(t.id==='awcosave'){const cm=Object.assign({},ADC.cm||{});document.querySelectorAll('[data-awm]').forEach(s=>{const k=s.dataset.awm,p=document.querySelector('[data-awp="'+k+'"]'),o=ADC0.cm[k],pv=p&&p.value!==''?Math.max(0,Math.round(+p.value)):null,x={};
+   if(pv!=null&&o&&pv!==o.p)x.p=pv;if(s.value)x.m=s.value;if(Object.keys(x).length)cm[k]=x;else delete cm[k]});adcSave({cm});return}
+ if(t.id==='awprsave'){const vb={},vl={};document.querySelectorAll('[data-awv]').forEach(i=>{const[a,n]=i.dataset.awv.split('.'),v=Math.max(0,Math.round(+i.value||0)),o=(a==='b'?ADC0.vb:ADC0.vl)[+n];if(v!==Math.round(o))(a==='b'?vb:vl)[n]=v});
+  const rl=Math.max(0,Math.round(+awv('awrl')||0)),pay=Math.max(1,Math.min(1000,Math.round(+awv('awpay',100)||100)));const pr={};if(Object.keys(vb).length)pr.vb=vb;if(Object.keys(vl).length)pr.vl=vl;if(rl!==Math.round(ADC0.rl))pr.rl=rl;if(pay!==100)pr.pay=pay;adcSave({pr});return}
+ if(t.id==='awprreset'){adcSave({pr:{}},'Preise auf Standard zurückgesetzt.');return}
+ if(t.id==='awpfsave'){const pfh=[],bh=[];document.querySelectorAll('.awpf').forEach(c=>{if(!c.checked)(c.dataset.l==='pfh'?pfh:bh).push(c.value)});adcSave({pfh,bh});return}
+ if(t.id==='awaosave'){const ao=[];document.querySelectorAll('.awao').forEach(c=>{if(!c.checked)ao.push(c.value)});adcSave({ao});return}
+ if(t.id==='awacadd'){const n=awv('awacn').trim(),g=+awv('awacg',10);if(!n||!(g>0)){awn('Name und Ziel angeben.');return}const a={id:'x'+Date.now(),ic:awv('awaci').trim()||'🏆',n:n.slice(0,30),d:awv('awacd').trim().slice(0,80),s:awv('awacs'),g};adcSave({ach:(ADC.ach||[]).concat([a])},'Erfolg angelegt.');return}
+ if(t.dataset.awacdel){adcSave({ach:(ADC.ach||[]).filter(a=>a.id!==t.dataset.awacdel)},'Erfolg gelöscht.');return}
+ if(t.id==='awbdadd'){const n=awv('awbdn').trim();if(!n){awn('Name angeben.');return}adcSave({bd:(ADC.bd||[]).concat([{id:'b'+Date.now(),ic:awv('awbdi').trim()||'🎖',n:n.slice(0,24)}])},'Abzeichen angelegt.');return}
+ if(t.dataset.awbddel){const id=t.dataset.awbddel,aw=Object.assign({},ADC.aw||{});Object.keys(aw).forEach(u=>{aw[u]=aw[u].filter(x=>x!==id);if(!aw[u].length)delete aw[u]});adcSave({bd:(ADC.bd||[]).filter(b=>b.id!==id),aw},'Abzeichen gelöscht.');return}
+ if(t.id==='awbdaw'||t.id==='awbdrm'){const u=awv('awbdp'),b=awv('awbds');if(!u||!b){awn('Spieler und Abzeichen wählen.');return}const aw=Object.assign({},ADC.aw||{}),l=(aw[u]||[]).filter(x=>x!==b);if(t.id==='awbdaw')l.push(b);if(l.length)aw[u]=l;else delete aw[u];adcSave({aw},t.id==='awbdaw'?'Abzeichen vergeben.':'Abzeichen entzogen.');return}});
 /* ---------- Blackjack ---------- */
 const BJB=[100,500,1000,2500,5000,10000],RK=['A','2','3','4','5','6','7','8','9','10','J','Q','K'],SU=['♠','♥','♦','♣'];
 let bjBet=100,bjBusy=false;
