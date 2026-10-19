@@ -391,7 +391,7 @@ body{padding-bottom:0}
  </div></div>
 <div id="casself" class="meta" style="margin:14px 2px 0;text-align:center"><button class="reset" id="selfban" type="button">Selbstsperre: Casino für mich sperren</button></div>
 </section>
-<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 19.10. 07:31 · Vorarbeiter 50.000 €</div></div>
+<div class="foot"><button class="reset" id="gfxbtn" type="button" style="display:block;margin:0 auto 4px">Grafik: Auto</button><button class="reset" id="reset" type="button">Spielstand zurücksetzen</button><div class="meta" style="margin-top:6px">Version 19.10. 07:40 · Vorarbeiter 50.000 €</div></div>
 </main></div>
 <nav class="tabs"><div class="in">
 <button data-t="jobs" class="on" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg>Aufträge</button>
@@ -2410,29 +2410,32 @@ let noCos=false,cosUsePrev=false,RBW=[],cosPrev={},cosTy='b',payTab=0;const cosI
 const CRBW='linear-gradient(90deg,#f33,#fb3,#3d6,#3bf,#93f)';
 const H6=h=>'#'+('000000'+h.toString(16)).slice(-6);
 const COSC={
- paint:{n:'Lackierung',it:[['Werkslack',0,null,'linear-gradient(135deg,#ddd,#999)'],['Signalrot',4e6,0xd32f2f],['Tiefblau',4e6,0x1a4aa8],['Waldgrün',4e6,0x1f6b3a],['Schwarz',12e6,0x15171a],['Weiß',12e6,0xf2f4f6],['Violett',25e6,0x6a2fb5],['Türkis',40e6,0x12b5b0],['Neon-Pink',40e6,0xff3d9a],['Neon-Orange',40e6,0xff6a00],['Roségold',150e6,0xe0a090],['Gold',400e6,0xd4a017],['Platin',800e6,0xbfc7d0],['Regenbogen',2e9,'rb',CRBW]]},
- finish:{n:'Lack-Finish',it:[['Glanz',0,{r:.3,m:.5,c:1,k:.05},'linear-gradient(135deg,#fff,#888)'],['Matt',10e6,{r:.85,m:.12,c:0,k:.5},'#8a8a8a'],['Satin',20e6,{r:.55,m:.3,c:.4,k:.3},'linear-gradient(135deg,#ccc,#777)'],['Metallic',35e6,{r:.2,m:.95,c:1,k:.03},'linear-gradient(135deg,#fff,#555 60%,#ddd)'],['Candy-Klarlack',120e6,{r:.08,m:.8,c:1,k:0},'linear-gradient(135deg,#fff,#c33 55%,#fff)']]},
+ paint:{n:'Lackierung',it:[['Werkslack',0,null,'linear-gradient(135deg,#ddd,#999)'],['Signalrot',4e6,0xd32f2f],['Tiefblau',4e6,0x1a4aa8],['Waldgrün',4e6,0x1f6b3a],['Schwarz',12e6,0x15171a],['Weiß',12e6,0xf2f4f6],['Violett',25e6,0x6a2fb5],['Türkis',40e6,0x12b5b0],['Neon-Pink',40e6,0xff3d9a],['Neon-Orange',40e6,0xff6a00],['Roségold',150e6,0xe0a090],['Gold',400e6,0xd4a017],['Platin',800e6,0xbfc7d0],['Regenbogen',2e9,'rb',CRBW],['Dunkles Olivgrün',6e6,0x3b4a1f]]},
+ pearl:{n:'Perleffekt-Lack',it:[['Kein Perleffekt',0,null,'linear-gradient(135deg,#ddd,#999)'],['Perl Silber',35e6,{h:.58,s:.25,f:0},'linear-gradient(135deg,#fff,#cfe0ff 40%,#ffe6f2 70%,#fff)'],['Perl Rosé',60e6,{h:.93,s:.5,f:0},'linear-gradient(135deg,#fff,#ffc2e0 45%,#ffe9c9 75%,#fff)'],['Perl Aqua',90e6,{h:.5,s:.55,f:0},'linear-gradient(135deg,#fff,#a8f0ff 45%,#d4ffe8 75%,#fff)'],['Chamäleon-Perl',400e6,{h:0,s:.7,f:1},'linear-gradient(135deg,#ffd6f6,#b8d8ff 35%,#c8ffd8 65%,#fff0b8)']]},
  glass:{n:'Scheibenfolierung',it:[['Klar',0,null,'linear-gradient(135deg,#cfe8f3,#7fb4cf)'],['Getönt',3e6,[0x1d2a33,.78,.2],'#1d2a33'],['Blau verspiegelt',15e6,[0x2a5ad8,.7,.7],'linear-gradient(135deg,#6fa0ff,#1a3a98)'],['Grün verspiegelt',15e6,[0x1f9d55,.7,.7],'linear-gradient(135deg,#6fe09a,#157a3f)'],['Rote Folie',25e6,[0xb02828,.65,.3],'#b02828'],['Schwarz-Folie',40e6,[0x050607,.92,.1],'#050607'],['Gold verspiegelt',120e6,[0xd4a017,.75,.85],'linear-gradient(135deg,#ffe08a,#b8860b)']]},
  beacon:{n:'Warnleuchte',it:[['Orange',0,null,'#ff8a00'],['Blau',5e6,0x2a7bff,'#2a7bff'],['Grün',5e6,0x2fd36b,'#2fd36b'],['Rot',8e6,0xff2a2a,'#ff2a2a'],['Weiß',8e6,0xfff4e0,'#fff4e0'],['Violett',20e6,0xb04bff,'#b04bff'],['Regenbogen',150e6,'rb',CRBW]]},
  rim:{n:'Felgen und Laufrollen',it:[['Standard',0,null,'linear-gradient(135deg,#ccc,#777)'],['Chrom',6e6,[0xe8ecf0,.95,.12],'linear-gradient(135deg,#fff,#9aa,#fff)'],['Schwarz',8e6,[0x15171a,.5,.4],'#15171a'],['Rot',12e6,[0xd32f2f,.7,.3],'#d32f2f'],['Blau',12e6,[0x1a6bff,.7,.3],'#1a6bff'],['Neon-Grün',25e6,[0x39ff14,.6,.2],'#39ff14'],['Gold',90e6,[0xd4a017,.95,.15],'linear-gradient(135deg,#ffe08a,#b8860b)']]},
  glow:{n:'Unterbodenbeleuchtung',it:[['Aus',0,null,'#222'],['Blau',20e6,0x2a7bff,'#2a7bff'],['Grün',20e6,0x2fff7a,'#2fff7a'],['Rot',25e6,0xff2a2a,'#ff2a2a'],['Weiß',25e6,0xfff4e0,'#fff4e0'],['Violett',40e6,0xb04bff,'#b04bff'],['Regenbogen',300e6,'rb',CRBW]]}};
-const COSK=Object.keys(COSC);
+const COSK=Object.keys(COSC),PRL=[];
 const cosS=()=>S.cos||(S.cos={own:{},eq:{b:{},l:{}}});
 const cosOwn=(ty,c,i)=>i===0||!!cosS().own[ty+'.'+c+'.'+i];
 const cosEq=(ty,c)=>(cosUsePrev&&cosPrev[c]!=null)?cosPrev[c]:((cosS().eq[ty]||{})[c]||0);
-let glowTex=null;const glowT=()=>{if(glowTex)return glowTex;const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d'),g=x.createRadialGradient(64,64,6,64,64,62);g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(.55,'rgba(255,255,255,.55)');g.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=g;x.fillRect(0,0,128,128);return glowTex=new THREE.CanvasTexture(c)};
+let glowTex=null;const glowT=()=>{if(glowTex)return glowTex;const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d');x.shadowColor='#fff';x.shadowBlur=18;x.fillStyle='#fff';const a=34,b=94,r=14;x.beginPath();x.moveTo(a+r,a);x.arcTo(b,a,b,b,r);x.arcTo(b,b,a,b,r);x.arcTo(a,b,a,a,r);x.arcTo(a,a,b,a,r);x.closePath();x.fill();x.fill();return glowTex=new THREE.CanvasTexture(c)};
 function applyCos(r,ti){const ty=V[ti].loader?'l':'b',e=c=>COSC[c].it[cosEq(ty,c)];
- const pi=e('paint'),fi=e('finish'),gi=e('glass'),bi=e('beacon'),ri=e('rim'),ui=e('glow');RBW=[];const seen=new Set();
+ const pi=e('paint'),fi=e('pearl'),gi=e('glass'),bi=e('beacon'),ri=e('rim'),ui=e('glow');RBW=[];PRL.length=0;const seen=new Set();
  r.g.traverse(o=>{if(!o.isMesh||!o.material)return;const m=o.material;if(seen.has(m))return;seen.add(m);
-  if(PMAP&&m.map===PMAP){if(pi[2]==='rb')RBW.push(m);else if(pi[2]!=null)m.color.setHex(pi[2]);const f=fi[2];m.roughness=f.r;m.metalness=f.m;m.clearcoat=f.c;m.clearcoatRoughness=f.k}
+  if(PMAP&&m.map===PMAP){if(pi[2]==='rb')RBW.push(m);else if(pi[2]!=null)m.color.setHex(pi[2]);const f=fi[2];if(f){if(pi[2]!=='rb')m.color.lerp(new THREE.Color(0xffffff),.07);m.roughness=.16;m.metalness=.6;m.clearcoat=1;m.clearcoatRoughness=.03;m.sheen=new THREE.Color(0xffffff);m.needsUpdate=true;m.emissive=new THREE.Color(0x000000);m.emissiveIntensity=.1;PRL.push([m,f])}}
   else if(m.isMeshPhysicalMaterial&&m.transparent&&m.opacity>.05){if(gi[2]){m.color.setHex(gi[2][0]);m.opacity=gi[2][1];m.metalness=gi[2][2]}}
-  else if(m.emissive&&m.emissive.getHex()===0xff8a00){if(bi[2]==='rb')RBW.push(m);else if(bi[2]!=null){m.color.setHex(bi[2]);m.emissive.setHex(bi[2])}}
+  else if(m.emissive&&m.emissive.getHex()===0xff8a00){if(bi[2]==='rb'){m.userData.rbe=1;RBW.push(m)}else if(bi[2]!=null){m.color.setHex(bi[2]);m.emissive.setHex(bi[2])}}
   else if(m.userData&&m.userData.rim&&ri[2]){m.color.setHex(ri[2][0]);m.roughness=ri[2][1];m.metalness=ri[2][2]}});
- if(ui[2]!=null){let box;const bp=r.boom&&r.boom.parent;if(bp)bp.remove(r.boom);box=new THREE.Box3().setFromObject(r.g);if(bp)bp.add(r.boom);
+ if(ui[2]!=null){const box=new THREE.Box3(),arm=new Set();if(r.boom)r.boom.traverse(o=>arm.add(o));r.g.updateMatrixWorld(true);
+  r.g.traverse(o=>{if(!o.isMesh||arm.has(o)||o.geometry.type==='PlaneGeometry')return;const b=new THREE.Box3().setFromObject(o);if(b.min.y<.45*(r.g.scale.y||1)+.2&&b.max.y<2.6*(r.g.scale.y||1))box.union(b)});
+  if(box.isEmpty())box.setFromObject(r.g);
   const w=Math.max(2,box.max.x-box.min.x),d=Math.max(2,box.max.z-box.min.z),cx=(box.max.x+box.min.x)/2,cz=(box.max.z+box.min.z)/2;
   const mk=(k,op)=>{const mt=new THREE.MeshBasicMaterial({map:glowT(),color:ui[2]==='rb'?0xffffff:ui[2],transparent:true,opacity:op,blending:THREE.AdditiveBlending,depthWrite:false,fog:false});if(ui[2]==='rb')RBW.push(mt);
-   const mm=new THREE.Mesh(new THREE.PlaneGeometry(1,1),mt);mm.rotation.x=-Math.PI/2;mm.scale.set(w*k,d*k*1.15,1);mm.position.set(cx,.05,cz);mm.renderOrder=2;r.g.add(mm)};mk(1.25,.85);mk(1.8,.45)}}
-setInterval(()=>{if(!RBW.length)return;const h=(Date.now()/2500)%1;RBW.forEach(m=>{m.color.setHSL(h,1,.55);if(m.emissive)m.emissive.setHSL(h,1,.5)})},90);
+   const mm=new THREE.Mesh(new THREE.PlaneGeometry(1,1),mt);mm.rotation.x=-Math.PI/2;mm.scale.set(w*k,d*k,1);mm.position.set(cx,.05,cz);mm.renderOrder=2;r.g.add(mm)};mk(2.0,.95);mk(2.4,.3)}}
+setInterval(()=>{const t=Date.now();if(RBW.length){const h=(t/2500)%1;RBW.forEach(m=>{m.color.setHSL(h,1,.55);if(m.userData.rbe)m.emissive.setHSL(h,1,.5)})}
+ if(PRL.length){const w=Math.sin(t/1400)*.5+.5;PRL.forEach(([m,f])=>{const h=f.f?(t/6000)%1:f.h+(w-.5)*.12;m.sheen.setHSL(h,.9,.62);m.emissive.setHSL(h,.8,.4)})}},90);
 function cosShot(ty){const ti=ty==='b'?(S.lm?0:S.tier):(S.lm?S.tier:0);
  const key=ty+ti+COSK.map(c=>cosEq(ty,c)).join(',');cosUsePrev=true;const k2=ty+ti+COSK.map(c=>cosEq(ty,c)).join(',');cosUsePrev=false;
  if(cosImgC[k2])return cosImgC[k2];
@@ -2453,7 +2456,7 @@ function renderGarage(){
  let pvTot=0;COSK.forEach(c=>{const i=cosPrev[c];if(i!=null&&!cosOwn(ty,c,i))pvTot+=COSC[c].it[i][1]});
  let h=tabs+`<div class="stabs" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px"><button class="act sm ${ty==='b'?'':'ghost'}" type="button" data-cty="b">Bagger</button><button class="act sm ${ty==='l'?'':'ghost'}" type="button" data-cty="l">Radlader ${S.rl?'':'🔒'}</button></div>`
   +`<div class="gprev">${img?`<img src="${img}" alt="Vorschau">`:'<div class="meta" style="padding:30px">Keine Vorschau verfügbar</div>'}<div class="meta" style="color:#cfd3d8;padding:6px 4px 2px">${vn}${Object.keys(cosPrev).length?' · Vorschau':''}${pvTot?' · Vorschau-Teile zusammen '+F(pvTot):''}</div>${Object.keys(cosPrev).length?'<button class="act ghost sm" type="button" data-cpx="1" style="margin:6px 0 2px">Vorschau zurücksetzen</button>':''}</div><div class="meta" style="margin:0 2px 8px">Tippe auf ein Teil für die Vorschau. Kosmetik gilt für alle ${ty==='l'?'Radlader':'Bagger'}, bleibt über Firmenverkäufe erhalten und ist nur Optik.</div>`;
- COSK.forEach(c=>{const eq=cosEq(ty,c);h+=`<h2 class="sec">${COSC[c].n}</h2><div class="cgrid">`+COSC[c].it.map((it,i)=>{const o=cosOwn(ty,c,i),isEq=eq===i&&!cosPrev[c]&&true,real=(own.eq[ty]||{})[c]||0;const eqd=real===i,pv=cosPrev[c]===i;
+ COSK.forEach(c=>{const eq=cosEq(ty,c);h+=`<h2 class="sec">${COSC[c].n}</h2><div class="cgrid">`+COSC[c].it.map((it,i)=>[it,i]).sort((p,q)=>(p[0][1]-q[0][1])||(p[1]-q[1])).map(([it,i])=>{const o=cosOwn(ty,c,i),isEq=eq===i&&!cosPrev[c]&&true,real=(own.eq[ty]||{})[c]||0;const eqd=real===i,pv=cosPrev[c]===i;
   const sw=it[3]||(typeof it[2]==='number'?H6(it[2]):Array.isArray(it[2])?H6(it[2][0]):'#888');
   return `<div class="cc ${eqd?'eq':''} ${pv?'pv':''}" data-cv="${c}|${i}"><i class="sw" style="background:${sw}"></i><b>${it[0]}</b><span class="meta">${o?(eqd?'Angelegt':'Im Besitz'):F(it[1])}</span>${eqd?'<span class="tag">Angelegt</span>':o?`<button class="act sm ghost" type="button" data-ce="${c}|${i}">Anlegen</button>`:`<button class="act sm" type="button" data-cb="${c}|${i}" ${S.m<it[1]?'disabled':''}>Kaufen</button>`}</div>`}).join('')+'</div>'});
  $('#pay').innerHTML=h}
@@ -2595,7 +2598,7 @@ function clOpen(){if($('#clov'))return;const o=document.createElement('div');o.i
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#clbtn'))clOpen()});
 setTimeout(clLoad,3500);setInterval(clLoad,60000);
 /* Auto-Update: neue Version erkennen und neu laden */
-const BUILD='20261019-0731';
+const BUILD='20261019-0740';
 setTimeout(async()=>{try{if(!/^https?:/.test(location.protocol))return;
  const t=await (await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'})).text(),m=t.match(/const BUILD='([^']+)'/);
  if(m&&m[1]!==BUILD){const k='baggerUpd';if(sessionStorage.getItem(k)===m[1])return;sessionStorage.setItem(k,m[1]);location.replace(location.pathname+'?v='+m[1])}}catch(e){}},3500);
